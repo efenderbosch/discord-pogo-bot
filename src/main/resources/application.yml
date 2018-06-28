@@ -1,8 +1,6 @@
 spring:
   application.name: discord-pogo-bot
-
-discord:
-  token: NDYwOTczNzk3MTU2MDYxMjE1.DhMi2Q.CRjUybixJKvEd4AWq2o3J6PAESc
+  profiles.include: 'discord-token'
 
 ---
 
