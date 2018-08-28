@@ -6,7 +6,7 @@ import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 
 import java.util.regex.Pattern;
 
-public class RegexTextChannelCategoryFilter implements TextChannelCategoryFilter {
+public class RegexTextChannelCategoryFilter implements EventFilter<GenericMessageEvent> {
 
     private final Pattern[] channelCategoryPatterns;
 

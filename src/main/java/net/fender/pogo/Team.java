@@ -1,4 +1,4 @@
-package net.fender.discord.listeners;
+package net.fender.pogo;
 
 import java.util.Locale;
 import java.util.Optional;
@@ -28,7 +28,7 @@ public enum Team {
         if (team == null) return Optional.empty();
 
         try {
-            return Optional.of(valueOf(team.toUpperCase(Locale.US).trim()));
+            return Optional.of(valueOf(team.toUpperCase(Locale.getDefault()).trim()));
         } catch (IllegalArgumentException e) {
             return Optional.empty();
         }

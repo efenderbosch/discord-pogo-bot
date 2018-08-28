@@ -1,27 +1,28 @@
 package net.fender.discord.listeners;
 
+import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import org.apache.commons.lang3.StringUtils;
+import net.fender.discord.filters.CommandParser;
+import net.fender.discord.filters.EventFilter;
 
-import static net.fender.discord.filters.ChannelTypeFilter.TEXT_CHANNEL_FILTER;
+import java.util.List;
+import java.util.regex.Pattern;
 
-public abstract class CommandEventListener extends ListenerAdapter {
+public abstract class CommandEventListener extends BaseEventListener<MessageReceivedEvent> {
 
-    private final String command;
+    private final CommandParser commandParser;
 
-    protected CommandEventListener(String command) {
-        this.command = command;
+    protected CommandEventListener(Pattern command, EventFilter<? extends Event>... filters) {
+        super(MessageReceivedEvent.class, filters);
+        commandParser = new CommandParser(command);
     }
 
     @Override
-    public void onMessageReceived(MessageReceivedEvent event) {
-        if (!TEXT_CHANNEL_FILTER.test(event)) return;
-        String contentRaw = event.getMessage().getContentRaw();
-        if (StringUtils.startsWith(contentRaw, command)) {
-            processCommand(event);
-        }
+    protected void processEvent(MessageReceivedEvent event) {
+        List<String> parts = commandParser.apply(event);
+        if (parts.isEmpty()) return;
+        processCommand(event, parts);
     }
 
-    protected abstract void processCommand(MessageReceivedEvent event);
+    protected abstract void processCommand(MessageReceivedEvent event, List<String> parts);
 }

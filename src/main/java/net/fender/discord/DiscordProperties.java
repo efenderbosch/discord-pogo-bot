@@ -1,9 +1,7 @@
 package net.fender.discord;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
-@Component
 @ConfigurationProperties(prefix = "discord")
 public class DiscordProperties {
 

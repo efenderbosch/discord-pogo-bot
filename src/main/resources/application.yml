@@ -1,6 +1,11 @@
 spring:
   application.name: discord-pogo-bot
   profiles.include: 'discord-token'
+  jackson.property-naming-strategy: SNAKE_CASE
+
+default-locale: en_US
+
+server.port: 9090
 
 ---
 

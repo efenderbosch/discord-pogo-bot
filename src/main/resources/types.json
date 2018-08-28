@@ -1,0 +1,245 @@
+[
+  {
+    "name": "Normal",
+    "strong_vs": [
+      "Ghost"
+    ],
+    "weak_vs": [
+      "Fighting"
+    ]
+  },
+  {
+    "name": "Fighting",
+    "strong_vs": [
+      "Rock",
+      "Bug",
+      "Dark"
+    ],
+    "weak_vs": [
+      "Flying",
+      "Psychic",
+      "Fairy"
+    ]
+  },
+  {
+    "name": "Flying",
+    "strong_vs": [
+      "Fighting",
+      "Ground",
+      "Bug",
+      "Grass"
+    ],
+    "weak_vs": [
+      "Rock",
+      "Electric",
+      "Ice"
+    ]
+  },
+  {
+    "name": "Poison",
+    "strong_vs": [
+      "Fighting",
+      "Poison",
+      "Bug",
+      "Grass",
+      "Fairy"
+    ],
+    "weak_vs": [
+      "Ground",
+      "Psychic"
+    ]
+  },
+  {
+    "name": "Ground",
+    "strong_vs": [
+      "Poison",
+      "Rock",
+      "Electric"
+    ],
+    "weak_vs": [
+      "Water",
+      "Grass",
+      "Ice"
+    ]
+  },
+  {
+    "name": "Rock",
+    "strong_vs": [
+      "Normal",
+      "Flying",
+      "Poison",
+      "Fire"
+    ],
+    "weak_vs": [
+      "Fighting",
+      "Ground",
+      "Steel",
+      "Water",
+      "Grass"
+    ]
+  },
+  {
+    "name": "Bug",
+    "strong_vs": [
+      "Fighting",
+      "Ground",
+      "Grass"
+    ],
+    "weak_vs": [
+      "Flying",
+      "Rock",
+      "Fire"
+    ]
+  },
+  {
+    "name": "Ghost",
+    "strong_vs": [
+      "Normal",
+      "Fighting",
+      "Poison",
+      "Bug"
+    ],
+    "weak_vs": [
+      "Ghost",
+      "Dark"
+    ]
+  },
+  {
+    "name": "Steel",
+    "strong_vs": [
+      "Normal",
+      "Flying",
+      "Poison",
+      "Rock",
+      "Bug",
+      "Steel",
+      "Grass",
+      "Psychic"
+    ],
+    "weak_vs": [
+      "Fighting",
+      "Ground",
+      "Fire"
+    ]
+  },
+  {
+    "name": "Fire",
+    "strong_vs": [
+      "Bug",
+      "Steel",
+      "Fire",
+      "Grass",
+      "Ice",
+      "Fairy"
+    ],
+    "weak_vs": [
+      "Ground",
+      "Rock",
+      "Water"
+    ]
+  },
+  {
+    "name": "Water",
+    "strong_vs": [
+      "Steel",
+      "Water",
+      "Fire",
+      "Ice"
+    ],
+    "weak_vs": [
+      "Grass",
+      "Electric"
+    ]
+  },
+  {
+    "name": "Grass",
+    "strong_vs": [
+      "Ground",
+      "Water",
+      "Grass",
+      "Electric"
+    ],
+    "weak_vs": [
+      "Flying",
+      "Poison",
+      "Bug",
+      "Fire",
+      "Ice"
+    ]
+  },
+  {
+    "name": "Electric",
+    "strong_vs": [
+      "Flying",
+      "Steel",
+      "Electric"
+    ],
+    "weak_vs": [
+      "Ground"
+    ]
+  },
+  {
+    "name": "Psychic",
+    "strong_vs": [
+      "Fighting",
+      "Psychic"
+    ],
+    "weak_vs": [
+      "Bug",
+      "Ghost",
+      "Dark"
+    ]
+  },
+  {
+    "name": "Ice",
+    "strong_vs": [
+      "Ice"
+    ],
+    "weak_vs": [
+      "Fighting",
+      "Rock",
+      "Steel",
+      "Fire"
+    ]
+  },
+  {
+    "name": "Dragon",
+    "strong_vs": [
+      "Fire",
+      "Water",
+      "Grass",
+      "Electric"
+    ],
+    "weak_vs": [
+      "Ice",
+      "Dragon",
+      "Fairy"
+    ]
+  },
+  {
+    "name": "Dark",
+    "strong_vs": [
+      "Ghost",
+      "Psychic",
+      "Dark"
+    ],
+    "weak_vs": [
+      "Fighting",
+      "Bug",
+      "Fairy"
+    ]
+  },
+  {
+    "name": "Fairy",
+    "strong_vs": [
+      "Fighting",
+      "Bug",
+      "Dragon",
+      "Dark"
+    ],
+    "weak_vs": [
+      "Poison",
+      "Steel"
+    ]
+  }
+]

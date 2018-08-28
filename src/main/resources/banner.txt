@@ -1,8 +1,8 @@
-OooOOo.         .oOOOo.               .oOOOo.   .oOOOo.  `OooOOo.        o.oOOOo.
-O     `O       .O     o              .O     o. .O     o   o     `o        o     o
-o      O       o                     O       o o          O      O        O     O          O
-O     .o       O                     o       O o          o     .O        oOooOO.         oOo
-oOooOO'  .oOo. O   .oOOo .oOo.       O       o o          OOooOO'         o     `O .oOo.   o
-o        O   o o.      O O   o       o       O O          o    o          O      o O   o   O
-O        o   O  O.    oO o   O       `o     O' `o     .o  O     O         o     .O o   O   o
-o'       `OoO'   `OooO'  `OoO'        `OoooO'   `OoooO'   O      o        `OooOO'  `OoO'   `oO
+OooOOo.               .oOo                                      o.oOOOo.                   o
+O     `O              O                                          o     o  o               O
+o      O              o                                          O     O                  o
+O     .o              OoO                                        oOooOO.                  O
+oOooOO'  `OoOo. .oOo. o    .oOo. .oOo  .oOo  .oOo. `OoOo.        o     `O O  `OoOo. .oOo  OoOo.
+o         o     O   o O    OooO' `Ooo. `Ooo. O   o  o            O      o o   o     O     o   o
+O         O     o   O o    O         O     O o   O  O            o     .O O   O     o     o   O
+o'        o     `OoO' O'   `OoO' `OoO' `OoO' `OoO'  o            `OooOO'  o'  o     `OoO' O   o

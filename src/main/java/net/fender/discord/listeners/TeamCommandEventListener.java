@@ -5,41 +5,38 @@ import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.HierarchyException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.fender.pogo.Team;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import static java.util.stream.Collectors.toSet;
-import static net.fender.discord.listeners.Team.TEAM_ROLES;
+import static net.fender.pogo.Team.TEAM_ROLES;
 
 @Component
 public class TeamCommandEventListener extends CommandEventListener {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TeamCommandEventListener.class);
-
     public TeamCommandEventListener() {
-        super("$team");
+        super(Pattern.compile("^\\$team (.*)$"));
     }
 
     @Override
-    protected void processCommand(MessageReceivedEvent event) {
+    protected void processCommand(MessageReceivedEvent event, List<String> parts) {
         JDA jda = event.getJDA();
         TextChannel textChannel = event.getTextChannel();
-        Message message = event.getMessage();
-        String teamCommand = message.getContentRaw();
-        String t = teamCommand.substring(5);
-        Optional<Team> maybeTeam = Team.getTeam(t);
+
+        String arg = parts.get(1);
+        Optional<Team> maybeTeam = Team.getTeam(arg);
         Member member = event.getMember();
 
         if (!maybeTeam.isPresent()) {
             Message reply = new MessageBuilder().
                     append(member).
                     append(" there's no team ").
-                    append(t).
+                    append(arg).
                     append(". Use valor, mystic, instinct or harmony.").
                     build();
             textChannel.sendMessage(reply).submit();
@@ -70,7 +67,6 @@ public class TeamCommandEventListener extends CommandEventListener {
         }
 
         Role role = roles.get(0);
-        // TODO fix "Cannot perform action due to a lack of Permission. Missing permission: MANAGE_ROLES"
         try {
             member.getGuild().getController().addSingleRoleToMember(member, role).submit();
         } catch (HierarchyException e) {

@@ -7,9 +7,9 @@ import java.util.EnumSet;
 
 import static net.dv8tion.jda.core.entities.ChannelType.TEXT;
 
-public class ChannelTypeFilter implements GenericMessageEventFilter {
+public class ChannelTypeFilter implements EventFilter<GenericMessageEvent> {
 
-    public static final EnumSet<ChannelType> ALL = EnumSet.allOf(ChannelType.class);
+    public static final EnumSet<ChannelType> ANY = EnumSet.allOf(ChannelType.class);
     public static final ChannelTypeFilter TEXT_CHANNEL_FILTER = new ChannelTypeFilter(TEXT);
 
     private final EnumSet<ChannelType> channelTypes;

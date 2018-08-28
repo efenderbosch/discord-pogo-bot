@@ -5,6 +5,7 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.hooks.EventListener;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,6 +13,7 @@ import javax.security.auth.login.LoginException;
 import java.util.List;
 
 @Configuration
+@EnableConfigurationProperties(DiscordProperties.class)
 public class DiscordConfiguration {
 
     @Bean
