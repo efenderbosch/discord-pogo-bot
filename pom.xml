@@ -22,13 +22,6 @@
     </properties>
 
     <dependencies>
-        <!-- gce -->
-        <dependency>
-            <groupId>com.google.cloud</groupId>
-            <artifactId>google-cloud-vision</artifactId>
-            <version>1.33.0</version>
-        </dependency>
-
         <!-- discord -->
         <dependency>
             <groupId>net.dv8tion</groupId>
@@ -36,22 +29,9 @@
             <version>3.6.0_354</version>
         </dependency>
 
-        <!-- GraphicsMagick and ImageMagick -->
-        <!--<dependency>-->
-        <!--<groupId>com.sharneng</groupId>-->
-        <!--<artifactId>gm4java</artifactId>-->
-        <!--<version>1.1.1</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-        <!--<groupId>org.im4java</groupId>-->
-        <!--<artifactId>im4java</artifactId>-->
-        <!--<version>1.4.0</version>-->
-        <!--</dependency>-->
-
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <!--<version>3.7</version>-->
         </dependency>
         <dependency>
             <groupId>javax.annotation</groupId>
@@ -63,94 +43,52 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <!--
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
-                </exclusion>
-            </exclusions>
-            -->
         </dependency>
-        <!--
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-undertow</artifactId>
-        </dependency>
-        -->
-        <!--
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jetty</artifactId>
-        </dependency>
-        -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <!--
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot</artifactId>
-        </dependency>
-        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-quartz</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-        </dependency>
-
-        <!-- validation-api, hibernate-validator and hibernate-validator-annotation-processor -->
-        <!--<dependency>-->
-        <!--<groupId>javax.validation</groupId>-->
-        <!--<artifactId>validation-api</artifactId>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-        <!--<groupId>org.hibernate.validator</groupId>-->
-        <!--<artifactId>hibernate-validator</artifactId>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-        <!--<groupId>org.hibernate.validator</groupId>-->
-        <!--<artifactId>hibernate-validator-annotation-processor</artifactId>-->
-        <!--</dependency>-->
 
         <!-- test -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit-jupiter.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit-jupiter.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
             <version>${junit-jupiter.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-engine</artifactId>
             <version>${junit-platform.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
             <version>${mockito.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -183,48 +121,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--<plugin>-->
-            <!--<groupId>io.fabric8</groupId>-->
-            <!--<artifactId>docker-maven-plugin</artifactId>-->
-            <!--<version>0.26.0</version>-->
-            <!--<configuration>-->
-            <!--<images>-->
-            <!--<image>-->
-            <!--<name>efenderbosch/docker-pogo-bot:${project.version}</name>-->
-            <!--<build>-->
-            <!--<from>efenderbosch:alpine-jdk8-graphicsmagick</from>-->
-            <!--<assembly>-->
-            <!--<descriptorRef>artifact</descriptorRef>-->
-            <!--</assembly>-->
-            <!--<cmd>java -jar maven/${project.name}-${project.version}.jar</cmd>-->
-            <!--&lt;!&ndash; TODO add healthcheck &ndash;&gt;-->
-            <!--</build>-->
-            <!--</image>-->
-            <!--</images>-->
-            <!--<authConfig>-->
-            <!--<push>-->
-            <!--<username>${env.DOCKER_USER}</username>-->
-            <!--<password>${env.DOCKER_PASSWORD}</password>-->
-            <!--</push>-->
-            <!--</authConfig>-->
-            <!--</configuration>-->
-            <!--<executions>-->
-            <!--<execution>-->
-            <!--<id>build</id>-->
-            <!--<phase>install</phase>-->
-            <!--<goals>-->
-            <!--<goal>build</goal>-->
-            <!--</goals>-->
-            <!--</execution>-->
-            <!--<execution>-->
-            <!--<id>push</id>-->
-            <!--<phase>deploy</phase>-->
-            <!--<goals>-->
-            <!--<goal>push</goal>-->
-            <!--</goals>-->
-            <!--</execution>-->
-            <!--</executions>-->
-            <!--</plugin>-->
         </plugins>
     </build>
 

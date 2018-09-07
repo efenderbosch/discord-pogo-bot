@@ -1,7 +1,10 @@
 package net.fender.discord.quartz;
 
-//@Configuration
-//@EnableConfigurationProperties(QuartzProperties.class)
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@EnableConfigurationProperties(QuartzProperties.class)
 public class QuartzConfiguration {
 
 }

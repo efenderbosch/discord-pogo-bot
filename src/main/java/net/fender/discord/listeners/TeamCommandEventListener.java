@@ -6,7 +6,6 @@ import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.HierarchyException;
 import net.fender.pogo.Team;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +15,7 @@ import java.util.regex.Pattern;
 import static java.util.stream.Collectors.toSet;
 import static net.fender.pogo.Team.TEAM_ROLES;
 
-@Component
+//@Component
 public class TeamCommandEventListener extends CommandEventListener {
 
     public TeamCommandEventListener() {

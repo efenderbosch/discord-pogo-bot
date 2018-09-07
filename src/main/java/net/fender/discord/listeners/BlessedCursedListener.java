@@ -15,7 +15,7 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
 @Component
 public class BlessedCursedListener extends CommandEventListener {
 
-    public static final Pattern BLESSSED = Pattern.compile("(.*)(blessed)(.*)", CASE_INSENSITIVE);
+    public static final Pattern BLESSSED = Pattern.compile(".*(blessed).*", CASE_INSENSITIVE);
 
     public BlessedCursedListener() {
         super(BLESSSED, MemberIsUserFilter.INSTANCE);
@@ -25,7 +25,7 @@ public class BlessedCursedListener extends CommandEventListener {
     protected void processCommand(MessageReceivedEvent event, List<String> parts) {
         Message message = event.getMessage();
         JDA jda = message.getJDA();
-        List<Emote> emotea = jda.getEmotesByName("penta", true);
-        message.addReaction(emotea.get(0)).submit();
+        List<Emote> emotes = jda.getEmotesByName("penta", true);
+        message.addReaction(emotes.get(0)).submit();
     }
 }
