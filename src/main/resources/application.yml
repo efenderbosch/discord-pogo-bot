@@ -1,5 +1,5 @@
 spring:
-  application.name: discord-pogo-bot
+  application.name: professor-birch
   profiles.include: 'discord-token'
   jackson.property-naming-strategy: SNAKE_CASE
 
