@@ -13,7 +13,7 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
 public class WjatListener extends CommandEventListener {
 
     private static final Pattern WHAT = Pattern.compile(".*(what\\w*).*", CASE_INSENSITIVE);
-    private static final RegexChannelNameFilter AFTER_HOURS =new RegexChannelNameFilter("after-hours");
+    private static final RegexChannelNameFilter AFTER_HOURS = new RegexChannelNameFilter("after-hours");
 
     public WjatListener() {
         super(WHAT, AFTER_HOURS);
