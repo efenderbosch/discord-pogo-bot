@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(scanBasePackages = "net.fender")
-public class ProfessorBirch {
+public class Giovanni {
     public static void main(String[] args) {
-        SpringApplication.run(ProfessorBirch.class, args);
+        SpringApplication.run(Giovanni.class, args);
     }
 }

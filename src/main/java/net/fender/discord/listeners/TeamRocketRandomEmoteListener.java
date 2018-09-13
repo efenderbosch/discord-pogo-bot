@@ -11,9 +11,9 @@ import java.util.Random;
 @Component
 public class TeamRocketRandomEmoteListener extends BaseEventListener<MessageReceivedEvent> {
 
-    private static final RegexChannelNameFilter GENERAL  = new RegexChannelNameFilter("after-hours");
-    private static final String[] EMOTES = {"team_rocket", "jessie", "james"};
-    private static final Random random = new Random();
+    private static final RegexChannelNameFilter GENERAL  = new RegexChannelNameFilter("general");
+    private static final String[] EMOTES = {"team_rocket", "jessie", "james", "giovanni", "rainbow_rocket"};
+    private static final Random RANDOM = new Random();
 
     public TeamRocketRandomEmoteListener() {
         super(MessageReceivedEvent.class, GENERAL);
@@ -21,9 +21,9 @@ public class TeamRocketRandomEmoteListener extends BaseEventListener<MessageRece
 
     @Override
     protected void processEvent(MessageReceivedEvent event) {
-        if (random.nextInt(1000) == 0) {
+        if (RANDOM.nextInt(1000) == 0) {
             Message message = event.getMessage();
-            String emoteName = EMOTES[random.nextInt(3)];
+            String emoteName = EMOTES[RANDOM.nextInt(EMOTES.length)];
             Emote teamRocket = message.getJDA().getEmotesByName(emoteName, true).get(0);
             message.addReaction(teamRocket).submit();
         }

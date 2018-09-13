@@ -1,5 +1,5 @@
 spring:
-  application.name: professor-birch
+  application.name: giovanni
   profiles.include: 'discord-token'
   jackson.property-naming-strategy: SNAKE_CASE
 
