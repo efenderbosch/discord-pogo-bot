@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -19,7 +18,7 @@ import java.util.Map;
 
 import static org.springframework.core.io.ResourceLoader.CLASSPATH_URL_PREFIX;
 
-@Component
+//@Component
 public class PokemonTypeRegistry {
 
     private static final Logger LOG = LoggerFactory.getLogger(PokemonTypeRegistry.class);

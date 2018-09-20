@@ -2,6 +2,13 @@ spring:
   application.name: giovanni
   profiles.include: 'discord-token'
   jackson.property-naming-strategy: SNAKE_CASE
+  datasource:
+    driver-class-name: org.h2.Driver
+    username: sa
+    #password: mysqlpass
+    url: jdbc:h2:./giovanni_h2
+
+spring.jpa.hibernate.ddl-auto: create-only
 
 default-locale: en_US
 

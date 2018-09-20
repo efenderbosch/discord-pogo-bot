@@ -12,7 +12,7 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
 @Component
 public class WjatListener extends CommandEventListener {
 
-    private static final Pattern WHAT = Pattern.compile(".*(what\\w*).*", CASE_INSENSITIVE);
+    private static final Pattern WHAT = Pattern.compile(".*(wjat\\w*).*", CASE_INSENSITIVE);
     private static final RegexChannelNameFilter AFTER_HOURS = new RegexChannelNameFilter("after-hours");
 
     public WjatListener() {
@@ -21,7 +21,9 @@ public class WjatListener extends CommandEventListener {
 
     @Override
     protected void processCommand(MessageReceivedEvent event, List<String> parts) {
-        String wjat = parts.get(1).replaceFirst("h", "j").replaceFirst("H", "J");
-        event.getTextChannel().sendMessage(wjat + " ¯\\_(ツ)_/¯").submit();
+        //String wjat = parts.get(1).replaceFirst("h", "j").replaceFirst("H", "J");
+        //event.getTextChannel().sendMessage(wjat + " ¯\\_(ツ)_/¯").submit();
+        event.getTextChannel().sendMessage("(° ͜ʖ͡°)╭∩╮").submit();
+        //
     }
 }

@@ -3,6 +3,7 @@ package net.fender.discord.listeners;
 import net.dv8tion.jda.core.entities.Emote;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.fender.discord.filters.MemberIsUserFilter;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,15 +15,17 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
 @Component
 public class TeamRocketTextListener extends CommandEventListener {
 
-    static final Pattern TEAM_ROCKET = Pattern.compile(".*(team rocket|jessie|james|Prepare for trouble|Make it " +
-                    "double|To protect the world from devastation|To unite all peoples within our nation).*",
+    static final Pattern TEAM_ROCKET = Pattern.compile(".*(team rocket|giovanni|jessie|james|Prepare for trouble|Make" +
+                    " it double|To protect the world from devastation|To unite all peoples within our nation|To " +
+                    "denounce the evils of truth and love|To extend our reach to the stars above|blast off at the " +
+                    "speed of light|Surrender now, or prepare to fight|Meowth! That's right).*",
             CASE_INSENSITIVE);
 
     private static final String[] EMOTES = {"team_rocket", "jessie", "james", "giovanni", "rainbow_rocket"};
     private static final Random RANDOM = new Random();
 
     public TeamRocketTextListener() {
-        super(TEAM_ROCKET);
+        super(TEAM_ROCKET, MemberIsUserFilter.INSTANCE);
     }
 
     @Override
