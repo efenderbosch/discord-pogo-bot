@@ -5,7 +5,7 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.Message.Attachment;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.fender.discord.filters.RegexChannelNameFilter;
+import net.fender.discord.filters.ChannelNameFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -23,11 +23,11 @@ public class RaidScreenshotListener extends BaseEventListener<MessageReceivedEve
 
     private static final LocalTime START = LocalTime.of(6, 0);
     private static final LocalTime END = LocalTime.of(19, 15);
-    private static final RegexChannelNameFilter FACEBOOK_CHANNEL_NAME_FILTER = new RegexChannelNameFilter
-            ("facebook");
+    private static final ChannelNameFilter CHANNEL_NAME_FILTER = new ChannelNameFilter
+            ("west-side-pokemon-go", "downtown-akron-pokemon-go");
 
     public RaidScreenshotListener() {
-        super(MessageReceivedEvent.class, FACEBOOK_CHANNEL_NAME_FILTER);
+        super(MessageReceivedEvent.class, CHANNEL_NAME_FILTER);
     }
 
     @Override
@@ -45,11 +45,12 @@ public class RaidScreenshotListener extends BaseEventListener<MessageReceivedEve
 
         JDA jda = message.getJDA();
 
-        TextChannel giovannisPlayground = jda.getTextChannelsByName("giovannis-playground", true).get(0);
+        TextChannel announceRaidsHere = jda.getTextChannelsByName("announce-raids-here", true).get(0);
         for (Attachment attachment : imageAttachments) {
             LOG.info("got facebook image {}", attachment.getId());
+            // https://docs.oracle.com/javase/8/docs/api/java/awt/image/BufferedImage.html
             try {
-                giovannisPlayground.sendFile(attachment.getInputStream(), attachment.getFileName()).submit();
+                announceRaidsHere.sendFile(attachment.getInputStream(), attachment.getFileName()).submit();
             } catch (IOException e) {
                 LOG.warn("error mirroring {}", attachment.getId());
             }

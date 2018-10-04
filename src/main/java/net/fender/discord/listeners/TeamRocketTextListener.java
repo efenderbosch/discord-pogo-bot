@@ -34,5 +34,6 @@ public class TeamRocketTextListener extends CommandEventListener {
         String emoteName = EMOTES[RANDOM.nextInt(EMOTES.length)];
         Emote teamRocket = message.getJDA().getEmotesByName(emoteName, true).get(0);
         message.addReaction(teamRocket).submit();
+        // https://open.spotify.com/track/6rPO02ozF3bM7NnOV4h6s2?si=Bqp-3oMVSd6gLiRBCmW4vw
     }
 }
