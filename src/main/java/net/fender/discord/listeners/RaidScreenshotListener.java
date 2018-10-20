@@ -10,10 +10,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigDecimal;
 import java.time.LocalTime;
 import java.util.List;
 
+import static java.math.RoundingMode.HALF_EVEN;
 import static java.util.stream.Collectors.toList;
 
 @Component
@@ -46,11 +51,32 @@ public class RaidScreenshotListener extends BaseEventListener<MessageReceivedEve
         JDA jda = message.getJDA();
 
         TextChannel announceRaidsHere = jda.getTextChannelsByName("announce-raids-here", true).get(0);
+        TextChannel badImages = jda.getTextChannelsByName("bad-images", true).get(0);
         for (Attachment attachment : imageAttachments) {
             LOG.info("got facebook image {}", attachment.getId());
-            // https://docs.oracle.com/javase/8/docs/api/java/awt/image/BufferedImage.html
+
             try {
-                announceRaidsHere.sendFile(attachment.getInputStream(), attachment.getFileName()).submit();
+                InputStream inputStream = attachment.getInputStream();
+                BufferedImage image = ImageIO.read(attachment.getInputStream());
+                // attachment input stream is a ByteArrayInputStream which supports mark/reset
+                inputStream.mark(0);
+                inputStream.reset();
+
+                int width = image.getWidth();
+                int height = image.getHeight();
+                double ratio = 1.0 * width / height;
+                BigDecimal roundedRatio = BigDecimal.valueOf(ratio).setScale(2, HALF_EVEN);
+
+                TextChannel receivingChannel;
+                if (ratio < 0.45 || ratio > 0.57) {
+                    LOG.info("non-standard width/height ratio {}/{} = {}; assuming not a screenshot", width, height,
+                            roundedRatio);
+                    receivingChannel = badImages;
+                } else {
+                    LOG.info("standard width/height ratio {}/{} = {}; sending to pokenav", width, height, roundedRatio);
+                    receivingChannel = announceRaidsHere;
+                }
+                receivingChannel.sendFile(inputStream, attachment.getFileName()).submit();
             } catch (IOException e) {
                 LOG.warn("error mirroring {}", attachment.getId());
             }

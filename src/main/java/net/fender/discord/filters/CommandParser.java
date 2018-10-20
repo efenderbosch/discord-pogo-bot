@@ -9,6 +9,7 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static net.fender.discord.filters.ChannelTypeFilter.PRIVATE_CHANNEL_FILTER;
 import static net.fender.discord.filters.ChannelTypeFilter.TEXT_CHANNEL_FILTER;
 
 public class CommandParser implements Function<MessageReceivedEvent, List<String>> {
@@ -21,7 +22,10 @@ public class CommandParser implements Function<MessageReceivedEvent, List<String
 
     @Override
     public List<String> apply(MessageReceivedEvent messageReceivedEvent) {
-        if (!TEXT_CHANNEL_FILTER.test(messageReceivedEvent)) return Collections.emptyList();
+        if (!TEXT_CHANNEL_FILTER.test(messageReceivedEvent) &&
+                !PRIVATE_CHANNEL_FILTER.test(messageReceivedEvent)) {
+            return Collections.emptyList();
+        }
 
         String content = messageReceivedEvent.getMessage().getContentRaw();
         Matcher matcher = pattern.matcher(content);

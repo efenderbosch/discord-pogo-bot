@@ -1,13 +1,12 @@
 package net.fender.discord.listeners;
 
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.PrivateChannel;
-import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.requests.RequestFuture;
-import net.fender.discord.filters.MemberHasRoleFilter;
 import net.fender.pogo.Nest;
 import net.fender.pogo.NestRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +14,14 @@ import org.springframework.stereotype.Component;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static java.util.stream.Collectors.joining;
 
 @Component
 public class NestCommandListener extends CommandEventListener {
@@ -28,30 +29,24 @@ public class NestCommandListener extends CommandEventListener {
     private static final Logger LOG = LoggerFactory.getLogger(NestCommandListener.class);
 
     private static final Pattern NEST = Pattern.compile("\\$nest\\s+(\\w+)\\s*(.*)");
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a");
-    private static final MemberHasRoleFilter ADMIN_USER = new MemberHasRoleFilter(".*-admin");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("MMM dd hh:mm a");
 
     private final NestRepository nestRepo;
 
     @Autowired
     public NestCommandListener(NestRepository nestRepo) {
-        super(NEST);//, ADMIN_USER);
+        super(NEST);
         this.nestRepo = nestRepo;
     }
 
     @Override
     protected void processCommand(MessageReceivedEvent event, List<String> parts) {
-        TextChannel channel = event.getTextChannel();
-
-        String memberName = event.getMember().getEffectiveName();
-        RequestFuture<PrivateChannel> privateChannelFuture = event.getMember().getUser().openPrivateChannel().submit();
-        PrivateChannel privateChannel;
-        try {
-            privateChannel = privateChannelFuture.get(10, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            channel.sendMessage("could not open private channel with " + memberName);
-            return;
+        PrivateChannel privateChannel = event.getPrivateChannel();
+        if (privateChannel == null) {
+            privateChannel = event.getMember().getUser().openPrivateChannel().complete();
         }
+
+        String memberName = privateChannel.getUser().getName();
 
         String command = parts.get(1);
         String[] options = parts.get(2).split(",");
@@ -64,39 +59,57 @@ public class NestCommandListener extends CommandEventListener {
         } else if (options.length == 1 && command.equalsIgnoreCase("delete")) {
             deleteNest(privateChannel, options);
         } else if (options.length == 2 && command.equalsIgnoreCase("update")) {
-            updateNest(privateChannel, options);
+            updateNest(privateChannel, memberName, options);
+        } else if (options.length == 1 && command.equalsIgnoreCase("clear")) {
+            clearNests(privateChannel, memberName);
         } else {
-            channel.sendMessage("unknown $nest command").submit();
+            privateChannel.sendMessage("unknown $nest command").submit();
         }
     }
 
     private void sendHelp(PrivateChannel privateChannel) {
         privateChannel.sendMessage("nest commands:\n" +
                 "'$nest add name, longitude, latitude' to add a new nest\n" +
-                "'$nest update name, pokemon' to update a nest to a new pokemon").submit();
+                "'$nest update name, pokemon' to update a nest to a new pokemon\n" +
+                "'$nest clear' to clear all nests after rotation").submit();
     }
 
-    private void listAll(PrivateChannel channel) {
+    private void listAll(PrivateChannel privateChannel) {
         LOG.info("listing nests");
-        Iterable<Nest> nests = nestRepo.findAll();
 
-        MessageBuilder builder = new MessageBuilder();
-        for (Nest nest : nests) {
-            builder.append(nest.getName()).append("\t");
-            String pokemon = nest.getPokemon();
-            if (pokemon == null) {
-                builder.append("unknown\t");
-            } else {
-                builder.append(nest.getPokemon()).append("\t");
+        Iterable<Nest> nests = nestRepo.findAll();
+        List<Nest> sortedNests = StreamSupport.stream(nests.spliterator(), false).
+                sorted().
+                collect(Collectors.toList());
+
+        EmbedBuilder embedBuilder = new EmbedBuilder();
+        embedBuilder.setTimestamp(ZonedDateTime.now());
+
+        List<String> stale = new ArrayList<>();
+        for (Nest nest : sortedNests) {
+            String nestName = nest.getName();
+            if (nest.getPokemon() == null || nest.getReportedAt().isBefore(ZonedDateTime.now().minusDays(14))) {
+                stale.add(nestName);
+                continue;
             }
-            builder.append(nest.getReportedBy()).append("\t");
-            builder.append(nest.getReportedAt().format(FORMATTER)).append("\n");
+
+            String pokemon = StringUtils.abbreviate(nest.getPokemon() == null ? "unknown" : nest.getPokemon(), 20);
+            String reportedBy = StringUtils.abbreviate(nest.getReportedBy(), 20);
+            String reportedAt = FORMATTER.format(nest.getReportedAt());
+            String value = pokemon + " " + reportedBy + " " + reportedAt;
+            embedBuilder.addField(nestName, value, false);
         }
+
+        if (!stale.isEmpty()) {
+            embedBuilder.addField("Stale Nests:", stale.stream().collect(joining(", ")), false);
+        }
+        MessageBuilder builder = new MessageBuilder();
+        builder.setEmbed(embedBuilder.build());
         if (builder.isEmpty()) {
             LOG.info("no nests");
-            channel.sendMessage("No nests! Use $nest add <name>, <longitude>, <latitude> to add a nest.").submit();
+            privateChannel.sendMessage("No nests! Use $nest add <name>, <longitude>, <latitude> to add a nest.").submit();
         } else {
-            channel.sendMessage(builder.build()).submit();
+            privateChannel.sendMessage(builder.build()).submit();
         }
     }
 
@@ -121,18 +134,38 @@ public class NestCommandListener extends CommandEventListener {
         }
     }
 
-    private void updateNest(PrivateChannel channel, String[] options) {
+    private void updateNest(PrivateChannel channel, String memberName, String[] options) {
         String nestName = options[0].trim();
         Optional<Nest> maybeNest = nestRepo.findById(nestName);
         if (!maybeNest.isPresent()) {
-            channel.sendMessage("unknown nest " + nestName).submit();
-            return;
+            // HACK for lazy people that don't type Capital Letters
+            maybeNest = StreamSupport.stream(nestRepo.findAll().spliterator(), false).
+                    filter(nest -> nest.getName().equalsIgnoreCase(nestName)).
+                    findAny();
+            if (!maybeNest.isPresent()) {
+                channel.sendMessage("unknown nest " + nestName).submit();
+                return;
+            }
         }
 
         Nest nest = maybeNest.get();
         String pokemonName = options[1].trim();
         nest.setPokemon(pokemonName);
+        nest.setReportedBy(memberName);
         nestRepo.save(nest);
-        channel.sendMessage("updated nest " + nestName + " to " + pokemonName).submit();
+        channel.sendMessage("updated nest " + nest.getName() + " to " + pokemonName).submit();
+    }
+
+    private void clearNests(PrivateChannel channel, String memberName) {
+        LOG.info("{} cleared nests", memberName);
+        Iterable<Nest> nests = nestRepo.findAll();
+        ZonedDateTime now = ZonedDateTime.now();
+        StreamSupport.stream(nests.spliterator(), false).forEach(nest -> {
+            nest.setPokemon(null);
+            nest.setReportedAt(now);
+            nest.setReportedBy(memberName);
+        });
+        nestRepo.saveAll(nests);
+        channel.sendMessage("nests cleared").submit();
     }
 }

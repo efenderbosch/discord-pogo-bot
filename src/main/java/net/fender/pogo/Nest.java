@@ -8,7 +8,7 @@ import java.time.ZonedDateTime;
 import java.util.Objects;
 
 @Entity
-public class Nest {
+public class Nest implements Comparable<Nest> {
 
     @Id
     private String name;
@@ -81,5 +81,10 @@ public class Nest {
 
     public String toString() {
         return ReflectionToStringBuilder.toString(this);
+    }
+
+    @Override
+    public int compareTo(Nest other) {
+        return name.compareTo(other.name);
     }
 }
