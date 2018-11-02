@@ -2,7 +2,9 @@ package net.fender.discord.listeners;
 
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.MessageBuilder;
+import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.PrivateChannel;
+import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.fender.pogo.Nest;
 import net.fender.pogo.NestRepository;
@@ -71,12 +73,18 @@ public class NestCommandListener extends CommandEventListener {
         privateChannel.sendMessage("nest commands:\n" +
                 "'$nest add name, longitude, latitude' to add a new nest\n" +
                 "'$nest update name, pokemon' to update a nest to a new pokemon\n" +
+                "'$nest list' to show all nests\n" +
                 "'$nest clear' to clear all nests after rotation").submit();
     }
 
     private void listAll(PrivateChannel privateChannel) {
         LOG.info("listing nests");
 
+        Message message = buildAllNestMessage();
+        privateChannel.sendMessage(message).submit();
+    }
+
+    private Message buildAllNestMessage() {
         Iterable<Nest> nests = nestRepo.findAll();
         List<Nest> sortedNests = StreamSupport.stream(nests.spliterator(), false).
                 sorted().
@@ -105,12 +113,7 @@ public class NestCommandListener extends CommandEventListener {
         }
         MessageBuilder builder = new MessageBuilder();
         builder.setEmbed(embedBuilder.build());
-        if (builder.isEmpty()) {
-            LOG.info("no nests");
-            privateChannel.sendMessage("No nests! Use $nest add <name>, <longitude>, <latitude> to add a nest.").submit();
-        } else {
-            privateChannel.sendMessage(builder.build()).submit();
-        }
+        return builder.build();
     }
 
     private void addNest(PrivateChannel channel, String memberName, String[] options) {
@@ -129,9 +132,22 @@ public class NestCommandListener extends CommandEventListener {
         if (nestRepo.existsById(nestName)) {
             nestRepo.deleteById(options[0]);
             channel.sendMessage("deleted nest " + nestName).submit();
+
+            pinNestList(channel);
         } else {
             channel.sendMessage("unknown nest " + nestName).submit();
         }
+    }
+
+    private void pinNestList(PrivateChannel channel) {
+        Message allNestsMessage = buildAllNestMessage();
+        TextChannel sightings = channel.getJDA().getTextChannelsByName("sightings", true).get(0);
+        List<Message> pinnedMessages = sightings.getPinnedMessages().complete();
+        pinnedMessages.stream().
+                filter(message -> message.getMember().getUser().isBot()).
+                forEach(message -> message.delete().submit());
+        String id = sightings.sendMessage(allNestsMessage).complete().getId();
+        sightings.pinMessageById(id ).submit();
     }
 
     private void updateNest(PrivateChannel channel, String memberName, String[] options) {
@@ -154,6 +170,8 @@ public class NestCommandListener extends CommandEventListener {
         nest.setReportedBy(memberName);
         nestRepo.save(nest);
         channel.sendMessage("updated nest " + nest.getName() + " to " + pokemonName).submit();
+
+        pinNestList(channel);
     }
 
     private void clearNests(PrivateChannel channel, String memberName) {
