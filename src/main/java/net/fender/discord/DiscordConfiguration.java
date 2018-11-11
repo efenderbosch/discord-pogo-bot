@@ -25,10 +25,12 @@ public class DiscordConfiguration {
             throws LoginException, InterruptedException {
         LOG.info("discord props: {}", props);
         // https://discordapp.com/api/oauth2/authorize?client_id=460973797156061215&permissions=268560464&scope=bot
-        return new JDABuilder(AccountType.BOT).
+        JDA jda = new JDABuilder(AccountType.BOT).
                 setGame(Game.playing("Pokemon Go")).
                 setToken(props.getToken()).
                 addEventListener(eventListeners.toArray()).
                 buildBlocking();
+        LOG.info("JDA loaded {}", jda.getStatus());
+        return jda;
     }
 }

@@ -20,7 +20,7 @@ public class DiscordProperties {
 
     @Override
     public String toString() {
-        String redactedToken = StringUtils.abbreviate(token, "...", 12);
+        String redactedToken = StringUtils.abbreviate(token, "...", 9);
         return new ToStringBuilder(this).append("token", redactedToken).toString();
     }
 }
