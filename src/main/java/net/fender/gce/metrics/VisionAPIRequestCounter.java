@@ -35,6 +35,7 @@ public class VisionAPIRequestCounter {
 
     public long count() {
         try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+            LOG.info("metric service client settings: {}", metricServiceClient.getSettings());
             return count(metricServiceClient);
         } catch (IOException e) {
             LOG.error("exception with MetricServiceClient", e);
