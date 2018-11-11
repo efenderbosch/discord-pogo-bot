@@ -4,9 +4,10 @@ import net.dv8tion.jda.core.entities.Category;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-public class RegexTextChannelCategoryFilter implements EventFilter<GenericMessageEvent> {
+public class RegexTextChannelCategoryFilter implements Predicate<GenericMessageEvent> {
 
     private final Pattern[] channelCategoryPatterns;
 

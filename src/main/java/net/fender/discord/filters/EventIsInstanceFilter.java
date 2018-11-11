@@ -2,7 +2,9 @@ package net.fender.discord.filters;
 
 import net.dv8tion.jda.core.events.Event;
 
-public class EventIsInstanceFilter<T extends Event> implements EventFilter<T> {
+import java.util.function.Predicate;
+
+public class EventIsInstanceFilter<T extends Event> implements Predicate<T> {
 
     private final Class<Event> clazz;
 

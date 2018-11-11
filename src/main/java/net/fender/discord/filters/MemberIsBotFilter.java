@@ -4,9 +4,11 @@ import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.react.GenericMessageReactionEvent;
 
-public enum MemberIsBotFilter implements EventFilter<GenericMessageReactionEvent> {
+import java.util.function.Predicate;
 
-    INSTANCE;
+public enum MemberIsBotFilter implements Predicate<GenericMessageReactionEvent> {
+
+    MEMBER_IS_BOT_FILTER;
 
     @Override
     public boolean test(GenericMessageReactionEvent event) {

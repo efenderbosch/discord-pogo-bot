@@ -5,7 +5,6 @@ import net.dv8tion.jda.core.entities.MessageReaction;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
-import net.fender.discord.filters.MemberIsBotFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,8 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
+import static net.fender.discord.filters.MemberIsBotFilter.MEMBER_IS_BOT_FILTER;
+
 @Component
 public class PokeNavNegativeEmoteListener extends BaseEventListener<MessageReactionAddEvent> {
 
@@ -21,7 +22,7 @@ public class PokeNavNegativeEmoteListener extends BaseEventListener<MessageReact
 
     @Autowired
     public PokeNavNegativeEmoteListener() {
-        super(MessageReactionAddEvent.class, MemberIsBotFilter.INSTANCE);
+        super(MessageReactionAddEvent.class, MEMBER_IS_BOT_FILTER);
     }
 
     @Override

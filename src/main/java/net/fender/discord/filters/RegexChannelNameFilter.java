@@ -3,9 +3,10 @@ package net.fender.discord.filters;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-public class RegexChannelNameFilter implements EventFilter<GenericMessageEvent> {
+public class RegexChannelNameFilter implements Predicate<GenericMessageEvent> {
 
     private final Pattern[] channelNamePatterns;
 

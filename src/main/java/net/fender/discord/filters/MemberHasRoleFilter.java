@@ -1,14 +1,15 @@
 package net.fender.discord.filters;
 
-import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 import static java.util.stream.Collectors.toList;
 
-public class MemberHasRoleFilter implements EventFilter<MessageReceivedEvent> {
+public class MemberHasRoleFilter implements Predicate<MessageReceivedEvent> {
 
     private final Pattern[] rolePatterns;
 
@@ -22,11 +23,21 @@ public class MemberHasRoleFilter implements EventFilter<MessageReceivedEvent> {
 
     @Override
     public boolean test(MessageReceivedEvent messageReceivedEvent) {
-        if (!MemberIsUserFilter.INSTANCE.test(messageReceivedEvent)) return false;
+        if (!MemberIsUserFilter.MEMBER_IS_USER_FILTER.test(messageReceivedEvent)) return false;
 
-        List<String> roleNames = messageReceivedEvent.
-                getMember().
-                getRoles().
+        Member member;
+        PrivateChannel privateChannel = messageReceivedEvent.getPrivateChannel();
+        if (privateChannel != null) {
+            User user = privateChannel.getUser();
+            Guild guild = user.getMutualGuilds().stream().
+                    filter(g -> "Viridian".equalsIgnoreCase(g.getName())).
+                    findAny().get();
+            member = guild.getMember(user);
+        } else {
+            member = messageReceivedEvent.getMember();
+        }
+
+        List<String> roleNames = member.getRoles().
                 stream().
                 map(Role::getName).
                 collect(toList());

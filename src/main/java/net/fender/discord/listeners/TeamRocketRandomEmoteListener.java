@@ -18,7 +18,7 @@ public class TeamRocketRandomEmoteListener extends BaseEventListener<MessageRece
     private static final Random RANDOM = new Random();
 
     public TeamRocketRandomEmoteListener() {
-        super(MessageReceivedEvent.class, GENERAL, MemberIsUserFilter.INSTANCE);
+        super(MessageReceivedEvent.class, GENERAL, MemberIsUserFilter.MEMBER_IS_USER_FILTER);
     }
 
     @Override

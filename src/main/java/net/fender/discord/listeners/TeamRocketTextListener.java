@@ -25,7 +25,7 @@ public class TeamRocketTextListener extends CommandEventListener {
     private static final Random RANDOM = new Random();
 
     public TeamRocketTextListener() {
-        super(TEAM_ROCKET, MemberIsUserFilter.INSTANCE);
+        super(TEAM_ROCKET, MemberIsUserFilter.MEMBER_IS_USER_FILTER);
     }
 
     @Override

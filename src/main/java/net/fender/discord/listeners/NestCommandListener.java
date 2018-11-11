@@ -64,16 +64,35 @@ public class NestCommandListener extends CommandEventListener {
             updateNest(privateChannel, memberName, options);
         } else if (options.length == 1 && command.equalsIgnoreCase("clear")) {
             clearNests(privateChannel, memberName);
+        } else if (options.length == 3 && command.equalsIgnoreCase("locate")) {
+            locateNest(privateChannel, options);
         } else {
             privateChannel.sendMessage("unknown $nest command").submit();
         }
     }
 
+    private void locateNest(PrivateChannel privateChannel, String[] options) {
+        String nestName = options[0].trim();
+        Optional<Nest> maybeNest = nestRepo.findById(nestName);
+        if (!maybeNest.isPresent()) {
+            privateChannel.sendMessage("unknown nest " + nestName).submit();
+            return;
+        }
+
+        Nest nest = maybeNest.get();
+        nest.setLatitude(Double.parseDouble(options[1]));
+        nest.setLongitude(Double.parseDouble(options[2]));
+        nestRepo.save(nest);
+        privateChannel.sendMessage(nestName + " location updated to " + nest.getLatitude() +  ", " + nest
+                .getLongitude()).submit();
+    }
+
     private void sendHelp(PrivateChannel privateChannel) {
         privateChannel.sendMessage("nest commands:\n" +
-                "'$nest add name, longitude, latitude' to add a new nest\n" +
+                "'$nest add name, latitude, longitude' to add a new nest\n" +
                 "'$nest update name, pokemon' to update a nest to a new pokemon\n" +
                 "'$nest list' to show all nests\n" +
+                "'$nest locate name, latitude, longitude' to update a nest's location\n" +
                 "'$nest clear' to clear all nests after rotation").submit();
     }
 
@@ -93,6 +112,7 @@ public class NestCommandListener extends CommandEventListener {
         EmbedBuilder embedBuilder = new EmbedBuilder();
         embedBuilder.setTimestamp(ZonedDateTime.now());
 
+        // https://www.google.com/maps/@41.1890504,-81.7038606,16z
         List<String> stale = new ArrayList<>();
         for (Nest nest : sortedNests) {
             String nestName = nest.getName();
@@ -105,6 +125,11 @@ public class NestCommandListener extends CommandEventListener {
             String reportedBy = StringUtils.abbreviate(nest.getReportedBy(), 20);
             String reportedAt = FORMATTER.format(nest.getReportedAt());
             String value = pokemon + " " + reportedBy + " " + reportedAt;
+            if (nest.getLatitude() != 0.0 && nest.getLongitude() != 0.0) {
+                String map = "[map](https://www.google.com/maps/@" + nest.getLatitude() + "," + nest.getLongitude() +
+                        ",17z)";
+                value = value + " " + map;
+            }
             embedBuilder.addField(nestName, value, false);
         }
 
@@ -119,8 +144,8 @@ public class NestCommandListener extends CommandEventListener {
     private void addNest(PrivateChannel channel, String memberName, String[] options) {
         Nest nest = new Nest();
         nest.setName(options[0].trim());
-        nest.setLongitude(Double.parseDouble(options[1]));
-        nest.setLatitude(Double.parseDouble(options[2]));
+        nest.setLatitude(Double.parseDouble(options[1]));
+        nest.setLongitude(Double.parseDouble(options[2]));
         nest.setReportedBy(memberName);
         nest.setReportedAt(ZonedDateTime.now());
         nestRepo.save(nest);

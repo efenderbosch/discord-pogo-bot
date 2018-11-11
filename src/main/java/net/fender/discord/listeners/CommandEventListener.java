@@ -3,16 +3,16 @@ package net.fender.discord.listeners;
 import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.fender.discord.filters.CommandParser;
-import net.fender.discord.filters.EventFilter;
 
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 public abstract class CommandEventListener extends BaseEventListener<MessageReceivedEvent> {
 
     private final CommandParser commandParser;
 
-    protected CommandEventListener(Pattern command, EventFilter<? extends Event>... filters) {
+    protected CommandEventListener(Pattern command, Predicate<? extends Event>... filters) {
         super(MessageReceivedEvent.class, filters);
         commandParser = new CommandParser(command);
     }

@@ -5,10 +5,11 @@ import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 
 import java.util.Arrays;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.toSet;
 
-public class ChannelNameFilter implements EventFilter<GenericMessageEvent> {
+public class ChannelNameFilter implements Predicate<GenericMessageEvent> {
 
     private final Set<String> channelNames;
 

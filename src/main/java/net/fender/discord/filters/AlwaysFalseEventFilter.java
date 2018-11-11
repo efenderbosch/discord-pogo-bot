@@ -2,9 +2,11 @@ package net.fender.discord.filters;
 
 import net.dv8tion.jda.core.events.Event;
 
-public enum AlwaysFalseEventFilter implements EventFilter<Event> {
+import java.util.function.Predicate;
 
-    INSTANCE;
+public enum AlwaysFalseEventFilter implements Predicate<Event> {
+
+    ALWAYS_FALSE_EVENT_FILTER;
 
     @Override
     public boolean test(Event event) {
