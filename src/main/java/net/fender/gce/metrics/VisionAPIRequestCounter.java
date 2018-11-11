@@ -52,7 +52,9 @@ public class VisionAPIRequestCounter {
                 setFilter(FILTER).
                 setInterval(interval).
                 build();
+        LOG.debug("sending vision api count request");
         ListTimeSeriesPagedResponse response = metricServiceClient.listTimeSeries(request);
+        LOG.debug("received vision api count response");
         long count = 0;
         for (TimeSeries timeSeries : response.iterateAll()) {
             for (Point point : timeSeries.getPointsList()) {
