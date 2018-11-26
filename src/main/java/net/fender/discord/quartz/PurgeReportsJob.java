@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class PurgeReportsJob implements Job {
@@ -18,6 +20,7 @@ public class PurgeReportsJob implements Job {
     private ReportRepository reportRepo;
 
     @Override
+    @Transactional(propagation = Propagation.NEVER)
     public void execute(JobExecutionContext context) throws JobExecutionException {
         LOG.info("purging reports");
         long count = reportRepo.deleteByReportedAtBeforeNow();

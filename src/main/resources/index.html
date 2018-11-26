@@ -13,6 +13,7 @@
         margin: 0;
         padding: 0;
       }
+
     </style>
 </head>
 <body>
@@ -43,7 +44,6 @@
         // Create a <script> tag and set the USGS URL as the source.
         var script = document.createElement('script');
         script.src = 'https://s3.amazonaws.com/viridian-pokemongo-map/pokestops.js';
-        //script.src = 'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js';
         document.getElementsByTagName('head')[0].appendChild(script);
       }
 
@@ -57,11 +57,13 @@
           var marker = new google.maps.Marker({
             position: latLng,
             label: label,
-            map: map
+            map: map,
+            icon: 'https://s3.amazonaws.com/viridian-pokemongo-map/pokestop.png'
           });
         }
       }
-    </script>
+
+</script>
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBa_Jm8koFe96R-Tz3xPyVngBo49hQ6_AU&callback=initMap">
 </script>

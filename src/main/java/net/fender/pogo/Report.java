@@ -1,12 +1,13 @@
 package net.fender.pogo;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.springframework.data.annotation.Id;
 
-import javax.persistence.*;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import java.time.LocalDate;
 import java.util.Objects;
 
-@Entity
 public class Report {
 
     @Id
