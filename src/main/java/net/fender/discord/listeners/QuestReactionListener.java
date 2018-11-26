@@ -30,9 +30,10 @@ import software.amazon.awssdk.services.rekognition.model.*;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
+import software.amazon.awssdk.utils.IoUtils;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -72,8 +73,8 @@ public class QuestReactionListener extends BaseEventListener<MessageReactionAddE
         this.objectMapper = objectMapper;
         this.s3 = s3;
         Resource resource = resourceLoader.getResource("classpath:geojson.liquid");
-        File file = resource.getFile();
-        template = Template.parse(file);
+        InputStream is = resource.getInputStream();
+        template = Template.parse(IoUtils.toUtf8String(is));
     }
 
     @Override

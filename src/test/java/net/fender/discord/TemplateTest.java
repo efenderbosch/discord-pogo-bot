@@ -13,9 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+import software.amazon.awssdk.utils.IoUtils;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,8 +33,8 @@ public class TemplateTest {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.WRAP_ROOT_VALUE);
         Resource resource = resourceLoader.getResource("classpath:geojson.liquid");
-        File file = resource.getFile();
-        Template template = Template.parse(file);
+        InputStream is = resource.getInputStream();
+        Template template = Template.parse(IoUtils.toUtf8String(is));
 
         Report report = new Report();
         report.setPokestop("pokestop name goes here");
