@@ -7,7 +7,6 @@ import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.hooks.EventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.services.ssm.SsmClient;
@@ -18,7 +17,6 @@ import javax.security.auth.login.LoginException;
 import java.util.List;
 
 @Configuration
-@EnableConfigurationProperties(DiscordProperties.class)
 public class DiscordConfiguration {
 
     private static final Logger LOG = LoggerFactory.getLogger(DiscordConfiguration.class);
