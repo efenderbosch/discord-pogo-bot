@@ -83,7 +83,7 @@ public class NestCommandListener extends CommandEventListener {
         nest.setLatitude(Double.parseDouble(options[1]));
         nest.setLongitude(Double.parseDouble(options[2]));
         nestRepo.save(nest);
-        privateChannel.sendMessage(nestName + " location updated to " + nest.getLatitude() +  ", " + nest
+        privateChannel.sendMessage(nestName + " location updated to " + nest.getLatitude() + ", " + nest
                 .getLongitude()).submit();
     }
 
@@ -99,46 +99,71 @@ public class NestCommandListener extends CommandEventListener {
     private void listAll(PrivateChannel privateChannel) {
         LOG.info("listing nests");
 
-        Message message = buildAllNestMessage();
-        privateChannel.sendMessage(message).submit();
+        List<Message> messages = buildAllNestMessage();
+        messages.forEach(message -> privateChannel.sendMessage(message).submit());
     }
 
-    private Message buildAllNestMessage() {
+    private List<Message> buildAllNestMessage() {
         Iterable<Nest> nests = nestRepo.findAll();
         List<Nest> sortedNests = StreamSupport.stream(nests.spliterator(), false).
                 sorted().
                 collect(Collectors.toList());
 
+        ZonedDateTime now = ZonedDateTime.now();
         EmbedBuilder embedBuilder = new EmbedBuilder();
-        embedBuilder.setTimestamp(ZonedDateTime.now());
+        embedBuilder.setTimestamp(now);
 
+        List<Message> messages = new ArrayList<>(2);
         // https://www.google.com/maps/@41.1890504,-81.7038606,16z
-        List<String> stale = new ArrayList<>();
+        List<Nest> staleNests = new ArrayList<>();
         for (Nest nest : sortedNests) {
             String nestName = nest.getName();
             if (nest.getPokemon() == null || nest.getReportedAt().isBefore(ZonedDateTime.now().minusDays(14))) {
-                stale.add(nestName);
+                staleNests.add(nest);
                 continue;
             }
-
             String pokemon = StringUtils.abbreviate(nest.getPokemon() == null ? "unknown" : nest.getPokemon(), 20);
             String reportedBy = StringUtils.abbreviate(nest.getReportedBy(), 20);
             String reportedAt = FORMATTER.format(nest.getReportedAt());
             String value = pokemon + " " + reportedBy + " " + reportedAt;
             if (nest.getLatitude() != 0.0 && nest.getLongitude() != 0.0) {
-                String map = "[map](https://www.google.com/maps/@" + nest.getLatitude() + "," + nest.getLongitude() +
-                        ",17z)";
+                String map = "[map](https://www.google.com/maps/dir/?api=1&destination=" +
+                        nest.getLatitude() + "%2C+" + nest.getLongitude() + ")";
                 value = value + " " + map;
             }
             embedBuilder.addField(nestName, value, false);
         }
-
-        if (!stale.isEmpty()) {
-            embedBuilder.addField("Stale Nests:", stale.stream().collect(joining(", ")), false);
-        }
         MessageBuilder builder = new MessageBuilder();
         builder.setEmbed(embedBuilder.build());
-        return builder.build();
+        messages.add(builder.build());
+
+        if (!staleNests.isEmpty()) {
+            embedBuilder = new EmbedBuilder();
+            embedBuilder.setTimestamp(now);
+            String stale = staleNests.stream().
+                    map(nest -> {
+                        String nestName = nest.getName();
+                        if (nest.getLatitude() != 0.0 && nest.getLongitude() != 0.0) {
+                            return "[" + nestName + "](https://www.google.com/maps/dir/?api=1&destination=" +
+                                    nest.getLatitude() + "%2C+" + nest.getLongitude() + ")";
+                        } else {
+                            return nestName;
+                        }
+                    }).
+                    collect(joining(", "));
+            while (stale.length() > 1024) {
+                int last = stale.substring(0, 1023).lastIndexOf(',');
+                String first = stale.substring(0, last).trim();
+                embedBuilder.addField("Stale Nests:", first, false);
+                stale = stale.substring(last + 1).trim();
+            }
+            embedBuilder.addField("Stale Nests:", stale, false);
+
+            builder = new MessageBuilder();
+            builder.setEmbed(embedBuilder.build());
+            messages.add(builder.build());
+        }
+        return messages;
     }
 
     private void addNest(PrivateChannel channel, String memberName, String[] options) {
@@ -165,14 +190,14 @@ public class NestCommandListener extends CommandEventListener {
     }
 
     private void pinNestList(PrivateChannel channel) {
-        Message allNestsMessage = buildAllNestMessage();
+        List<Message> allNestsMessages = buildAllNestMessage();
         TextChannel sightings = channel.getJDA().getTextChannelsByName("sightings", true).get(0);
         List<Message> pinnedMessages = sightings.getPinnedMessages().complete();
         pinnedMessages.stream().
                 filter(message -> message.getMember().getUser().isBot()).
                 forEach(message -> message.delete().submit());
-        String id = sightings.sendMessage(allNestsMessage).complete().getId();
-        sightings.pinMessageById(id ).submit();
+        String id = sightings.sendMessage(allNestsMessages.get(0)).complete().getId();
+        sightings.pinMessageById(id).submit();
     }
 
     private void updateNest(PrivateChannel channel, String memberName, String[] options) {
@@ -193,6 +218,7 @@ public class NestCommandListener extends CommandEventListener {
         String pokemonName = options[1].trim();
         nest.setPokemon(pokemonName);
         nest.setReportedBy(memberName);
+        nest.setReportedAt(ZonedDateTime.now());
         nestRepo.save(nest);
         channel.sendMessage("updated nest " + nest.getName() + " to " + pokemonName).submit();
 

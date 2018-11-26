@@ -21,11 +21,15 @@ public class BlessedListener extends CommandEventListener {
         super(BLESSSED, MEMBER_IS_USER_FILTER);
     }
 
+    private Emote penta;
+
     @Override
     protected void processCommand(MessageReceivedEvent event, List<String> parts) {
         Message message = event.getMessage();
-        JDA jda = message.getJDA();
-        Emote emote = jda.getEmotesByName("penta", true).get(0);
-        message.addReaction(emote).submit();
+        if (penta == null) {
+            JDA jda = message.getJDA();
+             penta = jda.getEmotesByName("penta", true).get(0);
+        }
+        message.addReaction(penta).submit();
     }
 }

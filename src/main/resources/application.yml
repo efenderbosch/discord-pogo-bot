@@ -1,7 +1,9 @@
 spring:
   application.name: giovanni
-  profiles.include: 'discord-token'
-  jackson.property-naming-strategy: SNAKE_CASE
+  profiles.include: 'aws-credentials'
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    serialization.WRAP_ROOT_VALUE: true
   datasource:
     driver-class-name: org.h2.Driver
     username: sa

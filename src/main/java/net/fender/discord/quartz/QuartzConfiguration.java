@@ -2,12 +2,12 @@ package net.fender.discord.quartz;
 
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import static org.quartz.CronScheduleBuilder.dailyAtHourAndMinute;
+
 @Configuration
-@EnableConfigurationProperties(QuartzProperties.class)
 public class QuartzConfiguration {
 
     @Bean
@@ -23,7 +23,7 @@ public class QuartzConfiguration {
     public Trigger purgeQuestChannelJobTrigger(@Qualifier("purgeQuestChannelJobDetail") JobDetail
                                                            purgeQuestChannelJob) {
         return TriggerBuilder.newTrigger().forJob(purgeQuestChannelJob).
-                withSchedule(CronScheduleBuilder.dailyAtHourAndMinute(0, 1)).
+                withSchedule(dailyAtHourAndMinute(0, 1)).
                 build();
     }
 
@@ -40,7 +40,22 @@ public class QuartzConfiguration {
     public Trigger purgeSightingsChannelJobTrigger(@Qualifier("purgeSightingsChannelJobDetail") JobDetail
                                                                purgeSightingsChannelJob) {
         return TriggerBuilder.newTrigger().forJob(purgeSightingsChannelJob).
-                withSchedule(CronScheduleBuilder.dailyAtHourAndMinute(0, 1)).
+                withSchedule(dailyAtHourAndMinute(0, 1)).
+                build();
+    }
+
+    @Bean
+    public JobDetail purgeReportsJobDetail() {
+        return JobBuilder.newJob().
+                ofType(PurgeReportsJob.class).
+                storeDurably().
+                build();
+    }
+
+    @Bean
+    public Trigger purgeReportsJobTrigger(@Qualifier("purgeReportsJobDetail") JobDetail purgeReportsJob) {
+        return TriggerBuilder.newTrigger().forJob(purgeReportsJob).
+                withSchedule(dailyAtHourAndMinute(0, 1)).
                 build();
     }
 

@@ -1,2 +1,0 @@
-# run git update-index --assume-unchanged src/main/resources/application-discord-token.yml
-# this file should *NEVER* have your actual discord token checked in to git

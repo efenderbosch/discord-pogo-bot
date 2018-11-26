@@ -8,8 +8,6 @@ import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.fender.discord.filters.ChannelNameFilter;
 import net.fender.pogo.QuestRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,8 +25,6 @@ import static net.fender.discord.filters.MemberIsUserFilter.MEMBER_IS_USER_FILTE
 
 @Component
 public class QuestScreenshotListener extends BaseEventListener<MessageReceivedEvent> {
-
-    private static final Logger LOG = LoggerFactory.getLogger(QuestScreenshotListener.class);
 
     static final String QUEST_CHANNEL_NAME = "quests";
     private static final ChannelNameFilter CHANNEL_NAME_FILTER = new ChannelNameFilter

@@ -1,0 +1,16 @@
+eqfeed_callback({
+  "type":"FeatureCollection",
+  "features":[{% for report in reports %}
+    {
+      "type": "Feature",
+      "properties": {
+        "pokestop": "{{ report.pokestop }}",
+        "task": "{{ report.task }}",
+        "reward": "{{ report.reward }}"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ {{ report.latitude }}, {{ report.longitude }} ]
+      }
+    }{% if forloop.last != true %},{% endif %}
+{% endfor %}]});

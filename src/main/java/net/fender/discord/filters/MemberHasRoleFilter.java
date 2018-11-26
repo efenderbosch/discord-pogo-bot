@@ -8,6 +8,7 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 import static java.util.stream.Collectors.toList;
+import static net.fender.discord.filters.MemberIsUserFilter.MEMBER_IS_USER_FILTER;
 
 public class MemberHasRoleFilter implements Predicate<MessageReceivedEvent> {
 
@@ -23,7 +24,7 @@ public class MemberHasRoleFilter implements Predicate<MessageReceivedEvent> {
 
     @Override
     public boolean test(MessageReceivedEvent messageReceivedEvent) {
-        if (!MemberIsUserFilter.MEMBER_IS_USER_FILTER.test(messageReceivedEvent)) return false;
+        if (!MEMBER_IS_USER_FILTER.test(messageReceivedEvent)) return false;
 
         Member member;
         PrivateChannel privateChannel = messageReceivedEvent.getPrivateChannel();
