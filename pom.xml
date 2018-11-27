@@ -108,6 +108,11 @@
             <artifactId>logback-ext-loggly</artifactId>
             <version>0.1.5</version>
         </dependency>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>5.2</version>
+        </dependency>
 
         <!-- test -->
         <dependency>
