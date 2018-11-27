@@ -1,21 +1,24 @@
 <configuration>
 
-    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d [%thread] %-5level %logger{40} - %msg%n</pattern>
         </encoder>
     </appender>
 
+    <appender name="loggly" class="ch.qos.logback.ext.loggly.LogglyAppender">
+        <endpointUrl>http://logs-01.loggly.com/inputs/b48a573e-bb7c-436e-93d3-6216559c7216/tag/logback</endpointUrl>
+        <pattern>%d{"ISO8601", UTC}  %p %t %c{0}.%M - %m%n</pattern>
+    </appender>
+
     <logger name="net.fender" level="debug" additivity="false">
-        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="console"/>
+        <appender-ref ref="loggly"/>
     </logger>
 
-    <!--<logger name="io.grpc" level="trace" additivity="false">-->
-        <!--<appender-ref ref="CONSOLE"/>-->
-    <!--</logger>-->
-
     <root level="info">
-        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="console"/>
+        <appender-ref ref="loggly"/>
     </root>
 
 </configuration>

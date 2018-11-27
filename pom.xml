@@ -102,6 +102,13 @@
             <version>0.7.7</version>
         </dependency>
 
+        <!-- logging -->
+        <dependency>
+            <groupId>org.logback-extensions</groupId>
+            <artifactId>logback-ext-loggly</artifactId>
+            <version>0.1.5</version>
+        </dependency>
+
         <!-- test -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
