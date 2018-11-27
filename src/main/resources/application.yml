@@ -9,7 +9,7 @@ spring:
     username: sa
     #password: mysqlpass
     url: jdbc:h2:./giovanni_h2
-  jpa.hibernate.ddl-auto: update
+  jpa.hibernate.ddl-auto: create
   #quartz.job-store-type: jdbc
 
 default-locale: en_US
