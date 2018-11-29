@@ -50,9 +50,11 @@
       // Loop through the results array and place a marker for each
       // set of coordinates.
       window.eqfeed_callback = function(results) {
+        var bounds = new google.maps.LatLngBounds();
         for (var i = 0; i < results.features.length; i++) {
           var coords = results.features[i].geometry.coordinates;
           var latLng = new google.maps.LatLng(coords[0], coords[1]);
+          bounds.extend(latLng);
           var label = results.features[i].properties.pokestop;
           var marker = new google.maps.Marker({
             position: latLng,
@@ -61,8 +63,9 @@
             icon: 'https://s3.amazonaws.com/viridian-pokemongo-map/pokestop.png'
           });
         }
+        map.setCenter(bounds.getCenter());
+        map.fitBounds(bounds);
       }
-
 </script>
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBa_Jm8koFe96R-Tz3xPyVngBo49hQ6_AU&callback=initMap">
