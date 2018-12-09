@@ -156,7 +156,6 @@ public class QuestReactionListener extends BaseEventListener<MessageReactionAddE
             if (top < 0.05 || top > 0.1) continue;
 
             stringBuilder.append(textDetection.detectedText()).append(' ');
-            break;
         }
 
         String pokestop = stringBuilder.toString().trim();
