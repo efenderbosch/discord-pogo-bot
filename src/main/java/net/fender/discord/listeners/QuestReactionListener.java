@@ -148,17 +148,18 @@ public class QuestReactionListener extends BaseEventListener<MessageReactionAddE
         DetectTextRequest request = DetectTextRequest.builder().image(image).build();
         DetectTextResponse response = rekognition.detectText(request);
 
-        String pokestop = null;
+        StringBuilder stringBuilder = new StringBuilder();
         for (TextDetection textDetection : response.textDetections()) {
             if (textDetection.type() != TextTypes.LINE) continue;
 
             float top = textDetection.geometry().boundingBox().top();
             if (top < 0.05 || top > 0.1) continue;
 
-            pokestop = textDetection.detectedText();
+            stringBuilder.append(textDetection.detectedText()).append(' ');
             break;
         }
 
+        String pokestop = stringBuilder.toString().trim();
         if (pokestop.isEmpty()) {
             questChannel.sendMessage("Could not find a Pokestop name in that screenshot. Please send it to Fender.")
                     .submit();
