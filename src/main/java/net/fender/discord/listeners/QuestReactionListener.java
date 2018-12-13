@@ -153,7 +153,7 @@ public class QuestReactionListener extends BaseEventListener<MessageReactionAddE
             if (textDetection.type() != TextTypes.LINE) continue;
 
             float top = textDetection.geometry().boundingBox().top();
-            if (top < 0.05 || top > 0.1) continue;
+            if (top < 0.05 || top > 0.09) continue;
 
             stringBuilder.append(textDetection.detectedText()).append(' ');
         }
