@@ -23,9 +23,17 @@ public class TeamRocketRandomEmoteListener extends BaseEventListener<MessageRece
 
     @Override
     protected void processEvent(MessageReceivedEvent event) {
+        boolean robbie = "ShogaRobbie".equalsIgnoreCase(event.getAuthor().getName());
+
         int r = RANDOM.nextInt(1000);
         Message message = event.getMessage();
         TextChannel channel = message.getTextChannel();
+
+        if (robbie && r < 10) {
+            channel.sendMessage("Damn it Rob...").submit();
+            return;
+        }
+
         if (r == 0) {
             String emoteName = EMOTES[RANDOM.nextInt(EMOTES.length)];
             Emote teamRocket = message.getJDA().getEmotesByName(emoteName, true).get(0);
