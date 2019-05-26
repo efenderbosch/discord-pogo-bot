@@ -31,15 +31,13 @@ public class PurgeChannelJob implements Job {
     public void execute(JobExecutionContext context) {
         String channelName = (String) context.getMergedJobDataMap().get("channel");
         List<TextChannel> channels = jda.getTextChannelsByName(channelName, true);
-        OffsetDateTime midnight = OffsetDateTime.now().truncatedTo(DAYS);
+        OffsetDateTime purgeTime = OffsetDateTime.now().truncatedTo(DAYS).minusHours(1L);
         for (TextChannel channel : channels) {
-            LOG.info("purging messages before {} in {}", midnight, channelName);
+            LOG.info("purging messages before {} in {}", purgeTime, channelName);
             channel.sendTyping().submit();
             int count = 0;
             for (Message message : channel.getIterableHistory()) {
-                if (message.isPinned()) continue;
-
-                if (message.getCreationTime().isAfter(midnight)) continue;
+                if (message.isPinned() || message.getCreationTime().isAfter(purgeTime)) continue;
 
                 message.delete().submit();
                 count++;

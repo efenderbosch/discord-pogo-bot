@@ -47,19 +47,4 @@ public class QuartzConfiguration {
                 build();
     }
 
-    @Bean
-    public JobDetail purgeReportsJobDetail() {
-        return JobBuilder.newJob().
-                ofType(PurgeReportsJob.class).
-                storeDurably().
-                build();
-    }
-
-    @Bean
-    public Trigger purgeReportsJobTrigger(@Qualifier("purgeReportsJobDetail") JobDetail purgeReportsJob) {
-        return TriggerBuilder.newTrigger().forJob(purgeReportsJob).
-                withSchedule(dailyAtHourAndMinute(0, 1)).
-                build();
-    }
-
 }
