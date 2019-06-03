@@ -23,7 +23,7 @@ public class TestStuff {
     @Disabled
     public void test_base_stats() {
         PokeApi pokeApi = new PokeApiClient();
-        for (int i = 1; i < 100; i++) {
+        for (int i = 1; i < 10; i++) {
             Pokemon pokemon = pokeApi.getPokemon(i);
             BaseStats baseStats = new BaseStats(pokemon);
             System.out.println(pokemon.getName() + " " + baseStats.getAttack() + " " + baseStats.getDefense() + " " + baseStats.getStamina());
@@ -31,17 +31,14 @@ public class TestStuff {
             Map<IndividualValues, StatProduct> statProducts = StatProduct.generateStatProducts(pokemon, League.GREAT);
             SortedSet<StatProduct> sortedStatProducts = new TreeSet<>();
             sortedStatProducts.addAll(statProducts.values());
-            sortedStatProducts.stream().findFirst().ifPresent(top ->
-                    System.out.println(top.getLevel() + " " + top.getIvs().getAttack() + "/" +
-                            top.getIvs().getDefense() + "/" + top.getIvs().getStamina() + " " + top.getCp() + " " +
-                            round(top.getLevelAttack()) + " " + round(top.getLevelDefense()) + " " + top.getHp() + " " +
-                            top.getStatProduct()));
+            sortedStatProducts.stream().findFirst().ifPresent(System.out::println);
+//            top -> {}
+//                    System.out.println(top.getLevel() + " " + top.getIvs().getAttack() + "/" +
+//                            top.getIvs().getDefense() + "/" + top.getIvs().getStamina() + " " + top.getCp() + " " +
+//                            StatProduct.round(top.getLevelAttack()) + " " + StatProduct.round(top.getLevelDefense()) +
+//                            " " + top.getHp() + " " + top.getStatProduct()));
             System.out.println("---------------------");
         }
-    }
-
-    private static String round(double d) {
-        return "" + (Math.round(d * 100.0) / 100.0);
     }
 
     @Test

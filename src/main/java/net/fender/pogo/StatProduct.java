@@ -150,15 +150,17 @@ public class StatProduct implements Comparable<StatProduct> {
     public String toString() {
         ToStringBuilder builder = new ToStringBuilder(this);
         builder.append("level", level);
-        builder.append("atk-iv", ivs.getAttack());
-        builder.append("def-iv", ivs.getDefense());
-        builder.append("sta-iv", ivs.getStamina());
-        builder.append("atk", levelAttack);
-        builder.append("def", levelDefense);
+        builder.append("IVs", ivs.getAttack() + "/" + ivs.getDefense() + "/" + ivs.getStamina());
+        builder.append("atk", round(levelAttack));
+        builder.append("def", round(levelDefense));
         builder.append("hp", hp);
         builder.append("product", statProduct);
         builder.append("cp", cp);
         return builder.toString();
+    }
+
+    public static String round(double d) {
+        return "" + (Math.round(d * 100.0) / 100.0);
     }
 
     @Override
