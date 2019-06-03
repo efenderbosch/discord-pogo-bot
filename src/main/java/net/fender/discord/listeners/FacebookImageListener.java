@@ -63,7 +63,7 @@ public class FacebookImageListener extends BaseEventListener<MessageReceivedEven
         if (author.equalsIgnoreCase("Barb Hale")) {
             // Barb's screenshots are of the gym overview, which Pokenav doesn't handle. Burns quota.
             announceRaidsHere.sendMessage("Our field agent G-ma B may have reported a raid!").submit();
-            imageAttachments.forEach(attachment ->  announceRaidsHere.sendMessage(attachment.getUrl()).submit();
+            imageAttachments.forEach(attachment ->  announceRaidsHere.sendMessage(attachment.getUrl()).submit());
             return;
         }
 
