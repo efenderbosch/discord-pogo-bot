@@ -15,19 +15,17 @@ import net.fender.pogo.League;
 import net.fender.pogo.StatProduct;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
 
 @Component
 public class RankListener extends CommandEventListener {
 
-    private static final Pattern RANK = Pattern.compile("\\$rank\\s+([-\\w]+)\\s+(\\d{1,2})\\s+(\\d{1,2})\\s+(\\d{1,2})");
+    private static final Pattern RANK = Pattern.compile("\\$rank\\s+(\\w+)\\s+([-\\w]+)\\s+(\\d{1,2})\\s+(\\d{1,2})" +
+            "\\s+(\\d{1,2})");
     private static final PokeApi POKE_API = new PokeApiClient();
     private static final ChannelNameFilter CHANNEL_NAME_FILTER = new ChannelNameFilter("rank-bot");
 
@@ -42,11 +40,20 @@ public class RankListener extends CommandEventListener {
         if (rankBot == null) {
             rankBot = event.getJDA().getTextChannelsByName("rank-bot", true).get(0);
         }
+        rankBot.sendTyping().submit();
 
-        String pokemonName = parts.get(1);
-        int atk = Integer.parseInt(parts.get(2));
-        int def = Integer.parseInt(parts.get(3));
-        int sta = Integer.parseInt(parts.get(4));
+        String leagueName = parts.get(1);
+        Optional<League> maybeLeague = League.find(leagueName);
+        if (!maybeLeague.isPresent()) {
+            rankBot.sendMessage("Unknown league " + leagueName + "!").submit();
+            return;
+        }
+
+        String pokemonName = parts.get(2);
+        // reg ex won't pass if these aren't numbers, so should not need try/catch around conversion from String
+        int atk = Integer.parseInt(parts.get(3));
+        int def = Integer.parseInt(parts.get(4));
+        int sta = Integer.parseInt(parts.get(5));
         IndividualValues ivs = new IndividualValues(atk, def, sta);
 
         Pokemon pokemon = null;
@@ -67,7 +74,7 @@ public class RankListener extends CommandEventListener {
 
         SortedSet<StatProduct> betterStats = stats.values().stream().
                 filter(s -> s.getStatProduct() >= statProduct.getStatProduct()).
-                collect(Collectors.toCollection(TreeSet::new));
+                collect(toCollection(TreeSet::new));
         int rank = betterStats.size();
         StatProduct bestStats = betterStats.first();
 
