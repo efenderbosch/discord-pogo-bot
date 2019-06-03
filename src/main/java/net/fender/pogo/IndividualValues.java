@@ -1,6 +1,7 @@
 package net.fender.pogo;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class IndividualValues {
 
@@ -27,5 +28,20 @@ public class IndividualValues {
 
     public BigDecimal getStamina() {
         return stamina;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        IndividualValues that = (IndividualValues) o;
+        return attack.intValue() == that.attack.intValue() &&
+                defense.intValue() == that.defense.intValue() &&
+                stamina.intValue() == that.stamina.intValue();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(attack.intValue(), defense.intValue(), stamina.intValue());
     }
 }

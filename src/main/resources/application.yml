@@ -1,9 +1,8 @@
 spring:
   application.name: giovanni
   profiles.include: 'aws-credentials'
-  jackson:
-    property-naming-strategy: SNAKE_CASE
-    serialization.WRAP_ROOT_VALUE: true
+#  jackson:
+#    property-naming-strategy: SNAKE_CASE
   datasource:
     driver-class-name: org.h2.Driver
     username: sa
