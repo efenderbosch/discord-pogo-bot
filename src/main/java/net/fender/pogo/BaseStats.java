@@ -4,23 +4,13 @@ import me.sargunvohra.lib.pokekotlin.model.Pokemon;
 import me.sargunvohra.lib.pokekotlin.model.PokemonStat;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
-import java.math.BigDecimal;
 import java.util.List;
-
-import static java.math.RoundingMode.HALF_UP;
 
 public class BaseStats {
 
-    private static final BigDecimal FIVE_HUNDRED = new BigDecimal("500.00");
-    private static final BigDecimal SPEED_SCALE = new BigDecimal("1.75");
-    private static final BigDecimal SEVEN_EIGHTHS = BigDecimal.valueOf(7).divide(BigDecimal.valueOf(8));
-    private static final BigDecimal ONE_EIGHTH = BigDecimal.ONE.divide(BigDecimal.valueOf(8));
-    private static final BigDecimal FIVE_EIGHTS = BigDecimal.valueOf(5).divide(BigDecimal.valueOf(8));
-    private static final BigDecimal THREE_EIGHTS = BigDecimal.valueOf(3).divide(BigDecimal.valueOf(8));
-
-    private final BigDecimal attack;
-    private final BigDecimal defense;
-    private final BigDecimal stamina;
+    private final int attack;
+    private final int defense;
+    private final int stamina;
 
     public BaseStats(Pokemon pokemon) {
         List<PokemonStat> stats = pokemon.getStats();
@@ -53,40 +43,34 @@ public class BaseStats {
             }
         }
 
-        BigDecimal speedModifier = BigDecimal.valueOf(speed - 75).
-                divide(FIVE_HUNDRED).
-                add(BigDecimal.ONE);
+        double speedModifier = 1 + (speed - 75) / 500.0;
 
-        BigDecimal minAttack = BigDecimal.valueOf(Math.min(physicalAttack, specialAttack));
-        BigDecimal maxAttack = BigDecimal.valueOf(Math.max(physicalAttack, specialAttack));
-        attack = SEVEN_EIGHTHS.multiply(maxAttack).
-                add(ONE_EIGHTH.multiply(minAttack)).
-                multiply(BigDecimal.valueOf(2)).
-                multiply(speedModifier).
-                setScale(0, HALF_UP);
+        int minAttack = Math.min(physicalAttack, specialAttack);
+        int maxAttack = Math.max(physicalAttack, specialAttack);
+        double scaledMaxAttack = 7.0 / 8.0 * maxAttack;
+        double scaledMinAttack = 1.0 / 8.0 * minAttack;
+        int scaledAttack = (int) Math.round(2.0 * (scaledMaxAttack + scaledMinAttack));
+        attack = (int) Math.round(scaledAttack * speedModifier);
 
-        BigDecimal minDefense = BigDecimal.valueOf(Math.min(physicalDefense, specialDefense));
-        BigDecimal maxDefense = BigDecimal.valueOf(Math.max(physicalDefense, specialDefense));
-        defense = FIVE_EIGHTS.multiply(maxDefense).
-                add(THREE_EIGHTS.multiply(minDefense)).
-                multiply(BigDecimal.valueOf(2)).multiply(speedModifier).
-                setScale(0, HALF_UP);
+        int minDefense = Math.min(physicalDefense, specialDefense);
+        int maxDefense = Math.max(physicalDefense, specialDefense);
+        double scaledMaxDefense = 5.0 / 8.0 * maxDefense;
+        double scaledMinDefense = 3.0 / 8.0 * minDefense;
+        int scaledDefense = (int) Math.round(2.0 * (scaledMaxDefense + scaledMinDefense));
+        defense = (int) Math.round(scaledDefense * speedModifier);
 
-        stamina = SPEED_SCALE.
-                multiply(BigDecimal.valueOf(msgHp)).
-                add(BigDecimal.valueOf(50)).
-                setScale(0, HALF_UP);
+        stamina = (int) Math.floor(msgHp * 1.75 + 50);
     }
 
-    public BigDecimal getAttack() {
+    public int getAttack() {
         return attack;
     }
 
-    public BigDecimal getDefense() {
+    public int getDefense() {
         return defense;
     }
 
-    public BigDecimal getStamina() {
+    public int getStamina() {
         return stamina;
     }
 

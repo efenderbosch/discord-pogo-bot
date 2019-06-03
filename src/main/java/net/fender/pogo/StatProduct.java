@@ -4,20 +4,16 @@ import me.sargunvohra.lib.pokekotlin.model.Pokemon;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
-
-import static java.math.MathContext.DECIMAL64;
-import static java.math.RoundingMode.HALF_UP;
 
 public class StatProduct implements Comparable<StatProduct> {
 
     private final double level;
     private final BaseStats stats;
-    private final BigDecimal levelAttack;
-    private final BigDecimal levelDefense;
-    private final BigDecimal hp;
+    private final double levelAttack;
+    private final double levelDefense;
+    private final int hp;
     private int statProduct;
     private final int cp;
     private final IndividualValues ivs;
@@ -26,18 +22,22 @@ public class StatProduct implements Comparable<StatProduct> {
         this.level = level;
         this.stats = stats;
         this.ivs = ivs;
-        BigDecimal cpModifier = CpModifier.getCpModifier(level);
-        levelAttack = cpModifier.multiply(stats.getAttack().add(ivs.getAttack()));
-        levelDefense = cpModifier.multiply(stats.getDefense().add(ivs.getDefense()));
-        hp = cpModifier.multiply(stats.getStamina().add(ivs.getStamina())).setScale(0, HALF_UP);
-        statProduct = levelAttack.multiply(levelDefense).multiply(hp).setScale(0, HALF_UP).intValue();
-        cp = stats.getAttack().add(ivs.getAttack()).
-                multiply(stats.getDefense().add(ivs.getDefense()).sqrt(DECIMAL64)).
-                multiply(stats.getStamina().add(ivs.getStamina()).sqrt(DECIMAL64)).
-                multiply(cpModifier.pow(2)).
-                divide(BigDecimal.TEN).
-                setScale(0, HALF_UP).
-                intValue();
+
+        double cpModifier = CpModifier.getCpModifier(level);
+
+        int attack = stats.getAttack() + ivs.getAttack();
+        int defense = stats.getDefense() + ivs.getDefense();
+        int stamina = stats.getStamina() + ivs.getStamina();
+
+        levelAttack = cpModifier * attack;
+        levelDefense = cpModifier * defense;
+        hp = (int) Math.floor(cpModifier * stamina);
+
+        statProduct = (int) Math.round(levelAttack * levelDefense * hp);
+
+        double d = Math.sqrt(defense);
+        double s = Math.sqrt(stamina);
+        cp = (int) Math.floor(attack * d * s * cpModifier * cpModifier / 10.0);
     }
 
     public double getLevel() {
@@ -56,15 +56,15 @@ public class StatProduct implements Comparable<StatProduct> {
         return cp;
     }
 
-    public BigDecimal getLevelAttack() {
+    public double getLevelAttack() {
         return levelAttack;
     }
 
-    public BigDecimal getLevelDefense() {
+    public double getLevelDefense() {
         return levelDefense;
     }
 
-    public BigDecimal getHp() {
+    public int getHp() {
         return hp;
     }
 
@@ -105,9 +105,9 @@ public class StatProduct implements Comparable<StatProduct> {
     }
 
     private boolean testIVs(int floor) {
-        return ivs.getAttack().intValue() >= floor &&
-                ivs.getDefense().intValue() >= floor &&
-                ivs.getStamina().intValue() >= floor;
+        return ivs.getAttack() >= floor &&
+                ivs.getDefense() >= floor &&
+                ivs.getStamina() >= floor;
     }
 
     public static StatProduct generateStatProduct(Pokemon pokemon, IndividualValues ivs, League league) {
@@ -148,15 +148,14 @@ public class StatProduct implements Comparable<StatProduct> {
 
     @Override
     public String toString() {
-        // TODO scale BigDecimal to 2
         ToStringBuilder builder = new ToStringBuilder(this);
         builder.append("level", level);
         builder.append("atk-iv", ivs.getAttack());
         builder.append("def-iv", ivs.getDefense());
         builder.append("sta-iv", ivs.getStamina());
-        builder.append("atk", levelAttack.setScale(2, HALF_UP));
-        builder.append("def", levelDefense.setScale(2, HALF_UP));
-        builder.append("hp", hp.intValue());
+        builder.append("atk", levelAttack);
+        builder.append("def", levelDefense);
+        builder.append("hp", hp);
         builder.append("product", statProduct);
         builder.append("cp", cp);
         return builder.toString();
