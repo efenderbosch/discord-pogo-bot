@@ -25,6 +25,8 @@ public class PokeNavNegativeEmoteListener extends BaseEventListener<MessageReact
         super(MessageReactionAddEvent.class, MEMBER_IS_BOT_FILTER);
     }
 
+    private TextChannel badImages;
+
     @Override
     protected void processEvent(MessageReactionAddEvent event) {
         MessageReaction.ReactionEmote reactionEmote = event.getReactionEmote();
@@ -34,7 +36,10 @@ public class PokeNavNegativeEmoteListener extends BaseEventListener<MessageReact
             return;
         }
 
-        TextChannel badImages = event.getJDA().getTextChannelsByName("bad-images", true).get(0);
+        if (badImages == null) {
+            badImages = event.getJDA().getTextChannelsByName("bad-images", true).get(0);
+        }
+
         try {
             Message original = event.getTextChannel().getMessageById(event.getMessageId()).submit().get();
             User op = original.getMember().getUser();
