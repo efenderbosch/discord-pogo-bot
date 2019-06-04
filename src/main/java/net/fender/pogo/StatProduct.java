@@ -1,16 +1,14 @@
 package net.fender.pogo;
 
-import me.sargunvohra.lib.pokekotlin.model.Pokemon;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 
 public class StatProduct implements Comparable<StatProduct> {
 
     private final double level;
-    private final BaseStats stats;
     private final double levelAttack;
     private final double levelDefense;
     private final int hp;
@@ -18,16 +16,15 @@ public class StatProduct implements Comparable<StatProduct> {
     private final int cp;
     private final IndividualValues ivs;
 
-    public StatProduct(BaseStats stats, IndividualValues ivs, double level) {
+    public StatProduct(Pokemon pokemon, IndividualValues ivs, double level) {
         this.level = level;
-        this.stats = stats;
         this.ivs = ivs;
 
         double cpModifier = CpModifier.getCpModifier(level);
 
-        int attack = stats.getAttack() + ivs.getAttack();
-        int defense = stats.getDefense() + ivs.getDefense();
-        int stamina = stats.getStamina() + ivs.getStamina();
+        int attack = pokemon.getAttack() + ivs.getAttack();
+        int defense = pokemon.getDefense() + ivs.getDefense();
+        int stamina = pokemon.getStamina() + ivs.getStamina();
 
         levelAttack = cpModifier * attack;
         levelDefense = cpModifier * defense;
@@ -44,9 +41,9 @@ public class StatProduct implements Comparable<StatProduct> {
         return level;
     }
 
-    public BaseStats getStats() {
-        return stats;
-    }
+//    public BaseStats getStats() {
+//        return stats;
+//    }
 
     public int getStatProduct() {
         return statProduct;
@@ -110,11 +107,11 @@ public class StatProduct implements Comparable<StatProduct> {
                 ivs.getStamina() >= floor;
     }
 
-    public static StatProduct generateStatProduct(Pokemon pokemon, IndividualValues ivs, League league) {
-        BaseStats baseStats = new BaseStats(pokemon);
+    public static StatProduct generateStatProduct(net.fender.pogo.Pokemon pokemon, IndividualValues ivs, League league) {
+        //BaseStats baseStats = new BaseStats(pokemon);
         StatProduct bestStatProduct = null;
         for (double level = 1.0; level <= 40.0; level += 0.5) {
-            StatProduct statProduct = new StatProduct(baseStats, ivs, level);
+            StatProduct statProduct = new StatProduct(pokemon, ivs, level);
             int cp = statProduct.getCp();
             if (cp <= league.maxCp) {
                 bestStatProduct = statProduct;
@@ -124,7 +121,7 @@ public class StatProduct implements Comparable<StatProduct> {
     }
 
     public static Map<IndividualValues, StatProduct> generateStatProducts(Pokemon pokemon, League league) {
-        BaseStats baseStats = new BaseStats(pokemon);
+        //BaseStats baseStats = new BaseStats(pokemon);
         StatProduct zero = generateStatProduct(pokemon, IndividualValues.ZERO, league);
         StatProduct perfect = generateStatProduct(pokemon, IndividualValues.PERFECT, league);
 
@@ -134,7 +131,7 @@ public class StatProduct implements Comparable<StatProduct> {
                 for (int sta = 0; sta <= 15; sta++) {
                     IndividualValues ivs = new IndividualValues(atk, def, sta);
                     for (double level = perfect.level; level <= zero.level; level += 0.5) {
-                        StatProduct statProduct = new StatProduct(baseStats, ivs, level);
+                        StatProduct statProduct = new StatProduct(pokemon, ivs, level);
                         int cp = statProduct.getCp();
                         if (cp <= league.maxCp) {
                             stats.put(ivs, statProduct);
@@ -177,7 +174,7 @@ public class StatProduct implements Comparable<StatProduct> {
     }
 
     @Override
-    public int compareTo(@NotNull StatProduct o) {
+    public int compareTo(@Nonnull StatProduct o) {
         if (statProduct != o.statProduct) {
             return o.statProduct - statProduct;
         }

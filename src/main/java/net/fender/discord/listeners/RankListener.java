@@ -1,18 +1,13 @@
 package net.fender.discord.listeners;
 
-import me.sargunvohra.lib.pokekotlin.client.ErrorResponse;
-import me.sargunvohra.lib.pokekotlin.client.PokeApi;
-import me.sargunvohra.lib.pokekotlin.client.PokeApiClient;
-import me.sargunvohra.lib.pokekotlin.model.Pokemon;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.fender.discord.filters.ChannelNameFilter;
-import net.fender.pogo.IndividualValues;
-import net.fender.pogo.League;
-import net.fender.pogo.StatProduct;
+import net.fender.pogo.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -26,13 +21,16 @@ public class RankListener extends CommandEventListener {
 
     private static final Pattern RANK = Pattern.compile("\\$rank\\s+(\\w+)\\s+([-\\w]+)\\s+(\\d{1,2})\\s+(\\d{1,2})" +
             "\\s+(\\d{1,2})");
-    private static final PokeApi POKE_API = new PokeApiClient();
+    //private static final PokeApi POKE_API = new PokeApiClient();
     private static final ChannelNameFilter CHANNEL_NAME_FILTER = new ChannelNameFilter("rank-bot");
 
+    private final PokemonRegistry pokemonRegistry;
     private TextChannel rankBot;
 
-    public RankListener() {
+    @Autowired
+    public RankListener(PokemonRegistry pokemonRegistry) {
         super(RANK, CHANNEL_NAME_FILTER);
+        this.pokemonRegistry = pokemonRegistry;
     }
 
     @Override
@@ -49,27 +47,22 @@ public class RankListener extends CommandEventListener {
             return;
         }
 
-        String pokemonName = parts.get(2);
+        League league = maybeLeague.get();
+
+        String pokemonName = parts.get(2).toLowerCase();
         // reg ex won't pass if these aren't numbers, so should not need try/catch around conversion from String
         int atk = Integer.parseInt(parts.get(3));
         int def = Integer.parseInt(parts.get(4));
         int sta = Integer.parseInt(parts.get(5));
         IndividualValues ivs = new IndividualValues(atk, def, sta);
 
-        Pokemon pokemon = null;
-        try {
-            pokemon = POKE_API.getPokemon(pokemonName);
-        } catch (Throwable e) {
-            if (e instanceof ErrorResponse) {
-                ErrorResponse er = (ErrorResponse) e;
-                if (er.getCode() == 404) {
-                    rankBot.sendMessage(pokemonName + " not found!").submit();
-                    return;
-                }
-            }
+        Pokemon pokemon = pokemonRegistry.getPokeman(pokemonName);
+        if (pokemon == null) {
+            rankBot.sendMessage(pokemonName + " not found!").submit();
+            return;
         }
 
-        Map<IndividualValues, StatProduct> stats = StatProduct.generateStatProducts(pokemon, League.GREAT);
+        Map<IndividualValues, StatProduct> stats = StatProduct.generateStatProducts(pokemon, league);
         StatProduct statProduct = stats.get(ivs);
 
         SortedSet<StatProduct> betterStats = stats.values().stream().
@@ -82,7 +75,7 @@ public class RankListener extends CommandEventListener {
         double odds = Math.round(1000.0 * bestFriends.size() / 1331) / 10.0;
 
         EmbedBuilder embedBuilder = new EmbedBuilder();
-        embedBuilder.setThumbnail(pokemon.getSprites().getFrontDefault());
+
         embedBuilder.setTitle(pokemon.getName());
         String ivDesc = ivs.getAttack() + "/" + ivs.getDefense() + "/" + ivs.getStamina();
         double percentBest = Math.round(1000.0 * statProduct.getStatProduct() / bestStats.getStatProduct()) / 10.0;

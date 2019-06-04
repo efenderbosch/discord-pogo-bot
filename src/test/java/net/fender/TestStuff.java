@@ -1,15 +1,12 @@
 package net.fender;
 
-import me.sargunvohra.lib.pokekotlin.client.PokeApi;
-import me.sargunvohra.lib.pokekotlin.client.PokeApiClient;
-import me.sargunvohra.lib.pokekotlin.model.Pokemon;
-import net.fender.pogo.BaseStats;
-import net.fender.pogo.IndividualValues;
-import net.fender.pogo.League;
-import net.fender.pogo.StatProduct;
-import org.junit.jupiter.api.Disabled;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import net.fender.pogo.*;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.ResourceLoader;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
@@ -20,38 +17,21 @@ import static java.util.stream.Collectors.toList;
 
 public class TestStuff {
 
-    @Disabled
-    public void test_base_stats() {
-        PokeApi pokeApi = new PokeApiClient();
-        for (int i = 1; i < 10; i++) {
-            Pokemon pokemon = pokeApi.getPokemon(i);
-            BaseStats baseStats = new BaseStats(pokemon);
-            System.out.println(pokemon.getName() + " " + baseStats.getAttack() + " " + baseStats.getDefense() + " " + baseStats.getStamina());
-
-            Map<IndividualValues, StatProduct> statProducts = StatProduct.generateStatProducts(pokemon, League.GREAT);
-            SortedSet<StatProduct> sortedStatProducts = new TreeSet<>();
-            sortedStatProducts.addAll(statProducts.values());
-            sortedStatProducts.stream().findFirst().ifPresent(System.out::println);
-//            top -> {}
-//                    System.out.println(top.getLevel() + " " + top.getIvs().getAttack() + "/" +
-//                            top.getIvs().getDefense() + "/" + top.getIvs().getStamina() + " " + top.getCp() + " " +
-//                            StatProduct.round(top.getLevelAttack()) + " " + StatProduct.round(top.getLevelDefense()) +
-//                            " " + top.getHp() + " " + top.getStatProduct()));
-            System.out.println("---------------------");
-        }
-    }
 
     @Test
-    public void test_api() {
-        PokeApi pokeApi = new PokeApiClient();
-        Pokemon pokemon = pokeApi.getPokemon("lapras");
+    public void test_api() throws IOException {
+        ResourceLoader resourceLoader = new DefaultResourceLoader();
+        ObjectMapper objectMapper = new ObjectMapper();
+        PokemonRegistry pokemonRegistry = new PokemonRegistry(objectMapper, resourceLoader);
+        Pokemon pokemon = pokemonRegistry.getPokeman("dugtrio");
         Map<IndividualValues, StatProduct> stats = StatProduct.generateStatProducts(pokemon, League.GREAT);
 
-        IndividualValues ivs = new IndividualValues(6, 7, 12);
+        IndividualValues ivs = new IndividualValues(15, 14, 13);
         StatProduct statProduct = stats.get(ivs);
         System.out.println(statProduct);
 
         SortedSet<StatProduct> betterStats = stats.values().stream().
+                filter(StatProduct::isRaidHatchResearch).
                 filter(s -> s.getStatProduct() >= statProduct.getStatProduct()).
                 collect(Collectors.toCollection(TreeSet::new));
         int rank = betterStats.size();
