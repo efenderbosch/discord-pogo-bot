@@ -19,9 +19,8 @@ import static java.util.stream.Collectors.toCollection;
 public class RankListener extends CommandEventWithHelpListener {
 
     private static final Pattern BASIC = Pattern.compile("\\$rank.*");
-    private static final Pattern FULL = Pattern.compile("\\$rank\\s+(\\w+)\\s+([-\\w]+)\\s+(\\d{1,2})\\s+(\\d{1,2})" +
-            "\\s+(\\d{1,2})");
-    //private static final PokeApi POKE_API = new PokeApiClient();
+    private static final Pattern FULL = Pattern.compile("\\$rank\\s+([-\\w]+)\\s+(\\d{1,2})\\s+(\\d{1,2})" +
+            "\\s+(\\d{1,2})\\s*(\\w*)");
     private static final ChannelNameFilter CHANNEL_NAME_FILTER = new ChannelNameFilter("rank-bot");
 
     private final PokemonRegistry pokemonRegistry;
@@ -40,25 +39,29 @@ public class RankListener extends CommandEventWithHelpListener {
         }
         rankBot.sendTyping().submit();
 
-        String leagueName = parts.get(1);
-        Optional<League> maybeLeague = League.find(leagueName);
-        if (!maybeLeague.isPresent()) {
-            rankBot.sendMessage("Unknown league " + leagueName + "!").submit();
-            return;
+        League league = League.GREAT;
+        String leagueName = parts.get(5);
+        if (!leagueName.trim().isEmpty()) {
+            Optional<League> maybeLeague = League.find(leagueName);
+            if (!maybeLeague.isPresent()) {
+                rankBot.sendMessage("Unknown league '" + leagueName + "'!").submit();
+                sendHelp(event, parts);
+                return;
+            }
+            league = maybeLeague.get();
         }
 
-        League league = maybeLeague.get();
-
-        String pokemonName = parts.get(2).toLowerCase();
+        String pokemonName = parts.get(1).toLowerCase();
         // reg ex won't pass if these aren't numbers, so should not need try/catch around conversion from String
-        int atk = Integer.parseInt(parts.get(3));
-        int def = Integer.parseInt(parts.get(4));
-        int sta = Integer.parseInt(parts.get(5));
+        int atk = Integer.parseInt(parts.get(2));
+        int def = Integer.parseInt(parts.get(3));
+        int sta = Integer.parseInt(parts.get(4));
         IndividualValues ivs = new IndividualValues(atk, def, sta);
 
         Pokemon pokemon = pokemonRegistry.getPokeman(pokemonName);
         if (pokemon == null) {
             rankBot.sendMessage(pokemonName + " not found!").submit();
+            sendHelp(event, parts);
             return;
         }
 
@@ -81,41 +84,41 @@ public class RankListener extends CommandEventWithHelpListener {
                 statProduct.getCp() + " | " + percentBest + "%";
         embedBuilder.addField(ivDesc, desc, false);
 
-        String numberOne = "#1 " + (pokemon.isTradable() ? " Wild:" : " Raid/Hatch:");
+        embedBuilder.addField("#1 Rank", getDesc(wildStats, bestStatProduct), false);
 
-        embedBuilder.addField(numberOne , getDesc(wildStats, bestStatProduct), false);
-
-        if (pokemon.isTradable()) {
+        if (pokemon.isTradable() && league != League.MASTER) {
             StatProduct goodStats = statProducts.stream().
                     filter(StatProduct::isGoodFriend).
                     sorted().findFirst().get();
-            embedBuilder.addField("#1 Good:", getDesc(goodStats, bestStatProduct), false);
+            embedBuilder.addField("Top Good Friend Trade:", getDesc(goodStats, bestStatProduct), false);
 
             StatProduct greatStats = statProducts.stream().
                     filter(StatProduct::isGreatFriend).
                     sorted().findFirst().get();
-            embedBuilder.addField("#1 Great:", getDesc(greatStats, bestStatProduct), false);
+            embedBuilder.addField("Top Great Friend Trade:", getDesc(greatStats, bestStatProduct), false);
 
             StatProduct ultraStats = statProducts.stream().
                     filter(StatProduct::isUltraFriend).
                     sorted().findFirst().get();
-            embedBuilder.addField("#1 Ultra:", getDesc(ultraStats, bestStatProduct), false);
+            embedBuilder.addField("Top Ultra Friend Trade:", getDesc(ultraStats, bestStatProduct), false);
 
             StatProduct bestStats = statProducts.stream().
                     filter(StatProduct::isBestFriend).
                     sorted().findFirst().get();
-            embedBuilder.addField("#1 Best:", getDesc(bestStats, bestStatProduct), false);
+            embedBuilder.addField("Top Best Friend Trade:", getDesc(bestStats, bestStatProduct), false);
 
             StatProduct raidHatchResearchStats = statProducts.stream().
                     filter(StatProduct::isRaidHatchResearch).
                     sorted().findFirst().get();
-            embedBuilder.addField("#1 Raid:", getDesc(raidHatchResearchStats, bestStatProduct), false);
+            embedBuilder.addField("Top Raid/Hatch/Research:", getDesc(raidHatchResearchStats, bestStatProduct), false);
 
             StatProduct luckyStats = statProducts.stream().
                     filter(StatProduct::isLucky).
                     sorted().findFirst().get();
-            embedBuilder.addField("#1 Lucky:", getDesc(luckyStats, bestStatProduct), false);
+            embedBuilder.addField("Top Lucky Friend Trade:", getDesc(luckyStats, bestStatProduct), false);
+        }
 
+        if (pokemon.isTradable()) {
             long count = betterStats.stream().filter(StatProduct::isBestFriend).count();
             double odds = Math.round(1000.0 * count / 1331) / 10.0;
             embedBuilder.addField("Odds Best Friend Trade Will Improve Rank", odds + "%", false);
@@ -140,8 +143,11 @@ public class RankListener extends CommandEventWithHelpListener {
             rankBot = event.getJDA().getTextChannelsByName("rank-bot", true).get(0);
         }
 
-        rankBot.sendMessage("usage: $rank great|ultra|master pokemonname-optionalforme atk def sta").submit();
-        rankBot.sendMessage("example: $rank great deoxys-defense 10 15 15").submit();
+        rankBot.sendMessage("usage: $rank pokemonname-optionalforme atk def sta ultra|master (great league is " +
+                "default)").submit();
+        rankBot.sendMessage("example: $rank deoxys-defense 10 15 15").submit();
+        rankBot.sendMessage("example: $rank giratina-altered 10 15 15 ultra").submit();
+        rankBot.sendMessage("example: $rank giratina-altered 10 15 15 master").submit();
     }
 
 }
