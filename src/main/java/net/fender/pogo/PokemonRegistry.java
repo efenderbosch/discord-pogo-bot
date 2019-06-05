@@ -9,6 +9,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,5 +42,9 @@ public class PokemonRegistry {
 
     public Pokemon getPokeman(String name) {
         return pokemonByName.get(name);
+    }
+
+    public Collection<Pokemon> getAll() {
+        return pokemonByName.values();
     }
 }

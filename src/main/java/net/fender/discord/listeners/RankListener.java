@@ -147,7 +147,7 @@ public class RankListener extends CommandEventWithHelpListener {
                 "default)").submit();
         rankBot.sendMessage("example: $rank deoxys-defense 10 15 15").submit();
         rankBot.sendMessage("example: $rank giratina-altered 10 15 15 ultra").submit();
-        rankBot.sendMessage("example: $rank giratina-altered 10 15 15 master").submit();
+        rankBot.sendMessage("example: $rank giratina-origin 10 15 15 master").submit();
     }
 
 }

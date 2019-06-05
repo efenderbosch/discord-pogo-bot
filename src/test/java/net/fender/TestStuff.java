@@ -2,6 +2,7 @@ package net.fender;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.fender.pogo.*;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.ResourceLoader;
@@ -43,5 +44,26 @@ public class TestStuff {
             double odds = Math.round(1000.0 * bestFriends.size() / 1331) / 10.0;
             System.out.println(odds);
         }
+    }
+
+    @Disabled
+    public void test_all() throws IOException {
+        ResourceLoader resourceLoader = new DefaultResourceLoader();
+        ObjectMapper objectMapper = new ObjectMapper();
+        PokemonRegistry pokemonRegistry = new PokemonRegistry(objectMapper, resourceLoader);
+        SortedSet<PokemonStatProduct> best = new TreeSet<>();
+        for (Pokemon pokemon : pokemonRegistry.getAll()) {
+            Map<IndividualValues, StatProduct> stats = StatProduct.generateStatProducts(pokemon, League.GREAT);
+            StatProduct statProduct = stats.values().stream().sorted().findFirst().get();
+            PokemonStatProduct pokemonStatProduct = new PokemonStatProduct(pokemon, statProduct);
+            best.add(pokemonStatProduct);
+        }
+        best.stream().limit(50).forEach(pokemonStatProduct -> {
+            StatProduct statProduct = pokemonStatProduct.getStatProduct();
+            int fakeCp = (int) (statProduct.getStatProduct() / 2815080.0 * 1500.0);
+            System.out.println(pokemonStatProduct.getPokemon().getName() + " " +
+                    statProduct.getStatProduct() + " @ " +
+                    statProduct.getLevel() + " " + fakeCp);
+        });
     }
 }
