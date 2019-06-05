@@ -101,7 +101,7 @@ public class StatProduct implements Comparable<StatProduct> {
         return testIVs(12);
     }
 
-    private boolean testIVs(int floor) {
+    public boolean testIVs(int floor) {
         return ivs.getAttack() >= floor &&
                 ivs.getDefense() >= floor &&
                 ivs.getStamina() >= floor;
@@ -125,10 +125,11 @@ public class StatProduct implements Comparable<StatProduct> {
         StatProduct zero = generateStatProduct(pokemon, IndividualValues.ZERO, league);
         StatProduct perfect = generateStatProduct(pokemon, IndividualValues.PERFECT, league);
 
+        int minIv = pokemon.isTradable() ? 0 : 10;
         Map<IndividualValues, StatProduct> stats = new HashMap<>(4096);
-        for (int atk = 0; atk <= 15; atk++) {
-            for (int def = 0; def <= 15; def++) {
-                for (int sta = 0; sta <= 15; sta++) {
+        for (int atk = minIv; atk <= 15; atk++) {
+            for (int def = minIv; def <= 15; def++) {
+                for (int sta = minIv; sta <= 15; sta++) {
                     IndividualValues ivs = new IndividualValues(atk, def, sta);
                     for (double level = perfect.level; level <= zero.level; level += 0.5) {
                         StatProduct statProduct = new StatProduct(pokemon, ivs, level);

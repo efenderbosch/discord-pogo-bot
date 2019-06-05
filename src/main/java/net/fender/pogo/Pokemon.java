@@ -10,12 +10,14 @@ public class Pokemon {
     private final int attack;
     private final int defense;
     private final int stamina;
+    private final boolean tradable;
 
-    public Pokemon(String name, int attack, int defense, int stamina) {
+    public Pokemon(String name, int attack, int defense, int stamina, boolean tradable) {
         this.name = name;
         this.attack = attack;
         this.defense = defense;
         this.stamina = stamina;
+        this.tradable = tradable;
     }
 
     public String getName() {
@@ -32,6 +34,10 @@ public class Pokemon {
 
     public int getStamina() {
         return stamina;
+    }
+
+    public boolean isTradable() {
+        return tradable;
     }
 
     @Override

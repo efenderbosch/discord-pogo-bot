@@ -14,7 +14,6 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 import static java.util.stream.Collectors.toCollection;
-import static java.util.stream.Collectors.toList;
 
 @Component
 public class RankListener extends CommandEventListener {
@@ -65,33 +64,72 @@ public class RankListener extends CommandEventListener {
         Map<IndividualValues, StatProduct> stats = StatProduct.generateStatProducts(pokemon, league);
         StatProduct statProduct = stats.get(ivs);
 
-        SortedSet<StatProduct> betterStats = stats.values().stream().
-                filter(s -> s.getStatProduct() >= statProduct.getStatProduct()).
+        Collection<StatProduct> statProducts = stats.values();
+        SortedSet<StatProduct> betterStats = statProducts.stream().
+                filter(s -> s.getStatProduct() > statProduct.getStatProduct()).
                 collect(toCollection(TreeSet::new));
-        int rank = betterStats.size();
-        StatProduct bestStats = betterStats.first();
-
-        List<StatProduct> bestFriends = betterStats.stream().filter(StatProduct::isBestFriend).collect(toList());
-        double odds = Math.round(1000.0 * bestFriends.size() / 1331) / 10.0;
+        int rank = betterStats.size() + 1;
+        StatProduct wildStats = betterStats.isEmpty() ? statProduct : betterStats.first();
+        int bestStatProduct = wildStats.getStatProduct();
 
         EmbedBuilder embedBuilder = new EmbedBuilder();
-
         embedBuilder.setTitle(pokemon.getName());
         String ivDesc = ivs.getAttack() + "/" + ivs.getDefense() + "/" + ivs.getStamina();
-        double percentBest = Math.round(1000.0 * statProduct.getStatProduct() / bestStats.getStatProduct()) / 10.0;
-        String desc = "#" + rank + " | L" + statProduct.getLevel() + " | CP " + statProduct.getCp() + " | " +
-                percentBest + "%";
+        double percentBest = Math.round(1000.0 * statProduct.getStatProduct() / wildStats.getStatProduct()) / 10.0;
+        String desc = "#" + rank + "/" + stats.size() + " | L" + statProduct.getLevel() + " | CP " +
+                statProduct.getCp() + " | " + percentBest + "%";
         embedBuilder.addField(ivDesc, desc, false);
 
-        String bestDesc = "L" + bestStats.getLevel() + " | CP " + bestStats.getCp() + " | " +
-                bestStats.getIvs().getAttack() + "/" + bestStats.getIvs().getDefense() + "/" +
-                bestStats.getIvs().getStamina();
-        embedBuilder.addField("#1", bestDesc, false);
-        embedBuilder.addField("Odds Best Friend Trade Will Improve Rank", odds + "%", false);
+        String numberOne = "#1 " + (pokemon.isTradable() ? " Wild:" : " Raid/Hatch:");
+
+        embedBuilder.addField(numberOne , getDesc(wildStats, bestStatProduct), false);
+
+        if (pokemon.isTradable()) {
+            StatProduct goodStats = statProducts.stream().
+                    filter(StatProduct::isGoodFriend).
+                    sorted().findFirst().get();
+            embedBuilder.addField("#1 Good:", getDesc(goodStats, bestStatProduct), false);
+
+            StatProduct greatStats = statProducts.stream().
+                    filter(StatProduct::isGreatFriend).
+                    sorted().findFirst().get();
+            embedBuilder.addField("#1 Great:", getDesc(greatStats, bestStatProduct), false);
+
+            StatProduct ultraStats = statProducts.stream().
+                    filter(StatProduct::isUltraFriend).
+                    sorted().findFirst().get();
+            embedBuilder.addField("#1 Ultra:", getDesc(ultraStats, bestStatProduct), false);
+
+            StatProduct bestStats = statProducts.stream().
+                    filter(StatProduct::isBestFriend).
+                    sorted().findFirst().get();
+            embedBuilder.addField("#1 Best:", getDesc(bestStats, bestStatProduct), false);
+
+            StatProduct raidHatchResearchStats = statProducts.stream().
+                    filter(StatProduct::isRaidHatchResearch).
+                    sorted().findFirst().get();
+            embedBuilder.addField("#1 Raid:", getDesc(raidHatchResearchStats, bestStatProduct), false);
+
+            StatProduct luckyStats = statProducts.stream().
+                    filter(StatProduct::isLucky).
+                    sorted().findFirst().get();
+            embedBuilder.addField("#1 Lucky:", getDesc(luckyStats, bestStatProduct), false);
+
+            long count = betterStats.stream().filter(StatProduct::isBestFriend).count();
+            double odds = Math.round(1000.0 * count / 1331) / 10.0;
+            embedBuilder.addField("Odds Best Friend Trade Will Improve Rank", odds + "%", false);
+        }
 
         MessageBuilder builder = new MessageBuilder();
         builder.setEmbed(embedBuilder.build());
         Message message = builder.build();
         rankBot.sendMessage(message).submit();
+    }
+
+    private String getDesc(StatProduct statProduct, int bestStatProduct) {
+        double percentBest = Math.round(1000.0 * statProduct.getStatProduct() / bestStatProduct) / 10.0;
+        return "L" + statProduct.getLevel() + " | CP " + statProduct.getCp() + " | " +
+                statProduct.getIvs().getAttack() + "/" + statProduct.getIvs().getDefense() + "/" +
+                statProduct.getIvs().getStamina() + " | " + percentBest + "%";
     }
 }

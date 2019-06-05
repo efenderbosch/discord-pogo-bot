@@ -1216,7 +1216,8 @@
     "base_defense": 210,
     "base_stamina": 225,
     "pokemon_id": 151,
-    "pokemon_name": "Mew"
+    "pokemon_name": "Mew",
+    "tradable": false
   },
   {
     "base_attack": 92,
@@ -1916,7 +1917,8 @@
     "base_defense": 210,
     "base_stamina": 225,
     "pokemon_id": 251,
-    "pokemon_name": "Celebi"
+    "pokemon_name": "Celebi",
+    "tradable": false
   },
   {
     "base_attack": 124,
@@ -2879,7 +2881,8 @@
     "base_defense": 210,
     "base_stamina": 225,
     "pokemon_id": 385,
-    "pokemon_name": "Jirachi"
+    "pokemon_name": "Jirachi",
+    "tradable": false
   },
   {
     "base_attack": 414,
@@ -2887,7 +2890,8 @@
     "base_stamina": 137,
     "form": "Attack",
     "pokemon_id": 386,
-    "pokemon_name": "Deoxys"
+    "pokemon_name": "Deoxys",
+    "tradable": false
   },
   {
     "base_attack": 144,
@@ -2895,7 +2899,8 @@
     "base_stamina": 137,
     "form": "Defense",
     "pokemon_id": 386,
-    "pokemon_name": "Deoxys"
+    "pokemon_name": "Deoxys",
+    "tradable": false
   },
   {
     "base_attack": 345,
@@ -2903,7 +2908,8 @@
     "base_stamina": 137,
     "form": "Normal",
     "pokemon_id": 386,
-    "pokemon_name": "Deoxys"
+    "pokemon_name": "Deoxys",
+    "tradable": false
   },
   {
     "base_attack": 230,
@@ -2911,7 +2917,8 @@
     "base_stamina": 137,
     "form": "Speed",
     "pokemon_id": 386,
-    "pokemon_name": "Deoxys"
+    "pokemon_name": "Deoxys",
+    "tradable": false
   },
   {
     "base_attack": 119,
@@ -3750,14 +3757,16 @@
     "base_defense": 210,
     "base_stamina": 225,
     "pokemon_id": 490,
-    "pokemon_name": "Manaphy"
+    "pokemon_name": "Manaphy",
+    "tradable": false
   },
   {
     "base_attack": 285,
     "base_defense": 198,
     "base_stamina": 172,
     "pokemon_id": 491,
-    "pokemon_name": "Darkrai"
+    "pokemon_name": "Darkrai",
+    "tradable": false
   },
   {
     "base_attack": 210,
@@ -3765,7 +3774,8 @@
     "base_stamina": 225,
     "form": "Land",
     "pokemon_id": 492,
-    "pokemon_name": "Shaymin"
+    "pokemon_name": "Shaymin",
+    "tradable": false
   },
   {
     "base_attack": 261,
@@ -3773,7 +3783,8 @@
     "base_stamina": 225,
     "form": "Sky",
     "pokemon_id": 492,
-    "pokemon_name": "Shaymin"
+    "pokemon_name": "Shaymin",
+    "tradable": false
   },
   {
     "base_attack": 238,
@@ -3781,7 +3792,8 @@
     "base_stamina": 237,
     "form": "Bug",
     "pokemon_id": 493,
-    "pokemon_name": "Arceus"
+    "pokemon_name": "Arceus",
+    "tradable": false
   },
   {
     "base_attack": 238,
@@ -3789,7 +3801,8 @@
     "base_stamina": 237,
     "form": "Dark",
     "pokemon_id": 493,
-    "pokemon_name": "Arceus"
+    "pokemon_name": "Arceus",
+    "tradable": false
   },
   {
     "base_attack": 238,
@@ -3797,7 +3810,8 @@
     "base_stamina": 237,
     "form": "Dragon",
     "pokemon_id": 493,
-    "pokemon_name": "Arceus"
+    "pokemon_name": "Arceus",
+    "tradable": false
   },
   {
     "base_attack": 238,
@@ -3805,7 +3819,8 @@
     "base_stamina": 237,
     "form": "Electric",
     "pokemon_id": 493,
-    "pokemon_name": "Arceus"
+    "pokemon_name": "Arceus",
+    "tradable": false
   },
   {
     "base_attack": 238,
@@ -3813,7 +3828,8 @@
     "base_stamina": 237,
     "form": "Fairy",
     "pokemon_id": 493,
-    "pokemon_name": "Arceus"
+    "pokemon_name": "Arceus",
+    "tradable": false
   },
   {
     "base_attack": 238,
@@ -3821,7 +3837,8 @@
     "base_stamina": 237,
     "form": "Fighting",
     "pokemon_id": 493,
-    "pokemon_name": "Arceus"
+    "pokemon_name": "Arceus",
+    "tradable": false
   },
   {
     "base_attack": 238,
@@ -3829,7 +3846,8 @@
     "base_stamina": 237,
     "form": "Fire",
     "pokemon_id": 493,
-    "pokemon_name": "Arceus"
+    "pokemon_name": "Arceus",
+    "tradable": false
   },
   {
     "base_attack": 238,
@@ -3837,7 +3855,8 @@
     "base_stamina": 237,
     "form": "Flying",
     "pokemon_id": 493,
-    "pokemon_name": "Arceus"
+    "pokemon_name": "Arceus",
+    "tradable": false
   },
   {
     "base_attack": 238,
@@ -3853,7 +3872,8 @@
     "base_stamina": 237,
     "form": "Grass",
     "pokemon_id": 493,
-    "pokemon_name": "Arceus"
+    "pokemon_name": "Arceus",
+    "tradable": false
   },
   {
     "base_attack": 238,
@@ -3861,7 +3881,8 @@
     "base_stamina": 237,
     "form": "Ground",
     "pokemon_id": 493,
-    "pokemon_name": "Arceus"
+    "pokemon_name": "Arceus",
+    "tradable": false
   },
   {
     "base_attack": 238,
@@ -3869,7 +3890,8 @@
     "base_stamina": 237,
     "form": "Ice",
     "pokemon_id": 493,
-    "pokemon_name": "Arceus"
+    "pokemon_name": "Arceus",
+    "tradable": false
   },
   {
     "base_attack": 238,
@@ -3877,7 +3899,8 @@
     "base_stamina": 237,
     "form": "Normal",
     "pokemon_id": 493,
-    "pokemon_name": "Arceus"
+    "pokemon_name": "Arceus",
+    "tradable": false
   },
   {
     "base_attack": 238,
@@ -3885,7 +3908,8 @@
     "base_stamina": 237,
     "form": "Poison",
     "pokemon_id": 493,
-    "pokemon_name": "Arceus"
+    "pokemon_name": "Arceus",
+    "tradable": false
   },
   {
     "base_attack": 238,
@@ -3893,7 +3917,8 @@
     "base_stamina": 237,
     "form": "Psychic",
     "pokemon_id": 493,
-    "pokemon_name": "Arceus"
+    "pokemon_name": "Arceus",
+    "tradable": false
   },
   {
     "base_attack": 238,
@@ -3901,7 +3926,8 @@
     "base_stamina": 237,
     "form": "Rock",
     "pokemon_id": 493,
-    "pokemon_name": "Arceus"
+    "pokemon_name": "Arceus",
+    "tradable": false
   },
   {
     "base_attack": 238,
@@ -3909,7 +3935,8 @@
     "base_stamina": 237,
     "form": "Steel",
     "pokemon_id": 493,
-    "pokemon_name": "Arceus"
+    "pokemon_name": "Arceus",
+    "tradable": false
   },
   {
     "base_attack": 238,
@@ -3917,7 +3944,8 @@
     "base_stamina": 237,
     "form": "Water",
     "pokemon_id": 493,
-    "pokemon_name": "Arceus"
+    "pokemon_name": "Arceus",
+    "tradable": false
   },
   {
     "base_attack": 118,

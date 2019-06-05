@@ -19,7 +19,7 @@ public class PokemonRegistry {
 
     @Autowired
     public PokemonRegistry(ObjectMapper mapper, ResourceLoader resourceLoader) throws IOException {
-        Resource resource = resourceLoader.getResource("base_stats.json");
+        Resource resource = resourceLoader.getResource("classpath:base_stats.json");
         ArrayNode root = (ArrayNode) mapper.readTree(resource.getInputStream());
         for (int i = 0; i < root.size(); i++) {
             JsonNode pokemonNode = root.get(i);
@@ -33,7 +33,8 @@ public class PokemonRegistry {
             int attack = pokemonNode.get("base_attack").intValue();
             int defense = pokemonNode.get("base_defense").intValue();
             int stamina = pokemonNode.get("base_stamina").intValue();
-            Pokemon pokemon = new Pokemon(name, attack, defense, stamina);
+            boolean tradable = pokemonNode.hasNonNull("tradable") ? pokemonNode.get("tradable").booleanValue() : true;
+            Pokemon pokemon = new Pokemon(name, attack, defense, stamina, tradable);
             pokemonByName.put(name, pokemon);
         }
     }
