@@ -16,9 +16,10 @@ import java.util.regex.Pattern;
 import static java.util.stream.Collectors.toCollection;
 
 @Component
-public class RankListener extends CommandEventListener {
+public class RankListener extends CommandEventWithHelpListener {
 
-    private static final Pattern RANK = Pattern.compile("\\$rank\\s+(\\w+)\\s+([-\\w]+)\\s+(\\d{1,2})\\s+(\\d{1,2})" +
+    private static final Pattern BASIC = Pattern.compile("\\$rank.*");
+    private static final Pattern FULL = Pattern.compile("\\$rank\\s+(\\w+)\\s+([-\\w]+)\\s+(\\d{1,2})\\s+(\\d{1,2})" +
             "\\s+(\\d{1,2})");
     //private static final PokeApi POKE_API = new PokeApiClient();
     private static final ChannelNameFilter CHANNEL_NAME_FILTER = new ChannelNameFilter("rank-bot");
@@ -28,12 +29,12 @@ public class RankListener extends CommandEventListener {
 
     @Autowired
     public RankListener(PokemonRegistry pokemonRegistry) {
-        super(RANK, CHANNEL_NAME_FILTER);
+        super(BASIC, FULL, CHANNEL_NAME_FILTER);
         this.pokemonRegistry = pokemonRegistry;
     }
 
     @Override
-    protected void processCommand(MessageReceivedEvent event, List<String> parts) {
+    protected void doCommand(MessageReceivedEvent event, List<String> parts) {
         if (rankBot == null) {
             rankBot = event.getJDA().getTextChannelsByName("rank-bot", true).get(0);
         }
@@ -132,4 +133,15 @@ public class RankListener extends CommandEventListener {
                 statProduct.getIvs().getAttack() + "/" + statProduct.getIvs().getDefense() + "/" +
                 statProduct.getIvs().getStamina() + " | " + percentBest + "%";
     }
+
+    @Override
+    protected void sendHelp(MessageReceivedEvent event, List<String> parts) {
+        if (rankBot == null) {
+            rankBot = event.getJDA().getTextChannelsByName("rank-bot", true).get(0);
+        }
+
+        rankBot.sendMessage("usage: $rank great|ultra|master pokemonname-optionalforme atk def sta").submit();
+        rankBot.sendMessage("example: $rank great deoxys-defense 10 15 15").submit();
+    }
+
 }
