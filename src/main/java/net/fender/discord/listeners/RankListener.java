@@ -4,6 +4,7 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.fender.discord.filters.ChannelNameFilter;
 import net.fender.pogo.*;
@@ -13,7 +14,8 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.counting;
 
 @Component
 public class RankListener extends CommandEventWithHelpListener {
@@ -78,6 +80,8 @@ public class RankListener extends CommandEventWithHelpListener {
 
         EmbedBuilder embedBuilder = new EmbedBuilder();
         embedBuilder.setTitle(pokemon.getName());
+        User author = event.getAuthor();
+        embedBuilder.setFooter(author.getName(), author.getAvatarUrl());
         String ivDesc = ivs.getAttack() + "/" + ivs.getDefense() + "/" + ivs.getStamina();
         double percentBest = Math.round(1000.0 * statProduct.getStatProduct() / wildStats.getStatProduct()) / 10.0;
         String desc = "#" + rank + "/" + stats.size() + " | L" + statProduct.getLevel() + " | CP " +
@@ -87,11 +91,6 @@ public class RankListener extends CommandEventWithHelpListener {
         embedBuilder.addField("#1 Rank", getDesc(wildStats, bestStatProduct), false);
 
         if (pokemon.isTradable() && league != League.MASTER) {
-            StatProduct goodStats = statProducts.stream().
-                    filter(StatProduct::isGoodFriend).
-                    sorted().findFirst().get();
-            embedBuilder.addField("Top Good Friend Trade:", getDesc(goodStats, bestStatProduct), false);
-
             StatProduct greatStats = statProducts.stream().
                     filter(StatProduct::isGreatFriend).
                     sorted().findFirst().get();
@@ -122,12 +121,46 @@ public class RankListener extends CommandEventWithHelpListener {
             long count = betterStats.stream().filter(StatProduct::isBestFriend).count();
             double odds = Math.round(1000.0 * count / 1331) / 10.0;
             embedBuilder.addField("Odds Best Friend Trade Will Improve Rank", odds + "%", false);
+        } else {
+            embedBuilder.setDescription("(not tradable)");
         }
+
+        int size = stats.size() / 8;
+        List<StatProduct> top = stats.values().stream().sorted().limit(size).collect(toList());
+        long amazes = top.stream().filter(StatProduct::isAmazes).count();
+        embedBuilder.addField("Top Appraisal", percent(100.0 * amazes / size), true);
+        long strong = top.stream().filter(StatProduct::isStrong).count();
+        embedBuilder.addField("High Appraisal", percent(100.0 * strong / size), false);
+        long decent = top.stream().filter(StatProduct::isDecent).count();
+        embedBuilder.addField("Average Appraisal", percent(100.0 * decent / size), true);
+        long notGreatInBattle = top.stream().filter(StatProduct::isNotGreatInBattle).count();
+        embedBuilder.addField("Poor Appraisal", percent(100.0 * notGreatInBattle / size), false);
+        long attackTop = top.stream().filter(StatProduct::isAttackBest).count();
+        embedBuilder.addField("Attack Best Stat", percent(100.0 * attackTop / size), true);
+
+        Map<Integer, Long> counts = top.stream().collect(groupingBy(StatProduct::getCp, counting()));
+        long breakpoint = size / 16;
+        long sum = 0;
+        long cpBreakpoint = 1500;
+        for (Map.Entry<Integer, Long> entry : counts.entrySet()) {
+            int cp = entry.getKey();
+            long count = entry.getValue();
+            sum += count;
+            if (sum >= breakpoint) {
+                cpBreakpoint = cp;
+                break;
+            }
+        }
+        embedBuilder.addField("CP Eval Breakpoint", cpBreakpoint + "", false);
 
         MessageBuilder builder = new MessageBuilder();
         builder.setEmbed(embedBuilder.build());
         Message message = builder.build();
         rankBot.sendMessage(message).submit();
+    }
+
+    private static String percent(double d) {
+        return (Math.round(d * 10.0) / 10.0) + "%";
     }
 
     private String getDesc(StatProduct statProduct, int bestStatProduct) {

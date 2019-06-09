@@ -83,7 +83,6 @@ public class TestImageListener extends BaseEventListener<MessageReceivedEvent> {
         Stroke wide = new BasicStroke(8);
         Stroke narrow = new BasicStroke(4);
 
-
         String pokestop = null;
         for (TextDetection textDetection : response.textDetections()) {
             if (textDetection.type() != TextTypes.LINE) continue;
@@ -94,6 +93,7 @@ public class TestImageListener extends BaseEventListener<MessageReceivedEvent> {
             pokestop = textDetection.detectedText();
             break;
         }
+
         for (TextDetection textDetection : response.textDetections()) {
             TextTypes type = textDetection.type();
             String text = textDetection.detectedText();

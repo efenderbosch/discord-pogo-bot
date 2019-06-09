@@ -107,8 +107,29 @@ public class StatProduct implements Comparable<StatProduct> {
                 ivs.getStamina() >= floor;
     }
 
+    public boolean isAttackBest() {
+        return ivs.getAttack() >= ivs.getDefense() && ivs.getAttack() >= ivs.getStamina();
+    }
+
+    public boolean isNotGreatInBattle() {
+        return ivs.getAttack() + ivs.getDefense() + ivs.getStamina() <= 22;
+    }
+
+    public boolean isDecent() {
+        int total = ivs.getAttack() + ivs.getDefense() + ivs.getStamina();
+        return total > 22 && total <= 29;
+    }
+
+    public boolean isStrong() {
+        int total = ivs.getAttack() + ivs.getDefense() + ivs.getStamina();
+        return total > 29 && total <= 36;
+    }
+
+    public boolean isAmazes() {
+        return ivs.getAttack() + ivs.getDefense() + ivs.getStamina() > 36;
+    }
+
     public static StatProduct generateStatProduct(net.fender.pogo.Pokemon pokemon, IndividualValues ivs, League league) {
-        //BaseStats baseStats = new BaseStats(pokemon);
         StatProduct bestStatProduct = null;
         for (double level = 1.0; level <= 40.0; level += 0.5) {
             StatProduct statProduct = new StatProduct(pokemon, ivs, level);
@@ -121,7 +142,6 @@ public class StatProduct implements Comparable<StatProduct> {
     }
 
     public static Map<IndividualValues, StatProduct> generateStatProducts(Pokemon pokemon, League league) {
-        //BaseStats baseStats = new BaseStats(pokemon);
         StatProduct zero = generateStatProduct(pokemon, IndividualValues.ZERO, league);
         StatProduct perfect = generateStatProduct(pokemon, IndividualValues.PERFECT, league);
 
