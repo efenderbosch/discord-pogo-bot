@@ -68,7 +68,17 @@ public class RankListener extends CommandEventWithHelpListener {
         }
 
         Map<IndividualValues, StatProduct> stats = StatProduct.generateStatProducts(pokemon, league);
+        if (stats.isEmpty()) {
+            rankBot.sendMessage(pokemonName + " is ineligible for " + leagueName + " league.").submit();
+            return;
+        }
+
         StatProduct statProduct = stats.get(ivs);
+        if (statProduct == null) {
+            rankBot.sendMessage("Stat Product for " + atk + "/" + def + "/" + sta + " not found.").submit();
+            sendHelp(event, parts);
+            return;
+        }
 
         Collection<StatProduct> statProducts = stats.values();
         SortedSet<StatProduct> betterStats = statProducts.stream().

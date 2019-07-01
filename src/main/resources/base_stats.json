@@ -1167,21 +1167,24 @@
     "base_defense": 236,
     "base_stamina": 207,
     "pokemon_id": 144,
-    "pokemon_name": "Articuno"
+    "pokemon_name": "Articuno",
+    "level_floor": 15
   },
   {
     "base_attack": 253,
     "base_defense": 185,
     "base_stamina": 207,
     "pokemon_id": 145,
-    "pokemon_name": "Zapdos"
+    "pokemon_name": "Zapdos",
+    "level_floor": 15
   },
   {
     "base_attack": 251,
     "base_defense": 181,
     "base_stamina": 207,
     "pokemon_id": 146,
-    "pokemon_name": "Moltres"
+    "pokemon_name": "Moltres",
+    "level_floor": 15
   },
   {
     "base_attack": 119,
@@ -1209,7 +1212,8 @@
     "base_defense": 182,
     "base_stamina": 214,
     "pokemon_id": 150,
-    "pokemon_name": "Mewtwo"
+    "pokemon_name": "Mewtwo",
+    "level_floor": 20
   },
   {
     "base_attack": 210,
@@ -1217,7 +1221,8 @@
     "base_stamina": 225,
     "pokemon_id": 151,
     "pokemon_name": "Mew",
-    "tradable": false
+    "tradable": false,
+    "level_floor": 15
   },
   {
     "base_attack": 92,
@@ -1861,21 +1866,24 @@
     "base_defense": 195,
     "base_stamina": 207,
     "pokemon_id": 243,
-    "pokemon_name": "Raikou"
+    "pokemon_name": "Raikou",
+    "level_floor": 15
   },
   {
     "base_attack": 235,
     "base_defense": 171,
     "base_stamina": 251,
     "pokemon_id": 244,
-    "pokemon_name": "Entei"
+    "pokemon_name": "Entei",
+    "level_floor": 15
   },
   {
     "base_attack": 180,
     "base_defense": 235,
     "base_stamina": 225,
     "pokemon_id": 245,
-    "pokemon_name": "Suicune"
+    "pokemon_name": "Suicune",
+    "level_floor": 15
   },
   {
     "base_attack": 115,
@@ -1903,14 +1911,16 @@
     "base_defense": 310,
     "base_stamina": 235,
     "pokemon_id": 249,
-    "pokemon_name": "Lugia"
+    "pokemon_name": "Lugia",
+    "level_floor": 15
   },
   {
     "base_attack": 239,
     "base_defense": 244,
     "base_stamina": 214,
     "pokemon_id": 250,
-    "pokemon_name": "Ho-Oh"
+    "pokemon_name": "Ho-Oh",
+    "level_floor": 15
   },
   {
     "base_attack": 210,
@@ -1918,7 +1928,8 @@
     "base_stamina": 225,
     "pokemon_id": 251,
     "pokemon_name": "Celebi",
-    "tradable": false
+    "tradable": false,
+    "level_floor": 15
   },
   {
     "base_attack": 124,
@@ -2846,35 +2857,40 @@
     "base_defense": 246,
     "base_stamina": 190,
     "pokemon_id": 380,
-    "pokemon_name": "Latias"
+    "pokemon_name": "Latias",
+    "level_floor": 15
   },
   {
     "base_attack": 268,
     "base_defense": 212,
     "base_stamina": 190,
     "pokemon_id": 381,
-    "pokemon_name": "Latios"
+    "pokemon_name": "Latios",
+    "level_floor": 15
   },
   {
     "base_attack": 270,
     "base_defense": 228,
     "base_stamina": 205,
     "pokemon_id": 382,
-    "pokemon_name": "Kyogre"
+    "pokemon_name": "Kyogre",
+    "level_floor": 15
   },
   {
     "base_attack": 270,
     "base_defense": 228,
     "base_stamina": 205,
     "pokemon_id": 383,
-    "pokemon_name": "Groudon"
+    "pokemon_name": "Groudon",
+    "level_floor": 15
   },
   {
     "base_attack": 284,
     "base_defense": 170,
     "base_stamina": 213,
     "pokemon_id": 384,
-    "pokemon_name": "Rayquaza"
+    "pokemon_name": "Rayquaza",
+    "level_floor": 15
   },
   {
     "base_attack": 210,
@@ -2882,7 +2898,8 @@
     "base_stamina": 225,
     "pokemon_id": 385,
     "pokemon_name": "Jirachi",
-    "tradable": false
+    "tradable": false,
+    "level_floor": 15
   },
   {
     "base_attack": 414,
@@ -2891,7 +2908,8 @@
     "form": "Attack",
     "pokemon_id": 386,
     "pokemon_name": "Deoxys",
-    "tradable": false
+    "tradable": false,
+    "level_floor": 20
   },
   {
     "base_attack": 144,
@@ -2900,7 +2918,8 @@
     "form": "Defense",
     "pokemon_id": 386,
     "pokemon_name": "Deoxys",
-    "tradable": false
+    "tradable": false,
+    "level_floor": 20
   },
   {
     "base_attack": 345,
@@ -2909,7 +2928,8 @@
     "form": "Normal",
     "pokemon_id": 386,
     "pokemon_name": "Deoxys",
-    "tradable": false
+    "tradable": false,
+    "level_floor": 20
   },
   {
     "base_attack": 230,
@@ -2918,7 +2938,8 @@
     "form": "Speed",
     "pokemon_id": 386,
     "pokemon_name": "Deoxys",
-    "tradable": false
+    "tradable": false,
+    "level_floor": 20
   },
   {
     "base_attack": 119,
@@ -3371,7 +3392,8 @@
     "base_defense": 199,
     "base_stamina": 137,
     "pokemon_id": 442,
-    "pokemon_name": "Spiritomb"
+    "pokemon_name": "Spiritomb",
+    "level_floor": 15
   },
   {
     "base_attack": 124,
@@ -3699,28 +3721,32 @@
     "base_defense": 211,
     "base_stamina": 205,
     "pokemon_id": 483,
-    "pokemon_name": "Dialga"
+    "pokemon_name": "Dialga",
+    "level_floor": 15
   },
   {
     "base_attack": 280,
     "base_defense": 215,
     "base_stamina": 189,
     "pokemon_id": 484,
-    "pokemon_name": "Palkia"
+    "pokemon_name": "Palkia",
+    "level_floor": 15
   },
   {
     "base_attack": 251,
     "base_defense": 213,
     "base_stamina": 209,
     "pokemon_id": 485,
-    "pokemon_name": "Heatran"
+    "pokemon_name": "Heatran",
+    "level_floor": 15
   },
   {
     "base_attack": 287,
     "base_defense": 210,
     "base_stamina": 221,
     "pokemon_id": 486,
-    "pokemon_name": "Regigigas"
+    "pokemon_name": "Regigigas",
+    "level_floor": 15
   },
   {
     "base_attack": 187,
@@ -3728,7 +3754,8 @@
     "base_stamina": 284,
     "form": "Altered",
     "pokemon_id": 487,
-    "pokemon_name": "Giratina"
+    "pokemon_name": "Giratina",
+    "level_floor": 15
   },
   {
     "base_attack": 225,
@@ -3736,14 +3763,16 @@
     "base_stamina": 284,
     "form": "Origin",
     "pokemon_id": 487,
-    "pokemon_name": "Giratina"
+    "pokemon_name": "Giratina",
+    "level_floor": 15
   },
   {
     "base_attack": 152,
     "base_defense": 258,
     "base_stamina": 260,
     "pokemon_id": 488,
-    "pokemon_name": "Cresselia"
+    "pokemon_name": "Cresselia",
+    "level_floor": 15
   },
   {
     "base_attack": 162,
@@ -3793,7 +3822,8 @@
     "form": "Bug",
     "pokemon_id": 493,
     "pokemon_name": "Arceus",
-    "tradable": false
+    "tradable": false,
+    "level_floor": 20
   },
   {
     "base_attack": 238,
@@ -3802,7 +3832,8 @@
     "form": "Dark",
     "pokemon_id": 493,
     "pokemon_name": "Arceus",
-    "tradable": false
+    "tradable": false,
+    "level_floor": 20
   },
   {
     "base_attack": 238,
@@ -3811,7 +3842,8 @@
     "form": "Dragon",
     "pokemon_id": 493,
     "pokemon_name": "Arceus",
-    "tradable": false
+    "tradable": false,
+    "level_floor": 20
   },
   {
     "base_attack": 238,
@@ -3820,7 +3852,8 @@
     "form": "Electric",
     "pokemon_id": 493,
     "pokemon_name": "Arceus",
-    "tradable": false
+    "tradable": false,
+    "level_floor": 20
   },
   {
     "base_attack": 238,
@@ -3829,7 +3862,8 @@
     "form": "Fairy",
     "pokemon_id": 493,
     "pokemon_name": "Arceus",
-    "tradable": false
+    "tradable": false,
+    "level_floor": 20
   },
   {
     "base_attack": 238,
@@ -3838,7 +3872,8 @@
     "form": "Fighting",
     "pokemon_id": 493,
     "pokemon_name": "Arceus",
-    "tradable": false
+    "tradable": false,
+    "level_floor": 20
   },
   {
     "base_attack": 238,
@@ -3847,7 +3882,8 @@
     "form": "Fire",
     "pokemon_id": 493,
     "pokemon_name": "Arceus",
-    "tradable": false
+    "tradable": false,
+    "level_floor": 20
   },
   {
     "base_attack": 238,
@@ -3856,7 +3892,8 @@
     "form": "Flying",
     "pokemon_id": 493,
     "pokemon_name": "Arceus",
-    "tradable": false
+    "tradable": false,
+    "level_floor": 20
   },
   {
     "base_attack": 238,
@@ -3864,7 +3901,8 @@
     "base_stamina": 237,
     "form": "Ghost",
     "pokemon_id": 493,
-    "pokemon_name": "Arceus"
+    "pokemon_name": "Arceus",
+    "level_floor": 20
   },
   {
     "base_attack": 238,
@@ -3873,7 +3911,8 @@
     "form": "Grass",
     "pokemon_id": 493,
     "pokemon_name": "Arceus",
-    "tradable": false
+    "tradable": false,
+    "level_floor": 20
   },
   {
     "base_attack": 238,
@@ -3882,7 +3921,8 @@
     "form": "Ground",
     "pokemon_id": 493,
     "pokemon_name": "Arceus",
-    "tradable": false
+    "tradable": false,
+    "level_floor": 20
   },
   {
     "base_attack": 238,
@@ -3891,7 +3931,8 @@
     "form": "Ice",
     "pokemon_id": 493,
     "pokemon_name": "Arceus",
-    "tradable": false
+    "tradable": false,
+    "level_floor": 20
   },
   {
     "base_attack": 238,
@@ -3900,7 +3941,8 @@
     "form": "Normal",
     "pokemon_id": 493,
     "pokemon_name": "Arceus",
-    "tradable": false
+    "tradable": false,
+    "level_floor": 20
   },
   {
     "base_attack": 238,
@@ -3909,7 +3951,8 @@
     "form": "Poison",
     "pokemon_id": 493,
     "pokemon_name": "Arceus",
-    "tradable": false
+    "tradable": false,
+    "level_floor": 20
   },
   {
     "base_attack": 238,
@@ -3918,7 +3961,8 @@
     "form": "Psychic",
     "pokemon_id": 493,
     "pokemon_name": "Arceus",
-    "tradable": false
+    "tradable": false,
+    "level_floor": 20
   },
   {
     "base_attack": 238,
@@ -3927,7 +3971,8 @@
     "form": "Rock",
     "pokemon_id": 493,
     "pokemon_name": "Arceus",
-    "tradable": false
+    "tradable": false,
+    "level_floor": 20
   },
   {
     "base_attack": 238,
@@ -3936,7 +3981,8 @@
     "form": "Steel",
     "pokemon_id": 493,
     "pokemon_name": "Arceus",
-    "tradable": false
+    "tradable": false,
+    "level_floor": 20
   },
   {
     "base_attack": 238,
@@ -3945,7 +3991,8 @@
     "form": "Water",
     "pokemon_id": 493,
     "pokemon_name": "Arceus",
-    "tradable": false
+    "tradable": false,
+    "level_floor": 20
   },
   {
     "base_attack": 118,

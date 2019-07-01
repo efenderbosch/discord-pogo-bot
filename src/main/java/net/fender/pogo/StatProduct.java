@@ -41,10 +41,6 @@ public class StatProduct implements Comparable<StatProduct> {
         return level;
     }
 
-//    public BaseStats getStats() {
-//        return stats;
-//    }
-
     public int getStatProduct() {
         return statProduct;
     }
@@ -144,6 +140,7 @@ public class StatProduct implements Comparable<StatProduct> {
     public static Map<IndividualValues, StatProduct> generateStatProducts(Pokemon pokemon, League league) {
         StatProduct zero = generateStatProduct(pokemon, IndividualValues.ZERO, league);
         StatProduct perfect = generateStatProduct(pokemon, IndividualValues.PERFECT, league);
+        double startLevel = Math.max(pokemon.getLevelFloor(), perfect.getLevel());
 
         int minIv = pokemon.isTradable() ? 0 : 10;
         Map<IndividualValues, StatProduct> stats = new HashMap<>(4096);
@@ -151,7 +148,7 @@ public class StatProduct implements Comparable<StatProduct> {
             for (int def = minIv; def <= 15; def++) {
                 for (int sta = minIv; sta <= 15; sta++) {
                     IndividualValues ivs = new IndividualValues(atk, def, sta);
-                    for (double level = perfect.level; level <= zero.level; level += 0.5) {
+                    for (double level = startLevel; level <= zero.level; level += 0.5) {
                         StatProduct statProduct = new StatProduct(pokemon, ivs, level);
                         int cp = statProduct.getCp();
                         if (cp <= league.maxCp) {

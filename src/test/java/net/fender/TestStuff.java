@@ -23,9 +23,9 @@ public class TestStuff {
         ResourceLoader resourceLoader = new DefaultResourceLoader();
         ObjectMapper objectMapper = new ObjectMapper();
         PokemonRegistry pokemonRegistry = new PokemonRegistry(objectMapper, resourceLoader);
-        Pokemon pokemon = pokemonRegistry.getPokeman("bastiodon");
+        Pokemon pokemon = pokemonRegistry.getPokeman("deoxys-defense");
         Map<IndividualValues, StatProduct> stats = StatProduct.generateStatProducts(pokemon, League.GREAT);
-        stats.values().stream().sorted().limit(25).forEach(System.out::println);
+        stats.values().stream().sorted().limit(125).forEach(System.out::println);
 
         IndividualValues ivs = new IndividualValues(15, 15, 11);
         StatProduct statProduct = stats.get(ivs);
@@ -36,14 +36,16 @@ public class TestStuff {
                 collect(Collectors.toCollection(TreeSet::new));
         int rank = betterStats.size();
         System.out.println("rank: " + rank + "/" + stats.size());
-        StatProduct bestStats = betterStats.first();
-        System.out.println(bestStats);
+        //StatProduct bestStats = betterStats.first();
+        //System.out.println(bestStats);
 
-        if (pokemon.isTradable()) {
-            List<StatProduct> bestFriends = betterStats.stream().filter(StatProduct::isBestFriend).collect(toList());
-            double odds = Math.round(1000.0 * bestFriends.size() / 1331) / 10.0;
-            System.out.println(odds);
-        }
+        //stats.values().stream().map(StatProduct::getStatProduct).sorted().forEach(System.out::println);
+
+//        if (pokemon.isTradable()) {
+//            List<StatProduct> bestFriends = betterStats.stream().filter(StatProduct::isBestFriend).collect(toList());
+//            double odds = Math.round(1000.0 * bestFriends.size() / 1331) / 10.0;
+//            System.out.println(odds);
+//        }
     }
 
     @Disabled
