@@ -8,10 +8,7 @@ import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.ResourceLoader;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
@@ -23,11 +20,11 @@ public class TestStuff {
         ResourceLoader resourceLoader = new DefaultResourceLoader();
         ObjectMapper objectMapper = new ObjectMapper();
         PokemonRegistry pokemonRegistry = new PokemonRegistry(objectMapper, resourceLoader);
-        Pokemon pokemon = pokemonRegistry.getPokeman("deoxys-defense");
-        Map<IndividualValues, StatProduct> stats = StatProduct.generateStatProducts(pokemon, League.GREAT);
-        stats.values().stream().sorted().limit(125).forEach(System.out::println);
+        Pokemon pokemon = pokemonRegistry.getPokeman("lugia");
+        Map<IndividualValues, StatProduct> stats = StatProduct.generateStatProducts(pokemon, League.great);
+        stats.values().stream().sorted(Comparator.reverseOrder()).limit(25).forEach(System.out::println);
 
-        IndividualValues ivs = new IndividualValues(15, 15, 11);
+        IndividualValues ivs = new IndividualValues(15, 15, 15);
         StatProduct statProduct = stats.get(ivs);
 
         SortedSet<StatProduct> betterStats = stats.values().stream().
@@ -36,8 +33,10 @@ public class TestStuff {
                 collect(Collectors.toCollection(TreeSet::new));
         int rank = betterStats.size();
         System.out.println("rank: " + rank + "/" + stats.size());
-        //StatProduct bestStats = betterStats.first();
-        //System.out.println(bestStats);
+        if (!betterStats.isEmpty()) {
+            StatProduct bestStats = betterStats.first();
+            System.out.println(bestStats);
+        }
 
         //stats.values().stream().map(StatProduct::getStatProduct).sorted().forEach(System.out::println);
 
@@ -55,7 +54,7 @@ public class TestStuff {
         PokemonRegistry pokemonRegistry = new PokemonRegistry(objectMapper, resourceLoader);
         SortedSet<PokemonStatProduct> best = new TreeSet<>();
         for (Pokemon pokemon : pokemonRegistry.getAll()) {
-            Map<IndividualValues, StatProduct> stats = StatProduct.generateStatProducts(pokemon, League.GREAT);
+            Map<IndividualValues, StatProduct> stats = StatProduct.generateStatProducts(pokemon, League.great);
             StatProduct statProduct = stats.values().stream().sorted().findFirst().get();
             PokemonStatProduct pokemonStatProduct = new PokemonStatProduct(pokemon, statProduct);
             best.add(pokemonStatProduct);
@@ -75,7 +74,7 @@ public class TestStuff {
         ObjectMapper objectMapper = new ObjectMapper();
         PokemonRegistry pokemonRegistry = new PokemonRegistry(objectMapper, resourceLoader);
         Pokemon pokemon = pokemonRegistry.getPokeman("vigoroth");
-        Map<IndividualValues, StatProduct> stats = StatProduct.generateStatProducts(pokemon, League.GREAT);
+        Map<IndividualValues, StatProduct> stats = StatProduct.generateStatProducts(pokemon, League.great);
         int size = stats.size() / 8;
         List<StatProduct> top = stats.values().stream().sorted().limit(size).collect(toList());
 

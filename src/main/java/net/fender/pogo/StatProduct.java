@@ -125,22 +125,8 @@ public class StatProduct implements Comparable<StatProduct> {
         return ivs.getAttack() + ivs.getDefense() + ivs.getStamina() > 36;
     }
 
-    public static StatProduct generateStatProduct(net.fender.pogo.Pokemon pokemon, IndividualValues ivs, League league) {
-        StatProduct bestStatProduct = null;
-        for (double level = 1.0; level <= 40.0; level += 0.5) {
-            StatProduct statProduct = new StatProduct(pokemon, ivs, level);
-            int cp = statProduct.getCp();
-            if (cp <= league.maxCp) {
-                bestStatProduct = statProduct;
-            }
-        }
-        return bestStatProduct;
-    }
-
     public static Map<IndividualValues, StatProduct> generateStatProducts(Pokemon pokemon, League league) {
-        StatProduct zero = generateStatProduct(pokemon, IndividualValues.ZERO, league);
-        StatProduct perfect = generateStatProduct(pokemon, IndividualValues.PERFECT, league);
-        double startLevel = Math.max(pokemon.getLevelFloor(), perfect.getLevel());
+        double startLevel = pokemon.getLevelFloor();
 
         int minIv = pokemon.isTradable() ? 0 : 10;
         Map<IndividualValues, StatProduct> stats = new HashMap<>(4096);
@@ -148,7 +134,7 @@ public class StatProduct implements Comparable<StatProduct> {
             for (int def = minIv; def <= 15; def++) {
                 for (int sta = minIv; sta <= 15; sta++) {
                     IndividualValues ivs = new IndividualValues(atk, def, sta);
-                    for (double level = startLevel; level <= zero.level; level += 0.5) {
+                    for (double level = startLevel; level <= 40.0; level += 0.5) {
                         StatProduct statProduct = new StatProduct(pokemon, ivs, level);
                         int cp = statProduct.getCp();
                         if (cp <= league.maxCp) {

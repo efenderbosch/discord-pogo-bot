@@ -4,7 +4,7 @@ import java.util.Optional;
 
 public enum League {
 
-    GREAT(1500), ULTRA(2500), MASTER(9999);
+    great(1500), ultra(2500), master(9999);
 
     public final int maxCp;
 
@@ -13,9 +13,9 @@ public enum League {
     }
 
     public static Optional<League> find(String name) {
-        if (GREAT.name().equalsIgnoreCase(name)) return Optional.of(GREAT);
-        if (ULTRA.name().equalsIgnoreCase(name)) return Optional.of(ULTRA);
-        if (MASTER.name().equalsIgnoreCase(name)) return Optional.of(MASTER);
+        if (great.name().equalsIgnoreCase(name)) return Optional.of(great);
+        if (ultra.name().equalsIgnoreCase(name)) return Optional.of(ultra);
+        if (master.name().equalsIgnoreCase(name)) return Optional.of(master);
         return Optional.empty();
     }
 }

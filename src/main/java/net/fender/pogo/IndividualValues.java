@@ -43,4 +43,9 @@ public class IndividualValues {
     public int hashCode() {
         return Objects.hash(attack, defense, stamina);
     }
+
+    @Override
+    public String toString() {
+        return attack + "/" + defense + "/" + stamina;
+    }
 }

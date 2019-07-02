@@ -35,7 +35,7 @@ public class PokemonRegistry {
             int defense = pokemonNode.get("base_defense").intValue();
             int stamina = pokemonNode.get("base_stamina").intValue();
             boolean tradable = pokemonNode.hasNonNull("tradable") ? pokemonNode.get("tradable").booleanValue() : true;
-            int levelFloor = pokemonNode.hasNonNull("level_floor") ? pokemonNode.get("level_floor").intValue() : 0;
+            int levelFloor = pokemonNode.hasNonNull("level_floor") ? pokemonNode.get("level_floor").intValue() : 1;
             Pokemon pokemon = new Pokemon(name, attack, defense, stamina, tradable, levelFloor);
             pokemonByName.put(name, pokemon);
         }
