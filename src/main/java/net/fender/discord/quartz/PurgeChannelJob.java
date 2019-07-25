@@ -38,7 +38,6 @@ public class PurgeChannelJob implements Job {
         OffsetDateTime purgeTime = OffsetDateTime.now().truncatedTo(trunateTo).minus(window);
         for (TextChannel channel : channels) {
             LOG.info("purging messages before {} in {}", purgeTime, channelName);
-            channel.sendTyping().submit();
             int count = 0;
             for (Message message : channel.getIterableHistory()) {
                 if (message.isPinned() || message.getCreationTime().isAfter(purgeTime)) continue;
