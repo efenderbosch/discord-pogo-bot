@@ -4,16 +4,17 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
 import org.quartz.Job;
+import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
-
-import static java.time.temporal.ChronoUnit.DAYS;
 
 @Component
 public class PurgeChannelJob implements Job {
@@ -29,9 +30,12 @@ public class PurgeChannelJob implements Job {
 
     @Override
     public void execute(JobExecutionContext context) {
-        String channelName = (String) context.getMergedJobDataMap().get("channel");
+        JobDataMap jobDataMap = context.getMergedJobDataMap();
+        String channelName = (String) jobDataMap.get("channel");
         List<TextChannel> channels = jda.getTextChannelsByName(channelName, true);
-        OffsetDateTime purgeTime = OffsetDateTime.now().truncatedTo(DAYS).minusHours(1L);
+        ChronoUnit trunateTo = (ChronoUnit) jobDataMap.get("truncateTo");
+        Duration window = (Duration) jobDataMap.get("window");
+        OffsetDateTime purgeTime = OffsetDateTime.now().truncatedTo(trunateTo).minus(window);
         for (TextChannel channel : channels) {
             LOG.info("purging messages before {} in {}", purgeTime, channelName);
             channel.sendTyping().submit();
