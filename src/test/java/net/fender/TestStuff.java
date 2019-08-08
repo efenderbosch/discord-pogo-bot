@@ -57,7 +57,12 @@ public class TestStuff {
         for (Pokemon pokemon : pokemonRegistry.getAll()) {
             if (!pokemon.isTradable()) continue;
             Map<IndividualValues, StatProduct> stats = StatProduct.generateStatProducts(pokemon, League.great);
-            Optional<StatProduct> maybeStatProduct = stats.values().stream().sorted().findFirst();
+            Optional<StatProduct> maybeStatProduct = stats.values().stream().
+                    sorted().
+                    filter(sp -> sp.getCp() > 1300).
+                    limit(100).
+                    filter(sp -> TradeLevel.LUCKY_TRADE.test(sp.getIvs())).
+                    findFirst();
             if (maybeStatProduct.isPresent()) {
                 StatProduct statProduct = maybeStatProduct.get();
                 PokemonStatProduct pokemonStatProduct = new PokemonStatProduct(pokemon, statProduct);
@@ -67,24 +72,10 @@ public class TestStuff {
 
         best.stream().forEach(pokemonStatProduct -> {
             StatProduct statProduct = pokemonStatProduct.getStatProduct();
-            String trade = "wild catch";
-            if (statProduct.isLucky()) {
-                trade = "lucky";
-            } else if (statProduct.isRaidHatchResearch()) {
-                trade = "raid/hatch/research";
-            } else if (statProduct.isBestFriend()) {
-                trade = "best friend";
-            } else if (statProduct.isUltraFriend()) {
-                trade = "ultra friend";
-            } else if (statProduct.isWeatherBoosted()) {
-                trade = "weather boosted";
-            } else if (statProduct.isGreatFriend()) {
-                trade = "great friend";
-            } else if (statProduct.isGoodFriend()) {
-                trade = "good friend";
-            }
-            System.out.println(pokemonStatProduct.getPokemon().getName() + "," +
-                    statProduct.getLevel() + "," + statProduct.getIvs() + "," + statProduct.getCp() + "," + trade);
+            System.out.println(" *  " + pokemonStatProduct.getPokemon().getName() + " " + statProduct.getCp());
+//            + ", atk: " +
+//                    statProduct.getLevelAttack() + ", def: " + statProduct.getLevelDefense() + ", hp: " + statProduct.getHp() +
+//                    "," + statProduct.getStatProduct() + ", " + statProduct.getLevel() + ", " + statProduct.getCp());
         });
     }
 

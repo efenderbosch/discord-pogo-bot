@@ -3226,15 +3226,6 @@
     "base_attack": 170,
     "base_defense": 153,
     "base_stamina": 172,
-    "form": "Overcast",
-    "pokemon_id": 421,
-    "pokemon_name": "Cherrim"
-  },
-  {
-    "base_attack": 170,
-    "base_defense": 153,
-    "base_stamina": 172,
-    "form": "Sunny",
     "pokemon_id": 421,
     "pokemon_name": "Cherrim"
   },

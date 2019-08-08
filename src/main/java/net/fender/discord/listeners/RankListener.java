@@ -15,6 +15,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 import static java.util.stream.Collectors.*;
+import static net.fender.pogo.TradeLevel.*;
 
 @Component
 public class RankListener extends CommandEventWithHelpListener {
@@ -104,33 +105,33 @@ public class RankListener extends CommandEventWithHelpListener {
 
         if (pokemon.isTradable() && league != League.master) {
             StatProduct greatStats = statProducts.stream().
-                    filter(StatProduct::isGreatFriend).
+                    filter(sp -> sp.getTradeLevel() == GREAT_FRIEND).
                     sorted().findFirst().get();
             embedBuilder.addField("Top Great Friend Trade:", getDesc(greatStats, bestStatProduct), false);
 
             statProducts.stream().
-                    filter(StatProduct::isUltraFriend).
+                    filter(sp -> sp.getTradeLevel() == ULTRA_FRIEND).
                     sorted().findFirst().ifPresent(ultra ->
                     embedBuilder.addField("Top Ultra Friend Trade:", getDesc(ultra, bestStatProduct), false));
 
             statProducts.stream().
-                    filter(StatProduct::isBestFriend).
+                    filter(sp -> sp.getTradeLevel() == BEST_FRIEND).
                     sorted().findFirst().ifPresent(best ->
                     embedBuilder.addField("Top Best Friend Trade:", getDesc(best, bestStatProduct), false));
 
             statProducts.stream().
-                    filter(StatProduct::isRaidHatchResearch).
+                    filter(sp -> sp.getTradeLevel() == RAID_HATCH_RESEARCH).
                     sorted().findFirst().ifPresent(raid ->
                     embedBuilder.addField("Top Raid/Hatch/Research:", getDesc(raid, bestStatProduct), false));
 
             statProducts.stream().
-                    filter(StatProduct::isLucky).
+                    filter(sp -> sp.getTradeLevel() == LUCKY_TRADE).
                     sorted().findFirst().ifPresent(lucky ->
                     embedBuilder.addField("Top Lucky Friend Trade:", getDesc(lucky, bestStatProduct), false));
         }
 
         if (pokemon.isTradable()) {
-            long count = betterStats.stream().filter(StatProduct::isBestFriend).count();
+            long count = betterStats.stream().filter(sp -> sp.getTradeLevel() == BEST_FRIEND).count();
             double odds = Math.round(1000.0 * count / 1331) / 10.0;
             embedBuilder.addField("Odds Best Friend Trade Will Improve Rank", odds + "%", false);
         } else {

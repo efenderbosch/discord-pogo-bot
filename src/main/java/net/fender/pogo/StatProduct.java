@@ -34,7 +34,7 @@ public class StatProduct implements Comparable<StatProduct> {
 
         double d = Math.sqrt(defense);
         double s = Math.sqrt(stamina);
-        cp = (int) Math.floor(attack * d * s * cpModifier * cpModifier / 10.0);
+        cp = Math.max(10, (int) Math.floor(attack * d * s * cpModifier * cpModifier / 10.0));
     }
 
     public double getLevel() {
@@ -65,42 +65,8 @@ public class StatProduct implements Comparable<StatProduct> {
         return ivs;
     }
 
-    public boolean isWild() {
-        return testIVs(0);
-    }
-
-    public boolean isGoodFriend() {
-        return testIVs(1);
-    }
-
-    public boolean isGreatFriend() {
-        return testIVs(2);
-    }
-
-    public boolean isUltraFriend() {
-        return testIVs(3);
-    }
-
-    public boolean isWeatherBoosted() {
-        return testIVs(4);
-    }
-
-    public boolean isBestFriend() {
-        return testIVs(5);
-    }
-
-    public boolean isRaidHatchResearch() {
-        return testIVs(10);
-    }
-
-    public boolean isLucky() {
-        return testIVs(12);
-    }
-
-    public boolean testIVs(int floor) {
-        return ivs.getAttack() >= floor &&
-                ivs.getDefense() >= floor &&
-                ivs.getStamina() >= floor;
+    public TradeLevel getTradeLevel() {
+        return TradeLevel.getTradeLevel(ivs);
     }
 
     public boolean isAttackBest() {
