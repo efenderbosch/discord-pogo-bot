@@ -30,7 +30,7 @@ public class FacebookImageListener extends BaseEventListener<MessageReceivedEven
     private static final Logger LOG = LoggerFactory.getLogger(FacebookImageListener.class);
 
     private static final LocalTime START = LocalTime.of(5, 45);
-    private static final LocalTime END = LocalTime.of(19, 15);
+    private static final LocalTime END = LocalTime.of(20, 15);
     private static final TimeFilter RAID_WINDOW_FILTER = new TimeFilter(START, END);
 
     private static final ChannelNameFilter CHANNEL_NAME_FILTER = new ChannelNameFilter
