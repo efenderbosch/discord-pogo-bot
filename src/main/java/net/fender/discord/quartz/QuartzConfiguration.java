@@ -70,7 +70,7 @@ public class QuartzConfiguration {
     public Trigger purgeTeamRocketEncountersChannelJobTrigger(@Qualifier("purgeTeamRocketEncountersChannelJobDetail") JobDetail
                                                                           purgeTeamRocketEncountersChannelJob) {
         return TriggerBuilder.newTrigger().forJob(purgeTeamRocketEncountersChannelJob).
-                withSchedule(CronScheduleBuilder.cronSchedule("0 * * * * ?")).
+                withSchedule(CronScheduleBuilder.cronSchedule("0 0/5 * * * ?")).
                 build();
     }
 

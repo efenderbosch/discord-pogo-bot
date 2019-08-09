@@ -17,6 +17,11 @@ public class IndividualValues {
         this.stamina = stamina;
     }
 
+    public static IndividualValues parse(String ivs) {
+        String[] parts = ivs.split("/");
+        return new IndividualValues(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
+    }
+
     public int getAttack() {
         return attack;
     }

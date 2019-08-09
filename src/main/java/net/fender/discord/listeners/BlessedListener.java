@@ -28,7 +28,7 @@ public class BlessedListener extends CommandEventListener {
         Message message = event.getMessage();
         if (penta == null) {
             JDA jda = message.getJDA();
-             penta = jda.getEmotesByName("penta", true).get(0);
+            penta = jda.getEmotesByName("penta", true).get(0);
         }
         message.addReaction(penta).submit();
     }

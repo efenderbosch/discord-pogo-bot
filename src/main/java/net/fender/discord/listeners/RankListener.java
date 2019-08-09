@@ -1,29 +1,34 @@
 package net.fender.discord.listeners;
 
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.fender.discord.filters.ChannelNameFilter;
-import net.fender.pogo.*;
+import net.fender.pogo.IndividualValues;
+import net.fender.pogo.League;
+import net.fender.pogo.Pokemon;
+import net.fender.pogo.PokemonRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
-import static java.util.stream.Collectors.*;
-import static net.fender.pogo.TradeLevel.*;
+import static net.fender.discord.listeners.RankEmoteListener.REACTIONS;
 
 @Component
 public class RankListener extends CommandEventWithHelpListener {
 
+    static final ChannelNameFilter CHANNEL_NAME_FILTER = new ChannelNameFilter("rank-bot");
+
     private static final Pattern BASIC = Pattern.compile("\\$rank.*");
     private static final Pattern FULL = Pattern.compile("\\$rank\\s+([-\\w]+)\\s+(\\d{1,2})\\s+(\\d{1,2})" +
             "\\s+(\\d{1,2})\\s*(\\w*)");
-    private static final ChannelNameFilter CHANNEL_NAME_FILTER = new ChannelNameFilter("rank-bot");
 
     private final PokemonRegistry pokemonRegistry;
     private TextChannel rankBot;
@@ -36,8 +41,9 @@ public class RankListener extends CommandEventWithHelpListener {
 
     @Override
     protected void doCommand(MessageReceivedEvent event, List<String> parts) {
+        JDA jda = event.getJDA();
         if (rankBot == null) {
-            rankBot = event.getJDA().getTextChannelsByName("rank-bot", true).get(0);
+            rankBot = jda.getTextChannelsByName("rank-bot", true).get(0);
         }
         rankBot.sendTyping().submit();
 
@@ -67,83 +73,98 @@ public class RankListener extends CommandEventWithHelpListener {
                 rankBot.sendMessage(pokemonName + " not found!").submit();
                 sendHelp(event, parts);
             } else {
-                String message =
-                        pokemonName + " not found! Did you mean one of these?\n" + found.stream().collect(joining(", "));
-                rankBot.sendMessage(message).submit();
+                EmbedBuilder embedBuilder = new EmbedBuilder();
+                embedBuilder.setDescription(pokemonName + " not found! Did you mean one of these?");
+                Iterator<String> reactions = REACTIONS.keySet().iterator();
+                for (String name : found) {
+                    String reaction = reactions.next();
+                    embedBuilder.addField(reaction + " " + name, "", true);
+                }
+                embedBuilder.setFooter(league.name() + " " + ivs, null);
+                Message message = new MessageBuilder().setEmbed(embedBuilder.build()).build();
+                Message sent = rankBot.sendMessage(message).complete();
+                // after sending, add reactions
+                reactions = REACTIONS.values().iterator();
+                for (String name : found) {
+                    sent.addReaction(reactions.next()).submit();
+                }
             }
             return;
         }
 
-        int levelFloor = pokemon.getLevelFloor();
-        Map<IndividualValues, StatProduct> stats = StatProduct.generateStatProducts(pokemon, league);
-        if (stats.isEmpty()) {
-            StatProduct statProduct = new StatProduct(pokemon, IndividualValues.ZERO, levelFloor);
-            rankBot.sendMessage(pokemonName + " is ineligible for " + league + " league. Min CP @ lvl " +
-                    levelFloor + " is " + statProduct.getCp()).submit();
-            return;
-        }
+        RankService.rank(pokemon, league, ivs, rankBot);
+    }
 
-        StatProduct statProduct = stats.get(ivs);
-        if (statProduct == null) {
-            StatProduct over = new StatProduct(pokemon, ivs, levelFloor);
-            rankBot.sendMessage("CP at lvl " + levelFloor + " for " + ivs + " is " + over.getCp() +
-                    " which is over " + league.maxCp + " for " + league + " league.").submit();
-            return;
-        }
-
-        Collection<StatProduct> statProducts = stats.values();
-        SortedSet<StatProduct> betterStats = statProducts.stream().
-                filter(s -> s.getStatProduct() > statProduct.getStatProduct()).
-                collect(toCollection(TreeSet::new));
-        int rank = betterStats.size() + 1;
-        StatProduct wildStats = betterStats.isEmpty() ? statProduct : betterStats.first();
-        int bestStatProduct = wildStats.getStatProduct();
-
-        EmbedBuilder embedBuilder = new EmbedBuilder();
-        embedBuilder.setTitle(pokemon.getName());
-        User author = event.getAuthor();
-        embedBuilder.setFooter(author.getName(), author.getAvatarUrl());
-        double percentBest = Math.round(1000.0 * statProduct.getStatProduct() / wildStats.getStatProduct()) / 10.0;
-        String desc = "#" + rank + "/" + stats.size() + " | L" + statProduct.getLevel() + " | CP " +
-                statProduct.getCp() + " | " + percentBest + "%";
-        embedBuilder.addField(ivs.toString(), desc, false);
-
-        embedBuilder.addField("#1 Rank", getDesc(wildStats, bestStatProduct), false);
-
-        if (pokemon.isTradable() && league != League.master) {
-            statProducts.stream().
-                    filter(sp -> sp.getTradeLevel() == GREAT_FRIEND).
-                    sorted().findFirst().ifPresent(great ->
-                    embedBuilder.addField("Top Great Friend Trade:", getDesc(great, bestStatProduct), false));
-
-            statProducts.stream().
-                    filter(sp -> sp.getTradeLevel() == ULTRA_FRIEND).
-                    sorted().findFirst().ifPresent(ultra ->
-                    embedBuilder.addField("Top Ultra Friend Trade:", getDesc(ultra, bestStatProduct), false));
-
-            statProducts.stream().
-                    filter(sp -> sp.getTradeLevel() == BEST_FRIEND).
-                    sorted().findFirst().ifPresent(best ->
-                    embedBuilder.addField("Top Best Friend Trade:", getDesc(best, bestStatProduct), false));
-
-            statProducts.stream().
-                    filter(sp -> sp.getTradeLevel() == RAID_HATCH_RESEARCH).
-                    sorted().findFirst().ifPresent(raid ->
-                    embedBuilder.addField("Top Raid/Hatch/Research:", getDesc(raid, bestStatProduct), false));
-
-            statProducts.stream().
-                    filter(sp -> sp.getTradeLevel() == LUCKY_TRADE).
-                    sorted().findFirst().ifPresent(lucky ->
-                    embedBuilder.addField("Top Lucky Friend Trade:", getDesc(lucky, bestStatProduct), false));
-        }
-
-        if (pokemon.isTradable()) {
-            long count = betterStats.stream().filter(sp -> sp.getTradeLevel() == BEST_FRIEND).count();
-            double odds = Math.round(1000.0 * count / 1331) / 10.0;
-            embedBuilder.addField("Odds Best Friend Trade Will Improve Rank", odds + "%", false);
-        } else {
-            embedBuilder.setDescription("(not tradable)");
-        }
+//        int levelFloor = pokemon.getLevelFloor();
+//        Map<IndividualValues, StatProduct> stats = StatProduct.generateStatProducts(pokemon, league);
+//        if (stats.isEmpty()) {
+//            StatProduct statProduct = new StatProduct(pokemon, IndividualValues.ZERO, levelFloor);
+//            rankBot.sendMessage(pokemonName + " is ineligible for " + league + " league. Min CP @ lvl " +
+//                    levelFloor + " is " + statProduct.getCp()).submit();
+//            return;
+//        }
+//
+//        StatProduct statProduct = stats.get(ivs);
+//        if (statProduct == null) {
+//            StatProduct over = new StatProduct(pokemon, ivs, levelFloor);
+//            rankBot.sendMessage("CP at lvl " + levelFloor + " for " + ivs + " is " + over.getCp() +
+//                    " which is over " + league.maxCp + " for " + league + " league.").submit();
+//            return;
+//        }
+//
+//        Collection<StatProduct> statProducts = stats.values();
+//        SortedSet<StatProduct> betterStats = statProducts.stream().
+//                filter(s -> s.getStatProduct() > statProduct.getStatProduct()).
+//                collect(toCollection(TreeSet::new));
+//        int rank = betterStats.size() + 1;
+//        StatProduct wildStats = betterStats.isEmpty() ? statProduct : betterStats.first();
+//        int bestStatProduct = wildStats.getStatProduct();
+//
+//        EmbedBuilder embedBuilder = new EmbedBuilder();
+//        embedBuilder.setTitle(pokemon.getName());
+//        User author = event.getAuthor();
+//        embedBuilder.setFooter(author.getName(), author.getAvatarUrl());
+//        double percentBest = Math.round(1000.0 * statProduct.getStatProduct() / wildStats.getStatProduct()) / 10.0;
+//        String desc = "#" + rank + "/" + stats.size() + " | L" + statProduct.getLevel() + " | CP " +
+//                statProduct.getCp() + " | " + percentBest + "%";
+//        embedBuilder.addField(ivs.toString(), desc, false);
+//
+//        embedBuilder.addField("#1 Rank", getDesc(wildStats, bestStatProduct), false);
+//
+//        if (pokemon.isTradable() && league != League.master) {
+//            statProducts.stream().
+//                    filter(sp -> sp.getTradeLevel() == GREAT_FRIEND).
+//                    sorted().findFirst().ifPresent(great ->
+//                    embedBuilder.addField("Top Great Friend Trade:", getDesc(great, bestStatProduct), false));
+//
+//            statProducts.stream().
+//                    filter(sp -> sp.getTradeLevel() == ULTRA_FRIEND).
+//                    sorted().findFirst().ifPresent(ultra ->
+//                    embedBuilder.addField("Top Ultra Friend Trade:", getDesc(ultra, bestStatProduct), false));
+//
+//            statProducts.stream().
+//                    filter(sp -> sp.getTradeLevel() == BEST_FRIEND).
+//                    sorted().findFirst().ifPresent(best ->
+//                    embedBuilder.addField("Top Best Friend Trade:", getDesc(best, bestStatProduct), false));
+//
+//            statProducts.stream().
+//                    filter(sp -> sp.getTradeLevel() == RAID_HATCH_RESEARCH).
+//                    sorted().findFirst().ifPresent(raid ->
+//                    embedBuilder.addField("Top Raid/Hatch/Research:", getDesc(raid, bestStatProduct), false));
+//
+//            statProducts.stream().
+//                    filter(sp -> sp.getTradeLevel() == LUCKY_TRADE).
+//                    sorted().findFirst().ifPresent(lucky ->
+//                    embedBuilder.addField("Top Lucky Friend Trade:", getDesc(lucky, bestStatProduct), false));
+//        }
+//
+//        if (pokemon.isTradable()) {
+//            long count = betterStats.stream().filter(sp -> sp.getTradeLevel() == BEST_FRIEND).count();
+//            double odds = Math.round(1000.0 * count / 1331) / 10.0;
+//            embedBuilder.addField("Odds Best Friend Trade Will Improve Rank", odds + "%", false);
+//        } else {
+//            embedBuilder.setDescription("(not tradable)");
+//        }
 
         // put this in a summary command
 //        int size = stats.size() / 8;
@@ -174,22 +195,22 @@ public class RankListener extends CommandEventWithHelpListener {
 //        }
 //        embedBuilder.addField("CP Eval Breakpoint", cpBreakpoint + "", false);
 
-        MessageBuilder builder = new MessageBuilder();
-        builder.setEmbed(embedBuilder.build());
-        Message message = builder.build();
-        rankBot.sendMessage(message).submit();
-    }
-
-    private static String percent(double d) {
-        return (Math.round(d * 10.0) / 10.0) + "%";
-    }
-
-    private String getDesc(StatProduct statProduct, int bestStatProduct) {
-        double percentBest = Math.round(1000.0 * statProduct.getStatProduct() / bestStatProduct) / 10.0;
-        return "L" + statProduct.getLevel() + " | CP " + statProduct.getCp() + " | " +
-                statProduct.getIvs().getAttack() + "/" + statProduct.getIvs().getDefense() + "/" +
-                statProduct.getIvs().getStamina() + " | " + percentBest + "%";
-    }
+//        MessageBuilder builder = new MessageBuilder();
+//        builder.setEmbed(embedBuilder.build());
+//        Message message = builder.build();
+//        rankBot.sendMessage(message).submit();
+//    }
+//
+//    private static String percent(double d) {
+//        return (Math.round(d * 10.0) / 10.0) + "%";
+//    }
+//
+//    private static String getDesc(StatProduct statProduct, int bestStatProduct) {
+//        double percentBest = Math.round(1000.0 * statProduct.getStatProduct() / bestStatProduct) / 10.0;
+//        return "L" + statProduct.getLevel() + " | CP " + statProduct.getCp() + " | " +
+//                statProduct.getIvs().getAttack() + "/" + statProduct.getIvs().getDefense() + "/" +
+//                statProduct.getIvs().getStamina() + " | " + percentBest + "%";
+//    }
 
     @Override
     protected void sendHelp(MessageReceivedEvent event, List<String> parts) {

@@ -64,6 +64,6 @@ public class PokemonRegistry {
             }
             withScore.add(pokemonName);
         }
-        return scores.headMap(0.85).values().stream().flatMap(Collection::stream).collect(toList());
+        return scores.headMap(0.85).values().stream().flatMap(Collection::stream).limit(9).collect(toList());
     }
 }
