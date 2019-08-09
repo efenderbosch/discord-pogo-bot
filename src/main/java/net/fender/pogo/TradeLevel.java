@@ -5,14 +5,14 @@ import java.util.function.Predicate;
 
 public enum TradeLevel implements Predicate<IndividualValues> {
 
-    WILD("wild catch", 0),
-    GOOD_FRIEND("good friend", 1),
-    GREAT_FRIEND("great friend/purified", 2),
-    ULTRA_FRIEND("ultra friend", 3),
-    WEATHER_BOOSTED("weather boosted", 4),
-    BEST_FRIEND("best friend", 5),
+    LUCKY_TRADE("lucky trade", 12),
     RAID_HATCH_RESEARCH("raid/hatch/research", 10),
-    LUCKY_TRADE("lucky trade", 12);
+    BEST_FRIEND("best friend", 5),
+    WEATHER_BOOSTED("weather boosted", 4),
+    ULTRA_FRIEND("ultra friend", 3),
+    GREAT_FRIEND("great friend/purified", 2),
+    GOOD_FRIEND("good friend", 1),
+    WILD("wild catch", 0);
 
     public final String description;
     private final int floor;

@@ -3,19 +3,22 @@ package net.fender.pogo;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import org.apache.commons.text.similarity.JaroWinklerSimilarity;
+import org.apache.commons.text.similarity.SimilarityScore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
+import static java.util.stream.Collectors.toList;
 
 @Component
 public class PokemonRegistry {
 
+    private static final SimilarityScore<Double> SIMILARITY_SCORE = new JaroWinklerSimilarity();
     private final Map<String, Pokemon> pokemonByName = new HashMap<>();
 
     @Autowired
@@ -42,10 +45,25 @@ public class PokemonRegistry {
     }
 
     public Pokemon getPokeman(String name) {
-        return pokemonByName.get(name);
+        return pokemonByName.get(name.replace("alolan", "alola"));
     }
 
     public Collection<Pokemon> getAll() {
         return pokemonByName.values();
+    }
+
+    public List<String> find(String search) {
+        NavigableMap<Double, List<String>> scores = new TreeMap<>(Comparator.reverseOrder());
+        for (Pokemon pokemon : pokemonByName.values()) {
+            String pokemonName = pokemon.getName();
+            Double score = SIMILARITY_SCORE.apply(pokemonName, search);
+            List<String> withScore = scores.get(score);
+            if (withScore == null) {
+                withScore = new ArrayList<>();
+                scores.put(score, withScore);
+            }
+            withScore.add(pokemonName);
+        }
+        return scores.headMap(0.85).values().stream().flatMap(Collection::stream).collect(toList());
     }
 }

@@ -62,8 +62,15 @@ public class RankListener extends CommandEventWithHelpListener {
 
         Pokemon pokemon = pokemonRegistry.getPokeman(pokemonName);
         if (pokemon == null) {
-            rankBot.sendMessage(pokemonName + " not found!").submit();
-            sendHelp(event, parts);
+            List<String> found = pokemonRegistry.find(pokemonName);
+            if (found.isEmpty()) {
+                rankBot.sendMessage(pokemonName + " not found!").submit();
+                sendHelp(event, parts);
+            } else {
+                String message =
+                        pokemonName + " not found! Did you mean one of these?\n" + found.stream().collect(joining(", "));
+                rankBot.sendMessage(message).submit();
+            }
             return;
         }
 
@@ -104,10 +111,10 @@ public class RankListener extends CommandEventWithHelpListener {
         embedBuilder.addField("#1 Rank", getDesc(wildStats, bestStatProduct), false);
 
         if (pokemon.isTradable() && league != League.master) {
-            StatProduct greatStats = statProducts.stream().
+            statProducts.stream().
                     filter(sp -> sp.getTradeLevel() == GREAT_FRIEND).
-                    sorted().findFirst().get();
-            embedBuilder.addField("Top Great Friend Trade:", getDesc(greatStats, bestStatProduct), false);
+                    sorted().findFirst().ifPresent(great ->
+                    embedBuilder.addField("Top Great Friend Trade:", getDesc(great, bestStatProduct), false));
 
             statProducts.stream().
                     filter(sp -> sp.getTradeLevel() == ULTRA_FRIEND).
@@ -138,33 +145,34 @@ public class RankListener extends CommandEventWithHelpListener {
             embedBuilder.setDescription("(not tradable)");
         }
 
-        int size = stats.size() / 8;
-        List<StatProduct> top = stats.values().stream().sorted().limit(size).collect(toList());
-        long amazes = top.stream().filter(StatProduct::isAmazes).count();
-        embedBuilder.addField("Top Appraisal", percent(100.0 * amazes / size), true);
-        long strong = top.stream().filter(StatProduct::isStrong).count();
-        embedBuilder.addField("High Appraisal", percent(100.0 * strong / size), false);
-        long decent = top.stream().filter(StatProduct::isDecent).count();
-        embedBuilder.addField("Average Appraisal", percent(100.0 * decent / size), true);
-        long notGreatInBattle = top.stream().filter(StatProduct::isNotGreatInBattle).count();
-        embedBuilder.addField("Poor Appraisal", percent(100.0 * notGreatInBattle / size), false);
-        long attackTop = top.stream().filter(StatProduct::isAttackBest).count();
-        embedBuilder.addField("Attack Best Stat", percent(100.0 * attackTop / size), true);
-
-        Map<Integer, Long> counts = top.stream().collect(groupingBy(StatProduct::getCp, counting()));
-        long breakpoint = size / 16;
-        long sum = 0;
-        long cpBreakpoint = 1500;
-        for (Map.Entry<Integer, Long> entry : counts.entrySet()) {
-            int cp = entry.getKey();
-            long count = entry.getValue();
-            sum += count;
-            if (sum >= breakpoint) {
-                cpBreakpoint = cp;
-                break;
-            }
-        }
-        embedBuilder.addField("CP Eval Breakpoint", cpBreakpoint + "", false);
+        // put this in a summary command
+//        int size = stats.size() / 8;
+//        List<StatProduct> top = stats.values().stream().sorted().limit(size).collect(toList());
+//        long amazes = top.stream().filter(StatProduct::isAmazes).count();
+//        embedBuilder.addField("Top Appraisal", percent(100.0 * amazes / size), true);
+//        long strong = top.stream().filter(StatProduct::isStrong).count();
+//        embedBuilder.addField("High Appraisal", percent(100.0 * strong / size), false);
+//        long decent = top.stream().filter(StatProduct::isDecent).count();
+//        embedBuilder.addField("Average Appraisal", percent(100.0 * decent / size), true);
+//        long notGreatInBattle = top.stream().filter(StatProduct::isNotGreatInBattle).count();
+//        embedBuilder.addField("Poor Appraisal", percent(100.0 * notGreatInBattle / size), false);
+//        long attackTop = top.stream().filter(StatProduct::isAttackBest).count();
+//        embedBuilder.addField("Attack Best Stat", percent(100.0 * attackTop / size), true);
+//
+//        Map<Integer, Long> counts = top.stream().collect(groupingBy(StatProduct::getCp, counting()));
+//        long breakpoint = size / 16;
+//        long sum = 0;
+//        long cpBreakpoint = 1500;
+//        for (Map.Entry<Integer, Long> entry : counts.entrySet()) {
+//            int cp = entry.getKey();
+//            long count = entry.getValue();
+//            sum += count;
+//            if (sum >= breakpoint) {
+//                cpBreakpoint = cp;
+//                break;
+//            }
+//        }
+//        embedBuilder.addField("CP Eval Breakpoint", cpBreakpoint + "", false);
 
         MessageBuilder builder = new MessageBuilder();
         builder.setEmbed(embedBuilder.build());
