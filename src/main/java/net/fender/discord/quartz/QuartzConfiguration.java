@@ -15,8 +15,12 @@ public class QuartzConfiguration {
 
     @Bean
     public JobDetail purgeQuestChannelJobDetail() {
+        JobDataMap jobDataMap = new JobDataMap();
+        jobDataMap.put("channel", "quests");
+        jobDataMap.put("truncateTo", ChronoUnit.DAYS);
+        jobDataMap.put("window", Duration.ofHours(1L));
         return JobBuilder.newJob().
-                usingJobData("channel", "quests").
+                usingJobData(jobDataMap).
                 ofType(PurgeChannelJob.class).
                 storeDurably().
                 build();
