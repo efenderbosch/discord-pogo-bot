@@ -32,6 +32,10 @@ public enum TradeLevel implements Predicate<IndividualValues> {
                 ivs.getStamina() >= floor;
     }
 
+    public int getFloor() {
+        return floor;
+    }
+
     @Override
     public boolean test(IndividualValues ivs) {
         return testIVs(ivs, floor);

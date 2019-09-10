@@ -19,33 +19,20 @@ public class TestStuff {
         ResourceLoader resourceLoader = new DefaultResourceLoader();
         ObjectMapper objectMapper = new ObjectMapper();
         PokemonRegistry pokemonRegistry = new PokemonRegistry(objectMapper, resourceLoader);
-        Pokemon pokemon = pokemonRegistry.getPokeman("cloyster");
+        Pokemon pokemon = pokemonRegistry.getPokeman("wormadam-trash");
         Map<IndividualValues, StatProduct> stats = StatProduct.generateStatProducts(pokemon, League.great);
-        //stats.values().stream().sorted().limit(25).forEach(System.out::println);
 
-        IndividualValues ivs = new IndividualValues(1, 11, 14);
+        IndividualValues ivs = new IndividualValues(3, 14, 15);
         StatProduct statProduct = stats.get(ivs);
         System.out.println(statProduct);
 
-        SortedSet<StatProduct> betterStats = stats.values().stream().
-                //filter(StatProduct::isBestFriend).
-                        filter(s -> s.getStatProduct() >= statProduct.getStatProduct()).
-                        collect(Collectors.toCollection(TreeSet::new));
-        int rank = betterStats.size();
-        System.out.println("rank: " + rank + "/" + stats.size());
-//        if (!betterStats.isEmpty()) {
-//            StatProduct bestStats = betterStats.first();
-//            System.out.println(bestStats);
-//        }
-
-        betterStats.stream().limit(25).forEach(System.out::println);
-        //;);map(StatProduct::getStatProduct).sorted().forEach(System.out::println);
-
-//        if (pokemon.isTradable()) {
-//            List<StatProduct> bestFriends = betterStats.stream().filter(StatProduct::isBestFriend).collect(toList());
-//            double odds = Math.round(1000.0 * bestFriends.size() / 1331) / 10.0;
-//            System.out.println(odds);
-//        }
+        for (TradeLevel tradeLevel : TradeLevel.values()) {
+            stats.values().stream().
+                    filter(s -> s.isTradeLevel(tradeLevel)).
+                    sorted().
+                    findAny().
+                    ifPresent(v -> System.out.println(tradeLevel + ": " + v));
+        }
     }
 
     @Test
@@ -132,8 +119,8 @@ public class TestStuff {
                         limit(300).
                         collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
         EnumSet<Appraisal> allAppraisals = EnumSet.noneOf(Appraisal.class);
-        Set<Integer> allCP = new TreeSet<>();
-        Set<Integer> allHP = new TreeSet<>();
+        SortedSet<Integer> allCP = new TreeSet<>();
+        SortedSet<Integer> allHP = new TreeSet<>();
         int maxLevel = (int) Math.floor(evolvedStats.values().stream().map(StatProduct::getLevel).sorted().findFirst().get());
         for (int level = 1; level <= maxLevel; level++) {
             for (IndividualValues ivs : evolvedStats.keySet()) {
@@ -164,8 +151,8 @@ public class TestStuff {
         PokemonRegistry pokemonRegistry = new PokemonRegistry(objectMapper, resourceLoader);
         Pokemon mudkip = pokemonRegistry.getPokeman("mudkip");
         EnumSet<Appraisal> allAppraisals = EnumSet.noneOf(Appraisal.class);
-        Set<Integer> allCP = new TreeSet<>();
-        Set<Integer> allHP = new TreeSet<>();
+        SortedSet<Integer> allCP = new TreeSet<>();
+        SortedSet<Integer> allHP = new TreeSet<>();
         for (int d = 14; d <= 14; d++) {
             for (int s = 12; s <= 14; s++) {
                 for (double l = 25; l <= 35; l += 0.5) {
@@ -188,20 +175,15 @@ public class TestStuff {
         System.out.println(allAppraisals.stream().map(Appraisal::getSearchString).collect(Collectors.joining(",")));
     }
 
-    private void printRanges(Set<Integer> integers, String prefix) {
+    public static void printRanges(SortedSet<Integer> integers, String prefix) {
         int length = integers.size();
-        Integer[] cpArray = integers.toArray(new Integer[0]);
+        Integer[] cpArray = integers.toArray(new Integer[length]);
         int idx = 0;
         int idx2 = 0;
         while (idx < length) {
             while (++idx2 < length && cpArray[idx2] - cpArray[idx2 - 1] == 1) ;
-            if (idx2 - idx > 2) {
-                System.out.printf("%s%s-%s,", prefix, cpArray[idx], cpArray[idx2 - 1]);
-                idx = idx2;
-            } else {
-                for (; idx < idx2; idx++)
-                    System.out.printf("%s%s,", prefix, cpArray[idx]);
-            }
+            System.out.printf("%s%s-%s,", prefix, cpArray[idx], cpArray[idx2 - 1]);
+            idx = idx2;
         }
     }
 }

@@ -65,8 +65,8 @@ public class StatProduct implements Comparable<StatProduct> {
         return ivs;
     }
 
-    public TradeLevel getTradeLevel() {
-        return TradeLevel.getTradeLevel(ivs);
+    public boolean isTradeLevel(TradeLevel tradeLevel) {
+        return TradeLevel.getTradeLevel(ivs).getFloor() >= tradeLevel.getFloor();
     }
 
     public boolean isAttackBest() {
@@ -127,7 +127,7 @@ public class StatProduct implements Comparable<StatProduct> {
     }
 
     public static String round(double d) {
-        return "" + (Math.round(d * 100.0) / 100.0);
+        return "" + (Math.round(d * 1_000.0) / 1_000.0);
     }
 
     @Override
