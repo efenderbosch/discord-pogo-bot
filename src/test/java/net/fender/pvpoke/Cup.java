@@ -1,5 +1,7 @@
 package net.fender.pvpoke;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,5 +42,10 @@ public class Cup {
 
     public void setExclude(List<Filter> exclude) {
         this.exclude = exclude;
+    }
+
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this);
     }
 }

@@ -1,5 +1,7 @@
 package net.fender.pvpoke;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,5 +42,10 @@ public class GameMaster {
 
     public void setMoves(List<Move> moves) {
         this.moves = moves;
+    }
+
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this);
     }
 }

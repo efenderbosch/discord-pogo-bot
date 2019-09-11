@@ -1,5 +1,7 @@
 package net.fender.pvpoke;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
 public class Settings {
 
     private int partySize;
@@ -28,5 +30,10 @@ public class Settings {
 
     public void setBuffDivisor(int buffDivisor) {
         this.buffDivisor = buffDivisor;
+    }
+
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this);
     }
 }

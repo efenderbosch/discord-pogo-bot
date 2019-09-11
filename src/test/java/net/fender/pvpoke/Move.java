@@ -5,10 +5,10 @@ public class Move {
     private String moveId;
     private String name;
     private String type;
-    // power
-    // energy
-    // energyGain
-    // cooldown
+    private int power;
+    private int energy;
+    private int energyGain;
+    private int cooldown;
 
     public String getMoveId() {
         return moveId;
@@ -32,5 +32,37 @@ public class Move {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public int getPower() {
+        return power;
+    }
+
+    public void setPower(int power) {
+        this.power = power;
+    }
+
+    public int getEnergy() {
+        return energy;
+    }
+
+    public void setEnergy(int energy) {
+        this.energy = energy;
+    }
+
+    public int getEnergyGain() {
+        return energyGain;
+    }
+
+    public void setEnergyGain(int energyGain) {
+        this.energyGain = energyGain;
+    }
+
+    public int getCooldown() {
+        return cooldown;
+    }
+
+    public void setCooldown(int cooldown) {
+        this.cooldown = cooldown;
     }
 }

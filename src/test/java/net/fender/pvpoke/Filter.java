@@ -1,5 +1,7 @@
 package net.fender.pvpoke;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
 import java.util.List;
 
 public class Filter {
@@ -21,5 +23,10 @@ public class Filter {
 
     public void setValues(List<Object> values) {
         this.values = values;
+    }
+
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this);
     }
 }

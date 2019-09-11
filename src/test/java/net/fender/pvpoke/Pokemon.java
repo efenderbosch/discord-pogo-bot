@@ -1,5 +1,8 @@
 package net.fender.pvpoke;
 
+import net.fender.pogo.BaseStats;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -9,7 +12,7 @@ public class Pokemon {
     private int dex;
     private String speciesName;
     private String speciesId;
-    // baseStats
+    private BaseStats baseStats;
     private List<String> types;
     private List<String> fastMoves;
     private List<String> chargeMoves;
@@ -38,6 +41,14 @@ public class Pokemon {
 
     public void setSpeciesId(String speciesId) {
         this.speciesId = speciesId;
+    }
+
+    public BaseStats getBaseStats() {
+        return baseStats;
+    }
+
+    public void setBaseStats(BaseStats baseStats) {
+        this.baseStats = baseStats;
     }
 
     public List<String> getTypes() {
@@ -70,5 +81,10 @@ public class Pokemon {
 
     public void setLegacyMoves(Set<String> legacyMoves) {
         this.legacyMoves = legacyMoves;
+    }
+
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this);
     }
 }
