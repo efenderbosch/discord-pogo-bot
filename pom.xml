@@ -24,6 +24,7 @@
             <dependency>
                 <groupId>software.amazon.awssdk</groupId>
                 <artifactId>bom</artifactId>
+                <!-- TODO try 2.8.x -->
                 <version>2.7.36</version>
                 <type>pom</type>
                 <scope>import</scope>

@@ -32,6 +32,10 @@ public class RankService {
             return;
         }
 
+        if (!pokemon.isTradable()) {
+            ivs = IndividualValues.floorNonTradable(ivs);
+        }
+
         StatProduct statProduct = stats.get(ivs);
         if (statProduct == null) {
             StatProduct over = new StatProduct(pokemon, ivs, levelFloor);

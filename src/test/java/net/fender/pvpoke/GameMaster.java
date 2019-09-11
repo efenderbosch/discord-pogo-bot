@@ -1,14 +1,12 @@
 package net.fender.pvpoke;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class GameMaster {
 
     private Settings settings;
-    private Map<String, List<String>> cups = new HashMap<>();
+    private List<Cup> cups = new ArrayList<>();
     private List<Pokemon> pokemon = new ArrayList<>();
     private List<Move> moves = new ArrayList<>();
 
@@ -20,11 +18,11 @@ public class GameMaster {
         this.settings = settings;
     }
 
-    public Map<String, List<String>> getCups() {
+    public List<Cup> getCups() {
         return cups;
     }
 
-    public void setCups(Map<String, List<String>> cups) {
+    public void setCups(List<Cup> cups) {
         this.cups = cups;
     }
 

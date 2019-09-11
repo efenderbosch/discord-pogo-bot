@@ -22,6 +22,13 @@ public class IndividualValues {
         return new IndividualValues(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
     }
 
+    public static IndividualValues floorNonTradable(IndividualValues other) {
+        return new IndividualValues(
+                Math.max(other.getAttack(), 10),
+                Math.max(other.getDefense(), 10),
+                Math.max(other.getStamina(), 10));
+    }
+
     public int getAttack() {
         return attack;
     }

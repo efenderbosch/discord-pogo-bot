@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
+import static net.fender.pogo.TradeLevel.LUCKY_TRADE;
 
 public class TestStuff {
 
@@ -46,9 +47,9 @@ public class TestStuff {
             Map<IndividualValues, StatProduct> stats = StatProduct.generateStatProducts(pokemon, League.great);
             Optional<StatProduct> maybeStatProduct = stats.values().stream().
                     sorted().
-                    filter(sp -> sp.getCp() > 1300).
-                    limit(100).
-                    filter(sp -> TradeLevel.LUCKY_TRADE.test(sp.getIvs())).
+                    filter(sp -> sp.getCp() > 1400).
+                    limit(50).
+                    filter(sp -> sp.isTradeLevel(LUCKY_TRADE)).
                     findFirst();
             if (maybeStatProduct.isPresent()) {
                 StatProduct statProduct = maybeStatProduct.get();
@@ -60,9 +61,6 @@ public class TestStuff {
         best.stream().forEach(pokemonStatProduct -> {
             StatProduct statProduct = pokemonStatProduct.getStatProduct();
             System.out.println(" *  " + pokemonStatProduct.getPokemon().getName() + " " + statProduct.getCp());
-//            + ", atk: " +
-//                    statProduct.getLevelAttack() + ", def: " + statProduct.getLevelDefense() + ", hp: " + statProduct.getHp() +
-//                    "," + statProduct.getStatProduct() + ", " + statProduct.getLevel() + ", " + statProduct.getCp());
         });
     }
 
