@@ -10,8 +10,8 @@ import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.fender.pogo.IndividualValues;
 import net.fender.pogo.League;
-import net.fender.pogo.Pokemon;
 import net.fender.pogo.PokemonRegistry;
+import net.fender.pvpoke.Pokemon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

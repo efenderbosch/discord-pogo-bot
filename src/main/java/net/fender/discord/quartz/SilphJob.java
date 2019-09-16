@@ -45,8 +45,7 @@ public class SilphJob implements Job {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public SilphJob() {
-    }
+    public SilphJob() { }
 
     SilphJob(JDA jda, ObjectMapper objectMapper) {
         this.jda = jda;

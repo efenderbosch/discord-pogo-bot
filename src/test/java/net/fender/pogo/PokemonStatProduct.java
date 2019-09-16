@@ -1,5 +1,7 @@
 package net.fender.pogo;
 
+import net.fender.pvpoke.Pokemon;
+
 import java.util.Objects;
 
 public class PokemonStatProduct implements Comparable<PokemonStatProduct> {

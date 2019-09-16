@@ -1,8 +1,8 @@
 package net.fender.pogo;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
+import net.fender.pvpoke.GameMaster;
+import net.fender.pvpoke.Pokemon;
 import org.apache.commons.text.similarity.JaroWinklerSimilarity;
 import org.apache.commons.text.similarity.SimilarityScore;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,24 +23,15 @@ public class PokemonRegistry {
 
     @Autowired
     public PokemonRegistry(ObjectMapper mapper, ResourceLoader resourceLoader) throws IOException {
-        Resource resource = resourceLoader.getResource("classpath:base_stats.json");
-        ArrayNode root = (ArrayNode) mapper.readTree(resource.getInputStream());
-        for (int i = 0; i < root.size(); i++) {
-            JsonNode pokemonNode = root.get(i);
-            String name = pokemonNode.get("pokemon_name").textValue().toLowerCase();
-            if (pokemonNode.hasNonNull("form")) {
-                String form = pokemonNode.get("form").textValue().toLowerCase();
-                if (!"normal".equals(form)) {
-                    name = name + "-" + form;
-                }
-            }
-            int attack = pokemonNode.get("base_attack").intValue();
-            int defense = pokemonNode.get("base_defense").intValue();
-            int stamina = pokemonNode.get("base_stamina").intValue();
-            boolean tradable = pokemonNode.hasNonNull("tradable") ? pokemonNode.get("tradable").booleanValue() : true;
-            int levelFloor = pokemonNode.hasNonNull("level_floor") ? pokemonNode.get("level_floor").intValue() : 1;
-            Pokemon pokemon = new Pokemon(name, attack, defense, stamina, tradable, levelFloor);
-            pokemonByName.put(name, pokemon);
+        Resource resource = resourceLoader.getResource("classpath:gamemaster.json");
+        GameMaster gameMaster = mapper.readValue(resource.getInputStream(), GameMaster.class);
+        for (Pokemon pokemon : gameMaster.getPokemon()) {
+            pokemonByName.put(pokemon.getSpeciesId(), pokemon);
+        }
+        resource = resourceLoader.getResource("classpath:custom.json");
+        gameMaster = mapper.readValue(resource.getInputStream(), GameMaster.class);
+        for (Pokemon pokemon : gameMaster.getPokemon()) {
+            pokemonByName.put(pokemon.getSpeciesId(), pokemon);
         }
     }
 
@@ -55,7 +46,7 @@ public class PokemonRegistry {
     public List<String> find(String search) {
         NavigableMap<Double, List<String>> scores = new TreeMap<>(Comparator.reverseOrder());
         for (Pokemon pokemon : pokemonByName.values()) {
-            String pokemonName = pokemon.getName();
+            String pokemonName = pokemon.getSpeciesId();
             Double score = SIMILARITY_SCORE.apply(pokemonName, search);
             List<String> withScore = scores.get(score);
             if (withScore == null) {

@@ -6,8 +6,8 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.fender.pogo.IndividualValues;
 import net.fender.pogo.League;
-import net.fender.pogo.Pokemon;
 import net.fender.pogo.StatProduct;
+import net.fender.pvpoke.Pokemon;
 
 import java.util.Collection;
 import java.util.Map;
@@ -23,7 +23,7 @@ public class RankService {
 
     public static void rank(Pokemon pokemon, League league, IndividualValues ivs, TextChannel rankBot) {
         int levelFloor = pokemon.getLevelFloor();
-        String pokemonName = pokemon.getName();
+        String pokemonName = pokemon.getSpeciesId();
         Map<IndividualValues, StatProduct> stats = StatProduct.generateStatProducts(pokemon, league);
         if (stats.isEmpty()) {
             StatProduct statProduct = new StatProduct(pokemon, IndividualValues.ZERO, levelFloor);
@@ -53,7 +53,7 @@ public class RankService {
         int bestStatProduct = wildStats.getStatProduct();
 
         EmbedBuilder embedBuilder = new EmbedBuilder();
-        embedBuilder.setTitle(pokemon.getName());
+        embedBuilder.setTitle(pokemon.getSpeciesId());
 //        User author = event.getAuthor();
 //        embedBuilder.setFooter(author.getName(), author.getAvatarUrl());
         double percentBest = Math.round(1000.0 * statProduct.getStatProduct() / wildStats.getStatProduct()) / 10.0;

@@ -1,8 +1,9 @@
 package net.fender.pvpoke;
 
-import net.fender.pogo.BaseStats;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,13 +11,13 @@ import java.util.Set;
 public class Pokemon {
 
     private int dex;
-    private String speciesName;
     private String speciesId;
-    private BaseStats baseStats;
-    private List<String> types;
-    private List<String> fastMoves;
-    private List<String> chargeMoves;
+    private BaseStats baseStats = new BaseStats(0, 0, 0);
+    private Set<String> types = new HashSet<>();
+    private List<String> fastMoves = new ArrayList<>();
+    private List<String> chargeMoves = new ArrayList<>();
     private Set<String> legacyMoves = new HashSet<>();
+    private Set<String> tags = new HashSet<>();
     // defaultIVs
 
     public int getDex() {
@@ -25,14 +26,6 @@ public class Pokemon {
 
     public void setDex(int dex) {
         this.dex = dex;
-    }
-
-    public String getSpeciesName() {
-        return speciesName;
-    }
-
-    public void setSpeciesName(String speciesName) {
-        this.speciesName = speciesName;
     }
 
     public String getSpeciesId() {
@@ -51,11 +44,11 @@ public class Pokemon {
         this.baseStats = baseStats;
     }
 
-    public List<String> getTypes() {
+    public Set<String> getTypes() {
         return types;
     }
 
-    public void setTypes(List<String> types) {
+    public void setTypes(Set<String> types) {
         this.types = types;
     }
 
@@ -81,6 +74,27 @@ public class Pokemon {
 
     public void setLegacyMoves(Set<String> legacyMoves) {
         this.legacyMoves = legacyMoves;
+    }
+
+    public Set<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<String> tags) {
+        this.tags = tags;
+    }
+
+    @JsonIgnore
+    public boolean isTradable() {
+        return !tags.contains("mythical") || dex == 808 || dex == 809;
+    }
+
+    @JsonIgnore
+    public int getLevelFloor() {
+        if ((tags.contains("legendary") || tags.contains("mythical")) && dex != 808 & dex != 809) {
+            return 15;
+        }
+        return 1;
     }
 
     @Override

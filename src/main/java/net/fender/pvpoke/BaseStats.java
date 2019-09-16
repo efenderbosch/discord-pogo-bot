@@ -1,4 +1,4 @@
-package net.fender.pogo;
+package net.fender.pvpoke;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,14 +19,17 @@ public class BaseStats {
         this.stamina = stamina;
     }
 
+    @JsonProperty("atk")
     public int getAttack() {
         return attack;
     }
 
+    @JsonProperty("def")
     public int getDefense() {
         return defense;
     }
 
+    @JsonProperty("hp")
     public int getStamina() {
         return stamina;
     }

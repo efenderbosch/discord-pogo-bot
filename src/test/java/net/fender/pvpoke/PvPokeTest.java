@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.Sets;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -34,12 +35,14 @@ public class PvPokeTest {
         Map<String, Move> movesById = allMoves.stream().collect(toMap(Move::getMoveId, identity()));
 
         Set<String> search = new HashSet<>();
-        search.add("poison");
-//        search.add("flying");
-//        search.add("poison");
-//        search.add("ice");
-//        search.add("fire");
-//        search.add("ground");
+        search.add("electric");
+
+        Set<String> types = new HashSet<>();
+        types.add("fire");
+        types.add("bug");
+        types.add("grass");
+        types.add("water");
+
         ArrayNode root = (ArrayNode) mapper.readTree(rankingsIs);
         for (int i = 0; i < root.size(); i++) {
             boolean print = false;
@@ -51,8 +54,7 @@ public class PvPokeTest {
 
             String speciesId = node.get("speciesId").textValue();
             Pokemon pokemon = pokemonBySpeciesId.get(speciesId);
-            //if (pokemon.getTypes().contains("poison")) continue;
-            //temp.append(pokemon.getTypes().stream().collect(Collectors.joining("/"))).append('\t');
+            if (Sets.intersection(types, pokemon.getTypes()).isEmpty()) continue;
 
             JsonNode moves = node.get("moves");
             Set<String> legacyMoves = pokemon.getLegacyMoves();

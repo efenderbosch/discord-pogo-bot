@@ -9,6 +9,7 @@ public class Cup {
 
     private String name;
     private String title;
+    private int restrictedPicks;
     private List<Filter> include = new ArrayList<>();
     private List<Filter> exclude = new ArrayList<>();
 
@@ -26,6 +27,14 @@ public class Cup {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getRestrictedPicks() {
+        return restrictedPicks;
+    }
+
+    public void setRestrictedPicks(int restrictedPicks) {
+        this.restrictedPicks = restrictedPicks;
     }
 
     public List<Filter> getInclude() {

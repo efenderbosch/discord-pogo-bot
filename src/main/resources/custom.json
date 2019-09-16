@@ -1,0 +1,1426 @@
+{
+  "pokemon": [
+    {
+      "dex": 650,
+      "speciesId": "chespin",
+      "baseStats": {
+        "atk": 110,
+        "def": 106,
+        "hp": 148
+      }
+    },
+    {
+      "dex": 651,
+      "speciesId": "quilladin",
+      "baseStats": {
+        "atk": 146,
+        "def": 156,
+        "hp": 156
+      }
+    },
+    {
+      "dex": 652,
+      "speciesId": "chesnaught",
+      "baseStats": {
+        "atk": 201,
+        "def": 204,
+        "hp": 204
+      }
+    },
+    {
+      "dex": 653,
+      "speciesId": "fennekin",
+      "baseStats": {
+        "atk": 116,
+        "def": 102,
+        "hp": 120
+      }
+    },
+    {
+      "dex": 654,
+      "speciesId": "braixen",
+      "baseStats": {
+        "atk": 171,
+        "def": 130,
+        "hp": 153
+      }
+    },
+    {
+      "dex": 655,
+      "speciesId": "delphox",
+      "baseStats": {
+        "atk": 230,
+        "def": 189,
+        "hp": 181
+      }
+    },
+    {
+      "dex": 656,
+      "speciesId": "froakie",
+      "baseStats": {
+        "atk": 122,
+        "def": 84,
+        "hp": 121
+      }
+    },
+    {
+      "dex": 657,
+      "speciesId": "frogadier",
+      "baseStats": {
+        "atk": 168,
+        "def": 114,
+        "hp": 144
+      }
+    },
+    {
+      "dex": 658,
+      "speciesId": "greninja",
+      "baseStats": {
+        "atk": 223,
+        "def": 152,
+        "hp": 176
+      }
+    },
+    {
+      "dex": 659,
+      "speciesId": "bunnelby",
+      "baseStats": {
+        "atk": 68,
+        "def": 72,
+        "hp": 116
+      }
+    },
+    {
+      "dex": 660,
+      "speciesId": "diggersby",
+      "baseStats": {
+        "atk": 112,
+        "def": 155,
+        "hp": 198
+      }
+    },
+    {
+      "dex": 661,
+      "speciesId": "fletchling",
+      "baseStats": {
+        "atk": 95,
+        "def": 80,
+        "hp": 128
+      }
+    },
+    {
+      "dex": 662,
+      "speciesId": "fletchinder",
+      "baseStats": {
+        "atk": 145,
+        "def": 110,
+        "hp": 158
+      }
+    },
+    {
+      "dex": 663,
+      "speciesId": "talonflame",
+      "baseStats": {
+        "atk": 176,
+        "def": 155,
+        "hp": 186
+      }
+    },
+    {
+      "dex": 664,
+      "speciesId": "scatterbug",
+      "baseStats": {
+        "atk": 63,
+        "def": 63,
+        "hp": 116
+      }
+    },
+    {
+      "dex": 665,
+      "speciesId": "spewpa",
+      "baseStats": {
+        "atk": 48,
+        "def": 89,
+        "hp": 128
+      }
+    },
+    {
+      "dex": 666,
+      "speciesId": "vivillon",
+      "baseStats": {
+        "atk": 176,
+        "def": 103,
+        "hp": 190
+      }
+    },
+    {
+      "dex": 667,
+      "speciesId": "litleo",
+      "baseStats": {
+        "atk": 139,
+        "def": 112,
+        "hp": 158
+      }
+    },
+    {
+      "dex": 668,
+      "speciesId": "pyroar",
+      "baseStats": {
+        "atk": 221,
+        "def": 149,
+        "hp": 200
+      }
+    },
+    {
+      "dex": 669,
+      "speciesId": "flabebe",
+      "baseStats": {
+        "atk": 108,
+        "def": 120,
+        "hp": 127
+      }
+    },
+    {
+      "dex": 670,
+      "speciesId": "floette",
+      "baseStats": {
+        "atk": 136,
+        "def": 151,
+        "hp": 144
+      }
+    },
+    {
+      "dex": 671,
+      "speciesId": "florges",
+      "baseStats": {
+        "atk": 212,
+        "def": 244,
+        "hp": 186
+      }
+    },
+    {
+      "dex": 672,
+      "speciesId": "skiddo",
+      "baseStats": {
+        "atk": 123,
+        "def": 102,
+        "hp": 165
+      }
+    },
+    {
+      "dex": 673,
+      "speciesId": "gogoat",
+      "baseStats": {
+        "atk": 196,
+        "def": 146,
+        "hp": 265
+      }
+    },
+    {
+      "dex": 674,
+      "speciesId": "pancham",
+      "baseStats": {
+        "atk": 145,
+        "def": 107,
+        "hp": 167
+      }
+    },
+    {
+      "dex": 675,
+      "speciesId": "pangoro",
+      "baseStats": {
+        "atk": 226,
+        "def": 146,
+        "hp": 216
+      }
+    },
+    {
+      "dex": 676,
+      "speciesId": "furfrou",
+      "baseStats": {
+        "atk": 164,
+        "def": 167,
+        "hp": 181
+      }
+    },
+    {
+      "dex": 677,
+      "speciesId": "espurr",
+      "baseStats": {
+        "atk": 120,
+        "def": 114,
+        "hp": 158
+      }
+    },
+    {
+      "dex": 678,
+      "speciesId": "meowstic-male",
+      "baseStats": {
+        "atk": 166,
+        "def": 167,
+        "hp": 179
+      }
+    },
+    {
+      "dex": 679,
+      "speciesId": "honedge",
+      "baseStats": {
+        "atk": 135,
+        "def": 139,
+        "hp": 128
+      }
+    },
+    {
+      "dex": 680,
+      "speciesId": "doublade",
+      "baseStats": {
+        "atk": 188,
+        "def": 206,
+        "hp": 153
+      }
+    },
+    {
+      "dex": 681,
+      "speciesId": "aegislash-shield",
+      "baseStats": {
+        "atk": 97,
+        "def": 291,
+        "hp": 155
+      }
+    },
+    {
+      "dex": 682,
+      "speciesId": "spritzee",
+      "baseStats": {
+        "atk": 110,
+        "def": 113,
+        "hp": 186
+      }
+    },
+    {
+      "dex": 683,
+      "speciesId": "aromatisse",
+      "baseStats": {
+        "atk": 173,
+        "def": 150,
+        "hp": 226
+      }
+    },
+    {
+      "dex": 684,
+      "speciesId": "swirlix",
+      "baseStats": {
+        "atk": 109,
+        "def": 119,
+        "hp": 158
+      }
+    },
+    {
+      "dex": 685,
+      "speciesId": "slurpuff",
+      "baseStats": {
+        "atk": 168,
+        "def": 163,
+        "hp": 193
+      }
+    },
+    {
+      "dex": 686,
+      "speciesId": "inkay",
+      "baseStats": {
+        "atk": 98,
+        "def": 95,
+        "hp": 142
+      }
+    },
+    {
+      "dex": 687,
+      "speciesId": "malamar",
+      "baseStats": {
+        "atk": 177,
+        "def": 165,
+        "hp": 200
+      }
+    },
+    {
+      "dex": 688,
+      "speciesId": "binacle",
+      "baseStats": {
+        "atk": 96,
+        "def": 120,
+        "hp": 123
+      }
+    },
+    {
+      "dex": 689,
+      "speciesId": "barbaracle",
+      "baseStats": {
+        "atk": 194,
+        "def": 205,
+        "hp": 176
+      }
+    },
+    {
+      "dex": 690,
+      "speciesId": "skrelp",
+      "baseStats": {
+        "atk": 109,
+        "def": 109,
+        "hp": 137
+      }
+    },
+    {
+      "dex": 691,
+      "speciesId": "dragalge",
+      "baseStats": {
+        "atk": 177,
+        "def": 207,
+        "hp": 163
+      }
+    },
+    {
+      "dex": 692,
+      "speciesId": "clauncher",
+      "baseStats": {
+        "atk": 108,
+        "def": 117,
+        "hp": 137
+      }
+    },
+    {
+      "dex": 693,
+      "speciesId": "clawitzer",
+      "baseStats": {
+        "atk": 221,
+        "def": 171,
+        "hp": 174
+      }
+    },
+    {
+      "dex": 694,
+      "speciesId": "helioptile",
+      "baseStats": {
+        "atk": 115,
+        "def": 78,
+        "hp": 127
+      }
+    },
+    {
+      "dex": 695,
+      "speciesId": "heliolisk",
+      "baseStats": {
+        "atk": 219,
+        "def": 168,
+        "hp": 158
+      }
+    },
+    {
+      "dex": 696,
+      "speciesId": "tyrunt",
+      "baseStats": {
+        "atk": 158,
+        "def": 123,
+        "hp": 151
+      }
+    },
+    {
+      "dex": 697,
+      "speciesId": "tyrantrum",
+      "baseStats": {
+        "atk": 227,
+        "def": 191,
+        "hp": 193
+      }
+    },
+    {
+      "dex": 698,
+      "speciesId": "amaura",
+      "baseStats": {
+        "atk": 124,
+        "def": 109,
+        "hp": 184
+      }
+    },
+    {
+      "dex": 699,
+      "speciesId": "aurorus",
+      "baseStats": {
+        "atk": 186,
+        "def": 163,
+        "hp": 265
+      }
+    },
+    {
+      "dex": 700,
+      "speciesId": "sylveon",
+      "baseStats": {
+        "atk": 203,
+        "def": 205,
+        "hp": 216
+      }
+    },
+    {
+      "dex": 701,
+      "speciesId": "hawlucha",
+      "baseStats": {
+        "atk": 195,
+        "def": 153,
+        "hp": 186
+      }
+    },
+    {
+      "dex": 702,
+      "speciesId": "dedenne",
+      "baseStats": {
+        "atk": 164,
+        "def": 134,
+        "hp": 167
+      }
+    },
+    {
+      "dex": 703,
+      "speciesId": "carbink",
+      "baseStats": {
+        "atk": 95,
+        "def": 285,
+        "hp": 137
+      }
+    },
+    {
+      "dex": 704,
+      "speciesId": "goomy",
+      "baseStats": {
+        "atk": 101,
+        "def": 112,
+        "hp": 128
+      }
+    },
+    {
+      "dex": 705,
+      "speciesId": "sliggoo",
+      "baseStats": {
+        "atk": 159,
+        "def": 176,
+        "hp": 169
+      }
+    },
+    {
+      "dex": 706,
+      "speciesId": "goodra",
+      "baseStats": {
+        "atk": 220,
+        "def": 242,
+        "hp": 207
+      }
+    },
+    {
+      "dex": 707,
+      "speciesId": "klefki",
+      "baseStats": {
+        "atk": 160,
+        "def": 179,
+        "hp": 149
+      }
+    },
+    {
+      "dex": 708,
+      "speciesId": "phantump",
+      "baseStats": {
+        "atk": 125,
+        "def": 103,
+        "hp": 125
+      }
+    },
+    {
+      "dex": 709,
+      "speciesId": "trevenant",
+      "baseStats": {
+        "atk": 201,
+        "def": 154,
+        "hp": 198
+      }
+    },
+    {
+      "dex": 710,
+      "speciesId": "pumpkaboo-average",
+      "baseStats": {
+        "atk": 121,
+        "def": 123,
+        "hp": 135
+      }
+    },
+    {
+      "dex": 711,
+      "speciesId": "gourgeist-average",
+      "baseStats": {
+        "atk": 175,
+        "def": 213,
+        "hp": 163
+      }
+    },
+    {
+      "dex": 712,
+      "speciesId": "bergmite",
+      "baseStats": {
+        "atk": 117,
+        "def": 120,
+        "hp": 146
+      }
+    },
+    {
+      "dex": 713,
+      "speciesId": "avalugg",
+      "baseStats": {
+        "atk": 196,
+        "def": 240,
+        "hp": 216
+      }
+    },
+    {
+      "dex": 714,
+      "speciesId": "noibat",
+      "baseStats": {
+        "atk": 83,
+        "def": 73,
+        "hp": 120
+      }
+    },
+    {
+      "dex": 715,
+      "speciesId": "noivern",
+      "baseStats": {
+        "atk": 205,
+        "def": 175,
+        "hp": 198
+      }
+    },
+    {
+      "dex": 716,
+      "speciesId": "xerneas",
+      "baseStats": {
+        "atk": 275,
+        "def": 203,
+        "hp": 270
+      }
+    },
+    {
+      "dex": 717,
+      "speciesId": "yveltal",
+      "baseStats": {
+        "atk": 275,
+        "def": 203,
+        "hp": 270
+      }
+    },
+    {
+      "dex": 718,
+      "speciesId": "zygarde",
+      "baseStats": {
+        "atk": 203,
+        "def": 232,
+        "hp": 239
+      }
+    },
+    {
+      "dex": 719,
+      "speciesId": "diancie",
+      "baseStats": {
+        "atk": 190,
+        "def": 285,
+        "hp": 137
+      }
+    },
+    {
+      "dex": 720,
+      "speciesId": "hoopa",
+      "baseStats": {
+        "atk": 287,
+        "def": 206,
+        "hp": 190
+      }
+    },
+    {
+      "dex": 721,
+      "speciesId": "volcanion",
+      "baseStats": {
+        "atk": 252,
+        "def": 216,
+        "hp": 190
+      }
+    },
+    {
+      "dex": 722,
+      "speciesId": "rowlet",
+      "baseStats": {
+        "atk": 102,
+        "def": 99,
+        "hp": 169
+      }
+    },
+    {
+      "dex": 723,
+      "speciesId": "dartrix",
+      "baseStats": {
+        "atk": 142,
+        "def": 139,
+        "hp": 186
+      }
+    },
+    {
+      "dex": 724,
+      "speciesId": "decidueye",
+      "baseStats": {
+        "atk": 210,
+        "def": 179,
+        "hp": 186
+      }
+    },
+    {
+      "dex": 725,
+      "speciesId": "litten",
+      "baseStats": {
+        "atk": 128,
+        "def": 79,
+        "hp": 128
+      }
+    },
+    {
+      "dex": 726,
+      "speciesId": "torracat",
+      "baseStats": {
+        "atk": 174,
+        "def": 103,
+        "hp": 163
+      }
+    },
+    {
+      "dex": 727,
+      "speciesId": "incineroar",
+      "baseStats": {
+        "atk": 214,
+        "def": 175,
+        "hp": 216
+      }
+    },
+    {
+      "dex": 728,
+      "speciesId": "popplio",
+      "baseStats": {
+        "atk": 120,
+        "def": 103,
+        "hp": 137
+      }
+    },
+    {
+      "dex": 729,
+      "speciesId": "brionne",
+      "baseStats": {
+        "atk": 168,
+        "def": 145,
+        "hp": 155
+      }
+    },
+    {
+      "dex": 730,
+      "speciesId": "primarina",
+      "baseStats": {
+        "atk": 232,
+        "def": 195,
+        "hp": 190
+      }
+    },
+    {
+      "dex": 731,
+      "speciesId": "pikipek",
+      "baseStats": {
+        "atk": 136,
+        "def": 59,
+        "hp": 111
+      }
+    },
+    {
+      "dex": 732,
+      "speciesId": "trumbeak",
+      "baseStats": {
+        "atk": 159,
+        "def": 100,
+        "hp": 146
+      }
+    },
+    {
+      "dex": 733,
+      "speciesId": "toucannon",
+      "baseStats": {
+        "atk": 222,
+        "def": 146,
+        "hp": 190
+      }
+    },
+    {
+      "dex": 734,
+      "speciesId": "yungoos",
+      "baseStats": {
+        "atk": 122,
+        "def": 56,
+        "hp": 134
+      }
+    },
+    {
+      "dex": 735,
+      "speciesId": "gumshoos",
+      "baseStats": {
+        "atk": 194,
+        "def": 113,
+        "hp": 204
+      }
+    },
+    {
+      "dex": 736,
+      "speciesId": "grubbin",
+      "baseStats": {
+        "atk": 115,
+        "def": 85,
+        "hp": 132
+      }
+    },
+    {
+      "dex": 737,
+      "speciesId": "charjabug",
+      "baseStats": {
+        "atk": 145,
+        "def": 161,
+        "hp": 149
+      }
+    },
+    {
+      "dex": 738,
+      "speciesId": "vikavolt",
+      "baseStats": {
+        "atk": 254,
+        "def": 158,
+        "hp": 184
+      }
+    },
+    {
+      "dex": 739,
+      "speciesId": "crabrawler",
+      "baseStats": {
+        "atk": 150,
+        "def": 104,
+        "hp": 132
+      }
+    },
+    {
+      "dex": 740,
+      "speciesId": "crabominable",
+      "baseStats": {
+        "atk": 231,
+        "def": 138,
+        "hp": 219
+      }
+    },
+    {
+      "dex": 741,
+      "speciesId": "oricorio-baile",
+      "baseStats": {
+        "atk": 196,
+        "def": 145,
+        "hp": 181
+      }
+    },
+    {
+      "dex": 742,
+      "speciesId": "cutiefly",
+      "baseStats": {
+        "atk": 110,
+        "def": 81,
+        "hp": 120
+      }
+    },
+    {
+      "dex": 743,
+      "speciesId": "ribombee",
+      "baseStats": {
+        "atk": 198,
+        "def": 146,
+        "hp": 155
+      }
+    },
+    {
+      "dex": 744,
+      "speciesId": "rockruff",
+      "baseStats": {
+        "atk": 117,
+        "def": 78,
+        "hp": 128
+      }
+    },
+    {
+      "dex": 745,
+      "speciesId": "lycanroc-midday",
+      "baseStats": {
+        "atk": 231,
+        "def": 140,
+        "hp": 181
+      }
+    },
+    {
+      "dex": 746,
+      "speciesId": "wishiwashi-solo",
+      "baseStats": {
+        "atk": 46,
+        "def": 43,
+        "hp": 128
+      }
+    },
+    {
+      "dex": 747,
+      "speciesId": "mareanie",
+      "baseStats": {
+        "atk": 98,
+        "def": 110,
+        "hp": 137
+      }
+    },
+    {
+      "dex": 748,
+      "speciesId": "toxapex",
+      "baseStats": {
+        "atk": 114,
+        "def": 273,
+        "hp": 137
+      }
+    },
+    {
+      "dex": 749,
+      "speciesId": "mudbray",
+      "baseStats": {
+        "atk": 175,
+        "def": 121,
+        "hp": 172
+      }
+    },
+    {
+      "dex": 750,
+      "speciesId": "mudsdale",
+      "baseStats": {
+        "atk": 214,
+        "def": 174,
+        "hp": 225
+      }
+    },
+    {
+      "dex": 751,
+      "speciesId": "dewpider",
+      "baseStats": {
+        "atk": 72,
+        "def": 117,
+        "hp": 116
+      }
+    },
+    {
+      "dex": 752,
+      "speciesId": "araquanid",
+      "baseStats": {
+        "atk": 126,
+        "def": 219,
+        "hp": 169
+      }
+    },
+    {
+      "dex": 753,
+      "speciesId": "fomantis",
+      "baseStats": {
+        "atk": 100,
+        "def": 64,
+        "hp": 120
+      }
+    },
+    {
+      "dex": 754,
+      "speciesId": "lurantis",
+      "baseStats": {
+        "atk": 192,
+        "def": 169,
+        "hp": 172
+      }
+    },
+    {
+      "dex": 755,
+      "speciesId": "morelull",
+      "baseStats": {
+        "atk": 108,
+        "def": 119,
+        "hp": 120
+      }
+    },
+    {
+      "dex": 756,
+      "speciesId": "shiinotic",
+      "baseStats": {
+        "atk": 154,
+        "def": 168,
+        "hp": 155
+      }
+    },
+    {
+      "dex": 757,
+      "speciesId": "salandit",
+      "baseStats": {
+        "atk": 136,
+        "def": 80,
+        "hp": 134
+      }
+    },
+    {
+      "dex": 758,
+      "speciesId": "salazzle",
+      "baseStats": {
+        "atk": 228,
+        "def": 130,
+        "hp": 169
+      }
+    },
+    {
+      "dex": 759,
+      "speciesId": "stufful",
+      "baseStats": {
+        "atk": 136,
+        "def": 95,
+        "hp": 172
+      }
+    },
+    {
+      "dex": 760,
+      "speciesId": "bewear",
+      "baseStats": {
+        "atk": 226,
+        "def": 141,
+        "hp": 260
+      }
+    },
+    {
+      "dex": 761,
+      "speciesId": "bounsweet",
+      "baseStats": {
+        "atk": 55,
+        "def": 69,
+        "hp": 123
+      }
+    },
+    {
+      "dex": 762,
+      "speciesId": "steenee",
+      "baseStats": {
+        "atk": 78,
+        "def": 94,
+        "hp": 141
+      }
+    },
+    {
+      "dex": 763,
+      "speciesId": "tsareena",
+      "baseStats": {
+        "atk": 222,
+        "def": 195,
+        "hp": 176
+      }
+    },
+    {
+      "dex": 764,
+      "speciesId": "comfey",
+      "baseStats": {
+        "atk": 165,
+        "def": 215,
+        "hp": 139
+      }
+    },
+    {
+      "dex": 765,
+      "speciesId": "oranguru",
+      "baseStats": {
+        "atk": 168,
+        "def": 192,
+        "hp": 207
+      }
+    },
+    {
+      "dex": 766,
+      "speciesId": "passimian",
+      "baseStats": {
+        "atk": 222,
+        "def": 160,
+        "hp": 225
+      }
+    },
+    {
+      "dex": 767,
+      "speciesId": "wimpod",
+      "baseStats": {
+        "atk": 67,
+        "def": 74,
+        "hp": 93
+      }
+    },
+    {
+      "dex": 768,
+      "speciesId": "golisopod",
+      "baseStats": {
+        "atk": 218,
+        "def": 226,
+        "hp": 181
+      }
+    },
+    {
+      "dex": 769,
+      "speciesId": "sandygast",
+      "baseStats": {
+        "atk": 120,
+        "def": 118,
+        "hp": 146
+      }
+    },
+    {
+      "dex": 770,
+      "speciesId": "palossand",
+      "baseStats": {
+        "atk": 178,
+        "def": 178,
+        "hp": 198
+      }
+    },
+    {
+      "dex": 771,
+      "speciesId": "pyukumuku",
+      "baseStats": {
+        "atk": 97,
+        "def": 224,
+        "hp": 146
+      }
+    },
+    {
+      "dex": 772,
+      "speciesId": "type-null",
+      "baseStats": {
+        "atk": 184,
+        "def": 184,
+        "hp": 216
+      }
+    },
+    {
+      "dex": 773,
+      "speciesId": "silvally",
+      "baseStats": {
+        "atk": 198,
+        "def": 198,
+        "hp": 216
+      }
+    },
+    {
+      "dex": 774,
+      "speciesId": "minior-red-meteor",
+      "baseStats": {
+        "atk": 116,
+        "def": 194,
+        "hp": 155
+      }
+    },
+    {
+      "dex": 775,
+      "speciesId": "komala",
+      "baseStats": {
+        "atk": 216,
+        "def": 165,
+        "hp": 163
+      }
+    },
+    {
+      "dex": 776,
+      "speciesId": "turtonator",
+      "baseStats": {
+        "atk": 165,
+        "def": 215,
+        "hp": 155
+      }
+    },
+    {
+      "dex": 777,
+      "speciesId": "togedemaru",
+      "baseStats": {
+        "atk": 190,
+        "def": 145,
+        "hp": 163
+      }
+    },
+    {
+      "dex": 778,
+      "speciesId": "mimikyu-disguised",
+      "baseStats": {
+        "atk": 177,
+        "def": 199,
+        "hp": 146
+      }
+    },
+    {
+      "dex": 779,
+      "speciesId": "bruxish",
+      "baseStats": {
+        "atk": 208,
+        "def": 145,
+        "hp": 169
+      }
+    },
+    {
+      "dex": 780,
+      "speciesId": "drampa",
+      "baseStats": {
+        "atk": 231,
+        "def": 164,
+        "hp": 186
+      }
+    },
+    {
+      "dex": 781,
+      "speciesId": "dhelmise",
+      "baseStats": {
+        "atk": 233,
+        "def": 179,
+        "hp": 172
+      }
+    },
+    {
+      "dex": 782,
+      "speciesId": "jangmo-o",
+      "baseStats": {
+        "atk": 102,
+        "def": 108,
+        "hp": 128
+      }
+    },
+    {
+      "dex": 783,
+      "speciesId": "hakamo-o",
+      "baseStats": {
+        "atk": 145,
+        "def": 162,
+        "hp": 146
+      }
+    },
+    {
+      "dex": 784,
+      "speciesId": "kommo-o",
+      "baseStats": {
+        "atk": 222,
+        "def": 240,
+        "hp": 181
+      }
+    },
+    {
+      "dex": 785,
+      "speciesId": "tapu-koko",
+      "baseStats": {
+        "atk": 250,
+        "def": 181,
+        "hp": 172
+      }
+    },
+    {
+      "dex": 786,
+      "speciesId": "tapu-lele",
+      "baseStats": {
+        "atk": 259,
+        "def": 208,
+        "hp": 172
+      }
+    },
+    {
+      "dex": 787,
+      "speciesId": "tapu-bulu",
+      "baseStats": {
+        "atk": 249,
+        "def": 215,
+        "hp": 172
+      }
+    },
+    {
+      "dex": 788,
+      "speciesId": "tapu-fini",
+      "baseStats": {
+        "atk": 189,
+        "def": 254,
+        "hp": 172
+      }
+    },
+    {
+      "dex": 789,
+      "speciesId": "cosmog",
+      "baseStats": {
+        "atk": 54,
+        "def": 57,
+        "hp": 125
+      }
+    },
+    {
+      "dex": 790,
+      "speciesId": "cosmoem",
+      "baseStats": {
+        "atk": 54,
+        "def": 242,
+        "hp": 125
+      }
+    },
+    {
+      "dex": 791,
+      "speciesId": "solgaleo",
+      "baseStats": {
+        "atk": 280,
+        "def": 210,
+        "hp": 289
+      }
+    },
+    {
+      "dex": 792,
+      "speciesId": "lunala",
+      "baseStats": {
+        "atk": 280,
+        "def": 210,
+        "hp": 289
+      }
+    },
+    {
+      "dex": 793,
+      "speciesId": "nihilego",
+      "baseStats": {
+        "atk": 249,
+        "def": 210,
+        "hp": 240
+      }
+    },
+    {
+      "dex": 794,
+      "speciesId": "buzzwole",
+      "baseStats": {
+        "atk": 259,
+        "def": 216,
+        "hp": 237
+      }
+    },
+    {
+      "dex": 795,
+      "speciesId": "pheromosa",
+      "baseStats": {
+        "atk": 316,
+        "def": 85,
+        "hp": 174
+      }
+    },
+    {
+      "dex": 796,
+      "speciesId": "xurkitree",
+      "baseStats": {
+        "atk": 330,
+        "def": 144,
+        "hp": 195
+      }
+    },
+    {
+      "dex": 797,
+      "speciesId": "celesteela",
+      "baseStats": {
+        "atk": 207,
+        "def": 199,
+        "hp": 219
+      }
+    },
+    {
+      "dex": 798,
+      "speciesId": "kartana",
+      "baseStats": {
+        "atk": 355,
+        "def": 200,
+        "hp": 153
+      }
+    },
+    {
+      "dex": 799,
+      "speciesId": "guzzlord",
+      "baseStats": {
+        "atk": 188,
+        "def": 99,
+        "hp": 440
+      }
+    },
+    {
+      "dex": 800,
+      "speciesId": "necrozma",
+      "baseStats": {
+        "atk": 251,
+        "def": 195,
+        "hp": 219
+      }
+    },
+    {
+      "dex": 801,
+      "speciesId": "magearna",
+      "baseStats": {
+        "atk": 246,
+        "def": 225,
+        "hp": 190
+      }
+    },
+    {
+      "dex": 802,
+      "speciesId": "marshadow",
+      "baseStats": {
+        "atk": 265,
+        "def": 190,
+        "hp": 207
+      }
+    },
+    {
+      "dex": 803,
+      "speciesId": "poipole",
+      "baseStats": {
+        "atk": 145,
+        "def": 133,
+        "hp": 167
+      }
+    },
+    {
+      "dex": 804,
+      "speciesId": "naganadel",
+      "baseStats": {
+        "atk": 263,
+        "def": 159,
+        "hp": 177
+      }
+    },
+    {
+      "dex": 805,
+      "speciesId": "stakataka",
+      "baseStats": {
+        "atk": 213,
+        "def": 298,
+        "hp": 156
+      }
+    },
+    {
+      "dex": 806,
+      "speciesId": "blacephalon",
+      "baseStats": {
+        "atk": 315,
+        "def": 148,
+        "hp": 142
+      }
+    },
+    {
+      "dex": 807,
+      "speciesId": "zeraora",
+      "baseStats": {
+        "atk": 252,
+        "def": 177,
+        "hp": 204
+      }
+    }
+  ]
+}

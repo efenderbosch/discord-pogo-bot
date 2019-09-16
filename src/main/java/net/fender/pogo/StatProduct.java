@@ -1,5 +1,7 @@
 package net.fender.pogo;
 
+import net.fender.pvpoke.BaseStats;
+import net.fender.pvpoke.Pokemon;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.annotation.Nonnull;
@@ -22,9 +24,10 @@ public class StatProduct implements Comparable<StatProduct> {
 
         double cpModifier = CpModifier.getCpModifier(level);
 
-        int attack = pokemon.getAttack() + ivs.getAttack();
-        int defense = pokemon.getDefense() + ivs.getDefense();
-        int stamina = pokemon.getStamina() + ivs.getStamina();
+        BaseStats baseStats = pokemon.getBaseStats();
+        int attack = baseStats.getAttack() + ivs.getAttack();
+        int defense = baseStats.getDefense() + ivs.getDefense();
+        int stamina = baseStats.getStamina() + ivs.getStamina();
 
         levelAttack = cpModifier * attack;
         levelDefense = cpModifier * defense;

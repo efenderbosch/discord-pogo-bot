@@ -2,6 +2,7 @@ package net.fender;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.fender.pogo.*;
+import net.fender.pvpoke.Pokemon;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.ResourceLoader;
@@ -10,17 +11,19 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 import static java.util.stream.Collectors.*;
 import static net.fender.pogo.TradeLevel.LUCKY_TRADE;
 
 public class TestStuff {
 
+    private static final ObjectMapper MAPPER = new ObjectMapper().disable(FAIL_ON_UNKNOWN_PROPERTIES);
+
     @Test
     public void test() throws IOException {
         ResourceLoader resourceLoader = new DefaultResourceLoader();
-        ObjectMapper objectMapper = new ObjectMapper();
-        PokemonRegistry pokemonRegistry = new PokemonRegistry(objectMapper, resourceLoader);
-        Pokemon pokemon = pokemonRegistry.getPokeman("wormadam-trash");
+        PokemonRegistry pokemonRegistry = new PokemonRegistry(MAPPER, resourceLoader);
+        Pokemon pokemon = pokemonRegistry.getPokeman("chespin");
         Map<IndividualValues, StatProduct> stats = StatProduct.generateStatProducts(pokemon, League.great);
 
         IndividualValues ivs = new IndividualValues(3, 14, 15);
@@ -39,8 +42,7 @@ public class TestStuff {
     @Test
     public void test_all() throws IOException {
         ResourceLoader resourceLoader = new DefaultResourceLoader();
-        ObjectMapper objectMapper = new ObjectMapper();
-        PokemonRegistry pokemonRegistry = new PokemonRegistry(objectMapper, resourceLoader);
+        PokemonRegistry pokemonRegistry = new PokemonRegistry(MAPPER, resourceLoader);
         SortedSet<PokemonStatProduct> best = new TreeSet<>();
         for (Pokemon pokemon : pokemonRegistry.getAll()) {
             if (!pokemon.isTradable()) continue;
@@ -60,16 +62,15 @@ public class TestStuff {
 
         best.stream().forEach(pokemonStatProduct -> {
             StatProduct statProduct = pokemonStatProduct.getStatProduct();
-            System.out.println(" *  " + pokemonStatProduct.getPokemon().getName() + " " + statProduct.getCp());
+            System.out.println(" *  " + pokemonStatProduct.getPokemon() + " " + statProduct.getCp());
         });
     }
 
     @Test
     public void test_top() throws IOException {
         ResourceLoader resourceLoader = new DefaultResourceLoader();
-        ObjectMapper objectMapper = new ObjectMapper();
-        PokemonRegistry pokemonRegistry = new PokemonRegistry(objectMapper, resourceLoader);
-        Pokemon pokemon = pokemonRegistry.getPokeman("mewtwo-armored");
+        PokemonRegistry pokemonRegistry = new PokemonRegistry(MAPPER, resourceLoader);
+        Pokemon pokemon = pokemonRegistry.getPokeman("mew");
         Map<IndividualValues, StatProduct> stats = StatProduct.generateStatProducts(pokemon, League.great);
         int size = stats.size() / 8;
         List<StatProduct> top = stats.values().stream().sorted().limit(size).collect(toList());
@@ -107,20 +108,19 @@ public class TestStuff {
     @Test
     public void test_pvp_search_string() throws IOException {
         ResourceLoader resourceLoader = new DefaultResourceLoader();
-        ObjectMapper objectMapper = new ObjectMapper();
-        PokemonRegistry pokemonRegistry = new PokemonRegistry(objectMapper, resourceLoader);
-        Pokemon evolvedForm = pokemonRegistry.getPokeman("gardevoir");
-        Pokemon baseForm = pokemonRegistry.getPokeman("ralts");
+        PokemonRegistry pokemonRegistry = new PokemonRegistry(MAPPER, resourceLoader);
+        Pokemon evolvedForm = pokemonRegistry.getPokeman("grotle");
+        Pokemon baseForm = pokemonRegistry.getPokeman("turtwig");
         Map<IndividualValues, StatProduct> evolvedStats =
                 StatProduct.generateStatProducts(evolvedForm, League.great).entrySet().stream().
                         sorted(Map.Entry.comparingByValue()).
-                        limit(300).
+                        limit(301).
                         collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
         EnumSet<Appraisal> allAppraisals = EnumSet.noneOf(Appraisal.class);
         SortedSet<Integer> allCP = new TreeSet<>();
         SortedSet<Integer> allHP = new TreeSet<>();
         int maxLevel = (int) Math.floor(evolvedStats.values().stream().map(StatProduct::getLevel).sorted().findFirst().get());
-        for (int level = 1; level <= maxLevel; level++) {
+        for (int level = 19; level <= maxLevel; level++) {
             for (IndividualValues ivs : evolvedStats.keySet()) {
                 StatProduct statProduct = new StatProduct(baseForm, ivs, level);
                 StatProduct evolved = new StatProduct(evolvedForm, ivs, level);
@@ -145,8 +145,7 @@ public class TestStuff {
     @Test
     public void test_pve_search_string() throws IOException {
         ResourceLoader resourceLoader = new DefaultResourceLoader();
-        ObjectMapper objectMapper = new ObjectMapper();
-        PokemonRegistry pokemonRegistry = new PokemonRegistry(objectMapper, resourceLoader);
+        PokemonRegistry pokemonRegistry = new PokemonRegistry(MAPPER, resourceLoader);
         Pokemon mudkip = pokemonRegistry.getPokeman("mudkip");
         EnumSet<Appraisal> allAppraisals = EnumSet.noneOf(Appraisal.class);
         SortedSet<Integer> allCP = new TreeSet<>();
@@ -179,8 +178,12 @@ public class TestStuff {
         int idx = 0;
         int idx2 = 0;
         while (idx < length) {
-            while (++idx2 < length && cpArray[idx2] - cpArray[idx2 - 1] == 1) ;
-            System.out.printf("%s%s-%s,", prefix, cpArray[idx], cpArray[idx2 - 1]);
+            while (++idx2 < length && cpArray[idx2] - cpArray[idx2 - 1] == 1);
+            if (cpArray[idx] != cpArray[idx2 - 1]) {
+                System.out.printf("%s%s-%s,", prefix, cpArray[idx], cpArray[idx2 - 1]);
+            } else {
+                System.out.printf("%s%s,", prefix, cpArray[idx], cpArray[idx2 - 1]);
+            }
             idx = idx2;
         }
     }

@@ -9,8 +9,8 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.fender.discord.filters.ChannelNameFilter;
 import net.fender.pogo.IndividualValues;
 import net.fender.pogo.League;
-import net.fender.pogo.Pokemon;
 import net.fender.pogo.PokemonRegistry;
+import net.fender.pvpoke.Pokemon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -166,7 +166,7 @@ public class RankListener extends CommandEventWithHelpListener {
 //            embedBuilder.setDescription("(not tradable)");
 //        }
 
-        // put this in a summary command
+    // put this in a summary command
 //        int size = stats.size() / 8;
 //        List<StatProduct> top = stats.values().stream().sorted().limit(size).collect(toList());
 //        long amazes = top.stream().filter(StatProduct::isAmazes).count();
