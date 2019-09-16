@@ -26,7 +26,8 @@ public class RankService {
         String pokemonName = pokemon.getSpeciesId();
         Map<IndividualValues, StatProduct> stats = StatProduct.generateStatProducts(pokemon, league);
         if (stats.isEmpty()) {
-            StatProduct statProduct = new StatProduct(pokemon, IndividualValues.ZERO, levelFloor);
+            ivs = pokemon.isTradable() ? IndividualValues.ZERO : IndividualValues.floorNonTradable(ivs);
+            StatProduct statProduct = new StatProduct(pokemon, ivs, levelFloor);
             rankBot.sendMessage(pokemonName + " is ineligible for " + league + " league. Min CP @ lvl " +
                     levelFloor + " is " + statProduct.getCp()).submit();
             return;

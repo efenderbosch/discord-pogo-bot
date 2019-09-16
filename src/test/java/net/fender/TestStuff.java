@@ -23,10 +23,10 @@ public class TestStuff {
     public void test() throws IOException {
         ResourceLoader resourceLoader = new DefaultResourceLoader();
         PokemonRegistry pokemonRegistry = new PokemonRegistry(MAPPER, resourceLoader);
-        Pokemon pokemon = pokemonRegistry.getPokeman("chespin");
+        Pokemon pokemon = pokemonRegistry.getPokeman("meloetta-pirouette");
         Map<IndividualValues, StatProduct> stats = StatProduct.generateStatProducts(pokemon, League.great);
 
-        IndividualValues ivs = new IndividualValues(3, 14, 15);
+        IndividualValues ivs = new IndividualValues(15, 10, 10);
         StatProduct statProduct = stats.get(ivs);
         System.out.println(statProduct);
 

@@ -21391,6 +21391,9 @@
         "SURF",
         "WATER_PULSE"
       ],
+      "tags": [
+        "mythical"
+      ],
       "defaultIVs": {
         "cp1500": [
           27.5,
@@ -21428,6 +21431,9 @@
         "PSYCHIC",
         "SURF"
       ],
+      "tags": [
+        "mythical"
+      ],
       "defaultIVs": {
         "cp1500": [
           17.5,
@@ -21464,6 +21470,9 @@
         "DARK_PULSE",
         "FOCUS_BLAST",
         "SHADOW_BALL"
+      ],
+      "tags": [
+        "mythical"
       ],
       "defaultIVs": {
         "cp1500": [
@@ -21517,6 +21526,9 @@
         "GRASS_KNOT",
         "SOLAR_BEAM"
       ],
+      "tags": [
+        "mythical"
+      ],
       "defaultIVs": {
         "cp1500": [
           17.5,
@@ -21569,6 +21581,9 @@
         "GRASS_KNOT",
         "SOLAR_BEAM"
       ],
+      "tags": [
+        "mythical"
+      ],
       "defaultIVs": {
         "cp1500": [
           15.5,
@@ -21606,634 +21621,8 @@
         "HYPER_BEAM",
         "OUTRAGE"
       ],
-      "defaultIVs": {
-        "cp1500": [
-          13.5,
-          5,
-          15,
-          14
-        ],
-        "cp2500": [
-          23,
-          4,
-          15,
-          9
-        ]
-      }
-    },
-    {
-      "dex": 493,
-      "speciesName": "Arceus (Bug)",
-      "speciesId": "arceus_bug",
-      "baseStats": {
-        "atk": 238,
-        "def": 238,
-        "hp": 237
-      },
-      "types": [
-        "bug",
-        "none"
-      ],
-      "fastMoves": [
-        "IRON_TAIL",
-        "SHADOW_CLAW"
-      ],
-      "chargedMoves": [
-        "FUTURE_SIGHT",
-        "HYPER_BEAM",
-        "OUTRAGE"
-      ],
-      "defaultIVs": {
-        "cp1500": [
-          13.5,
-          5,
-          15,
-          14
-        ],
-        "cp2500": [
-          23,
-          4,
-          15,
-          9
-        ]
-      }
-    },
-    {
-      "dex": 493,
-      "speciesName": "Arceus (Dark)",
-      "speciesId": "arceus_dark",
-      "baseStats": {
-        "atk": 238,
-        "def": 238,
-        "hp": 237
-      },
-      "types": [
-        "dark",
-        "none"
-      ],
-      "fastMoves": [
-        "IRON_TAIL",
-        "SHADOW_CLAW"
-      ],
-      "chargedMoves": [
-        "FUTURE_SIGHT",
-        "HYPER_BEAM",
-        "OUTRAGE"
-      ],
-      "defaultIVs": {
-        "cp1500": [
-          13.5,
-          5,
-          15,
-          14
-        ],
-        "cp2500": [
-          23,
-          4,
-          15,
-          9
-        ]
-      }
-    },
-    {
-      "dex": 493,
-      "speciesName": "Arceus (Dragon)",
-      "speciesId": "arceus_dragon",
-      "baseStats": {
-        "atk": 238,
-        "def": 238,
-        "hp": 237
-      },
-      "types": [
-        "dragon",
-        "none"
-      ],
-      "fastMoves": [
-        "IRON_TAIL",
-        "SHADOW_CLAW"
-      ],
-      "chargedMoves": [
-        "FUTURE_SIGHT",
-        "HYPER_BEAM",
-        "OUTRAGE"
-      ],
-      "defaultIVs": {
-        "cp1500": [
-          13.5,
-          5,
-          15,
-          14
-        ],
-        "cp2500": [
-          23,
-          4,
-          15,
-          9
-        ]
-      }
-    },
-    {
-      "dex": 493,
-      "speciesName": "Arceus (Electric)",
-      "speciesId": "arceus_electric",
-      "baseStats": {
-        "atk": 238,
-        "def": 238,
-        "hp": 237
-      },
-      "types": [
-        "electric",
-        "none"
-      ],
-      "fastMoves": [
-        "IRON_TAIL",
-        "SHADOW_CLAW"
-      ],
-      "chargedMoves": [
-        "FUTURE_SIGHT",
-        "HYPER_BEAM",
-        "OUTRAGE"
-      ],
-      "defaultIVs": {
-        "cp1500": [
-          13.5,
-          5,
-          15,
-          14
-        ],
-        "cp2500": [
-          23,
-          4,
-          15,
-          9
-        ]
-      }
-    },
-    {
-      "dex": 493,
-      "speciesName": "Arceus (Fairy)",
-      "speciesId": "arceus_fairy",
-      "baseStats": {
-        "atk": 238,
-        "def": 238,
-        "hp": 237
-      },
-      "types": [
-        "fairy",
-        "none"
-      ],
-      "fastMoves": [
-        "IRON_TAIL",
-        "SHADOW_CLAW"
-      ],
-      "chargedMoves": [
-        "FUTURE_SIGHT",
-        "HYPER_BEAM",
-        "OUTRAGE"
-      ],
-      "defaultIVs": {
-        "cp1500": [
-          13.5,
-          5,
-          15,
-          14
-        ],
-        "cp2500": [
-          23,
-          4,
-          15,
-          9
-        ]
-      }
-    },
-    {
-      "dex": 493,
-      "speciesName": "Arceus (Fighting)",
-      "speciesId": "arceus_fighting",
-      "baseStats": {
-        "atk": 238,
-        "def": 238,
-        "hp": 237
-      },
-      "types": [
-        "fighting",
-        "none"
-      ],
-      "fastMoves": [
-        "IRON_TAIL",
-        "SHADOW_CLAW"
-      ],
-      "chargedMoves": [
-        "FUTURE_SIGHT",
-        "HYPER_BEAM",
-        "OUTRAGE"
-      ],
-      "defaultIVs": {
-        "cp1500": [
-          13.5,
-          5,
-          15,
-          14
-        ],
-        "cp2500": [
-          23,
-          4,
-          15,
-          9
-        ]
-      }
-    },
-    {
-      "dex": 493,
-      "speciesName": "Arceus (Fire)",
-      "speciesId": "arceus_fire",
-      "baseStats": {
-        "atk": 238,
-        "def": 238,
-        "hp": 237
-      },
-      "types": [
-        "fire",
-        "none"
-      ],
-      "fastMoves": [
-        "IRON_TAIL",
-        "SHADOW_CLAW"
-      ],
-      "chargedMoves": [
-        "FUTURE_SIGHT",
-        "HYPER_BEAM",
-        "OUTRAGE"
-      ],
-      "defaultIVs": {
-        "cp1500": [
-          13.5,
-          5,
-          15,
-          14
-        ],
-        "cp2500": [
-          23,
-          4,
-          15,
-          9
-        ]
-      }
-    },
-    {
-      "dex": 493,
-      "speciesName": "Arceus (Flying)",
-      "speciesId": "arceus_flying",
-      "baseStats": {
-        "atk": 238,
-        "def": 238,
-        "hp": 237
-      },
-      "types": [
-        "flying",
-        "none"
-      ],
-      "fastMoves": [
-        "IRON_TAIL",
-        "SHADOW_CLAW"
-      ],
-      "chargedMoves": [
-        "FUTURE_SIGHT",
-        "HYPER_BEAM",
-        "OUTRAGE"
-      ],
-      "defaultIVs": {
-        "cp1500": [
-          13.5,
-          5,
-          15,
-          14
-        ],
-        "cp2500": [
-          23,
-          4,
-          15,
-          9
-        ]
-      }
-    },
-    {
-      "dex": 493,
-      "speciesName": "Arceus (Ghost)",
-      "speciesId": "arceus_ghost",
-      "baseStats": {
-        "atk": 238,
-        "def": 238,
-        "hp": 237
-      },
-      "types": [
-        "ghost",
-        "none"
-      ],
-      "fastMoves": [
-        "IRON_TAIL",
-        "SHADOW_CLAW"
-      ],
-      "chargedMoves": [
-        "FUTURE_SIGHT",
-        "HYPER_BEAM",
-        "OUTRAGE"
-      ],
-      "defaultIVs": {
-        "cp1500": [
-          13.5,
-          5,
-          15,
-          14
-        ],
-        "cp2500": [
-          23,
-          4,
-          15,
-          9
-        ]
-      }
-    },
-    {
-      "dex": 493,
-      "speciesName": "Arceus (Grass)",
-      "speciesId": "arceus_grass",
-      "baseStats": {
-        "atk": 238,
-        "def": 238,
-        "hp": 237
-      },
-      "types": [
-        "grass",
-        "none"
-      ],
-      "fastMoves": [
-        "IRON_TAIL",
-        "SHADOW_CLAW"
-      ],
-      "chargedMoves": [
-        "FUTURE_SIGHT",
-        "HYPER_BEAM",
-        "OUTRAGE"
-      ],
-      "defaultIVs": {
-        "cp1500": [
-          13.5,
-          5,
-          15,
-          14
-        ],
-        "cp2500": [
-          23,
-          4,
-          15,
-          9
-        ]
-      }
-    },
-    {
-      "dex": 493,
-      "speciesName": "Arceus (Ground)",
-      "speciesId": "arceus_ground",
-      "baseStats": {
-        "atk": 238,
-        "def": 238,
-        "hp": 237
-      },
-      "types": [
-        "ground",
-        "none"
-      ],
-      "fastMoves": [
-        "IRON_TAIL",
-        "SHADOW_CLAW"
-      ],
-      "chargedMoves": [
-        "FUTURE_SIGHT",
-        "HYPER_BEAM",
-        "OUTRAGE"
-      ],
-      "defaultIVs": {
-        "cp1500": [
-          13.5,
-          5,
-          15,
-          14
-        ],
-        "cp2500": [
-          23,
-          4,
-          15,
-          9
-        ]
-      }
-    },
-    {
-      "dex": 493,
-      "speciesName": "Arceus (Ice)",
-      "speciesId": "arceus_ice",
-      "baseStats": {
-        "atk": 238,
-        "def": 238,
-        "hp": 237
-      },
-      "types": [
-        "ice",
-        "none"
-      ],
-      "fastMoves": [
-        "IRON_TAIL",
-        "SHADOW_CLAW"
-      ],
-      "chargedMoves": [
-        "FUTURE_SIGHT",
-        "HYPER_BEAM",
-        "OUTRAGE"
-      ],
-      "defaultIVs": {
-        "cp1500": [
-          13.5,
-          5,
-          15,
-          14
-        ],
-        "cp2500": [
-          23,
-          4,
-          15,
-          9
-        ]
-      }
-    },
-    {
-      "dex": 493,
-      "speciesName": "Arceus (Poison)",
-      "speciesId": "arceus_poison",
-      "baseStats": {
-        "atk": 238,
-        "def": 238,
-        "hp": 237
-      },
-      "types": [
-        "poison",
-        "none"
-      ],
-      "fastMoves": [
-        "IRON_TAIL",
-        "SHADOW_CLAW"
-      ],
-      "chargedMoves": [
-        "FUTURE_SIGHT",
-        "HYPER_BEAM",
-        "OUTRAGE"
-      ],
-      "defaultIVs": {
-        "cp1500": [
-          13.5,
-          5,
-          15,
-          14
-        ],
-        "cp2500": [
-          23,
-          4,
-          15,
-          9
-        ]
-      }
-    },
-    {
-      "dex": 493,
-      "speciesName": "Arceus (Psychic)",
-      "speciesId": "arceus_psychic",
-      "baseStats": {
-        "atk": 238,
-        "def": 238,
-        "hp": 237
-      },
-      "types": [
-        "psychic",
-        "none"
-      ],
-      "fastMoves": [
-        "IRON_TAIL",
-        "SHADOW_CLAW"
-      ],
-      "chargedMoves": [
-        "FUTURE_SIGHT",
-        "HYPER_BEAM",
-        "OUTRAGE"
-      ],
-      "defaultIVs": {
-        "cp1500": [
-          13.5,
-          5,
-          15,
-          14
-        ],
-        "cp2500": [
-          23,
-          4,
-          15,
-          9
-        ]
-      }
-    },
-    {
-      "dex": 493,
-      "speciesName": "Arceus (Rock)",
-      "speciesId": "arceus_rock",
-      "baseStats": {
-        "atk": 238,
-        "def": 238,
-        "hp": 237
-      },
-      "types": [
-        "rock",
-        "none"
-      ],
-      "fastMoves": [
-        "IRON_TAIL",
-        "SHADOW_CLAW"
-      ],
-      "chargedMoves": [
-        "FUTURE_SIGHT",
-        "HYPER_BEAM",
-        "OUTRAGE"
-      ],
-      "defaultIVs": {
-        "cp1500": [
-          13.5,
-          5,
-          15,
-          14
-        ],
-        "cp2500": [
-          23,
-          4,
-          15,
-          9
-        ]
-      }
-    },
-    {
-      "dex": 493,
-      "speciesName": "Arceus (Steel)",
-      "speciesId": "arceus_steel",
-      "baseStats": {
-        "atk": 238,
-        "def": 238,
-        "hp": 237
-      },
-      "types": [
-        "steel",
-        "none"
-      ],
-      "fastMoves": [
-        "IRON_TAIL",
-        "SHADOW_CLAW"
-      ],
-      "chargedMoves": [
-        "FUTURE_SIGHT",
-        "HYPER_BEAM",
-        "OUTRAGE"
-      ],
-      "defaultIVs": {
-        "cp1500": [
-          13.5,
-          5,
-          15,
-          14
-        ],
-        "cp2500": [
-          23,
-          4,
-          15,
-          9
-        ]
-      }
-    },
-    {
-      "dex": 493,
-      "speciesName": "Arceus (Water)",
-      "speciesId": "arceus_water",
-      "baseStats": {
-        "atk": 238,
-        "def": 238,
-        "hp": 237
-      },
-      "types": [
-        "water",
-        "none"
-      ],
-      "fastMoves": [
-        "IRON_TAIL",
-        "SHADOW_CLAW"
-      ],
-      "chargedMoves": [
-        "FUTURE_SIGHT",
-        "HYPER_BEAM",
-        "OUTRAGE"
+      "tags": [
+        "mythical"
       ],
       "defaultIVs": {
         "cp1500": [
@@ -22271,6 +21660,9 @@
         "OVERHEAT",
         "FOCUS_BLAST",
         "PSYCHIC"
+      ],
+      "tags": [
+        "mythical"
       ],
       "defaultIVs": {
         "cp1500": [
@@ -28626,7 +28018,7 @@
     },
     {
       "dex": 647,
-      "speciesId": "keldeo_ordinary",
+      "speciesId": "keldeo",
       "speciesName": "Keldeo (Ordinary)",
       "baseStats": {
         "atk": 260,
@@ -28647,43 +28039,8 @@
         "HYDRO_PUMP",
         "X_SCISSOR"
       ],
-      "defaultIVs": {
-        "cp1500": [
-          15.5,
-          1,
-          7,
-          5
-        ],
-        "cp2500": [
-          25.5,
-          5,
-          10,
-          3
-        ]
-      }
-    },
-    {
-      "dex": 647,
-      "speciesId": "keldeo_resolute",
-      "speciesName": "Keldeo (Resolute)",
-      "baseStats": {
-        "atk": 260,
-        "def": 192,
-        "hp": 209
-      },
-      "types": [
-        "water",
-        "fighting"
-      ],
-      "fastMoves": [
-        "POISON_JAB",
-        "LOW_KICK"
-      ],
-      "chargedMoves": [
-        "AQUA_JET",
-        "CLOSE_COMBAT",
-        "HYDRO_PUMP",
-        "X_SCISSOR"
+      "tags": [
+        "mythical"
       ],
       "defaultIVs": {
         "cp1500": [
@@ -28723,6 +28080,9 @@
         "DAZZLING_GLEAM",
         "HYPER_BEAM"
       ],
+      "tags": [
+        "mythical"
+      ],
       "defaultIVs": {
         "cp1500": [
           14.5,
@@ -28761,6 +28121,9 @@
         "ICE_PUNCH",
         "HYPER_BEAM"
       ],
+      "tags": [
+        "mythical"
+      ],
       "defaultIVs": {
         "cp1500": [
           14,
@@ -28798,153 +28161,8 @@
         "MAGNET_BOMB",
         "HYPER_BEAM"
       ],
-      "defaultIVs": {
-        "cp1500": [
-          16,
-          9,
-          15,
-          12
-        ],
-        "cp2500": [
-          28,
-          4,
-          13,
-          5
-        ]
-      }
-    },
-    {
-      "dex": 649,
-      "speciesId": "genesect_burn",
-      "speciesName": "Genesect (Burn)",
-      "baseStats": {
-        "atk": 252,
-        "def": 199,
-        "hp": 174
-      },
-      "types": [
-        "bug",
-        "steel"
-      ],
-      "fastMoves": [
-        "METAL_CLAW",
-        "FURY_CUTTER"
-      ],
-      "chargedMoves": [
-        "X_SCISSOR",
-        "MAGNET_BOMB",
-        "FLAMETHROWER"
-      ],
-      "defaultIVs": {
-        "cp1500": [
-          16,
-          9,
-          15,
-          12
-        ],
-        "cp2500": [
-          28,
-          4,
-          13,
-          5
-        ]
-      }
-    },
-    {
-      "dex": 649,
-      "speciesId": "genesect_chill",
-      "speciesName": "Genesect (Chill)",
-      "baseStats": {
-        "atk": 252,
-        "def": 199,
-        "hp": 174
-      },
-      "types": [
-        "bug",
-        "steel"
-      ],
-      "fastMoves": [
-        "METAL_CLAW",
-        "FURY_CUTTER"
-      ],
-      "chargedMoves": [
-        "X_SCISSOR",
-        "MAGNET_BOMB",
-        "ICE_BEAM"
-      ],
-      "defaultIVs": {
-        "cp1500": [
-          16,
-          9,
-          15,
-          12
-        ],
-        "cp2500": [
-          28,
-          4,
-          13,
-          5
-        ]
-      }
-    },
-    {
-      "dex": 649,
-      "speciesId": "genesect_douse",
-      "speciesName": "Genesect (Douse)",
-      "baseStats": {
-        "atk": 252,
-        "def": 199,
-        "hp": 174
-      },
-      "types": [
-        "bug",
-        "steel"
-      ],
-      "fastMoves": [
-        "METAL_CLAW",
-        "FURY_CUTTER"
-      ],
-      "chargedMoves": [
-        "X_SCISSOR",
-        "MAGNET_BOMB",
-        "GUNK_SHOT"
-      ],
-      "defaultIVs": {
-        "cp1500": [
-          16,
-          9,
-          15,
-          12
-        ],
-        "cp2500": [
-          28,
-          4,
-          13,
-          5
-        ]
-      }
-    },
-    {
-      "dex": 649,
-      "speciesId": "genesect_shock",
-      "speciesName": "Genesect (Shock)",
-      "baseStats": {
-        "atk": 252,
-        "def": 199,
-        "hp": 174
-      },
-      "types": [
-        "bug",
-        "steel"
-      ],
-      "fastMoves": [
-        "METAL_CLAW",
-        "FURY_CUTTER"
-      ],
-      "chargedMoves": [
-        "X_SCISSOR",
-        "MAGNET_BOMB",
-        "ZAP_CANNON"
+      "tags": [
+        "mythical"
       ],
       "defaultIVs": {
         "cp1500": [
