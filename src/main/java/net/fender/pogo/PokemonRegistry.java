@@ -44,7 +44,7 @@ public class PokemonRegistry {
     }
 
     public Pokemon getPokeman(String name) {
-        return pokemonByName.get(name.replace("alolan", "alola"));
+        return pokemonByName.get(name);
     }
 
     public Collection<Pokemon> getAll() {
