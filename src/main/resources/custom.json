@@ -598,18 +598,18 @@
       "dex": 716,
       "speciesId": "xerneas",
       "baseStats": {
-        "atk": 275,
-        "def": 203,
-        "hp": 270
+        "atk": 250,
+        "def": 185,
+        "hp": 246
       }
     },
     {
       "dex": 717,
       "speciesId": "yveltal",
       "baseStats": {
-        "atk": 275,
-        "def": 203,
-        "hp": 270
+        "atk": 250,
+        "def": 185,
+        "hp": 246
       }
     },
     {
@@ -634,9 +634,9 @@
       "dex": 720,
       "speciesId": "hoopa",
       "baseStats": {
-        "atk": 287,
-        "def": 206,
-        "hp": 190
+        "atk": 261,
+        "def": 187,
+        "hp": 173
       }
     },
     {
@@ -1273,18 +1273,18 @@
       "dex": 791,
       "speciesId": "solgaleo",
       "baseStats": {
-        "atk": 280,
-        "def": 210,
-        "hp": 289
+        "atk": 255,
+        "def": 191,
+        "hp": 264
       }
     },
     {
       "dex": 792,
       "speciesId": "lunala",
       "baseStats": {
-        "atk": 280,
-        "def": 210,
-        "hp": 289
+        "atk": 255,
+        "def": 191,
+        "hp": 264
       }
     },
     {
@@ -1300,9 +1300,9 @@
       "dex": 794,
       "speciesId": "buzzwole",
       "baseStats": {
-        "atk": 259,
-        "def": 216,
-        "hp": 237
+        "atk": 236,
+        "def": 196,
+        "hp": 216
       }
     },
     {
@@ -1336,9 +1336,9 @@
       "dex": 798,
       "speciesId": "kartana",
       "baseStats": {
-        "atk": 355,
-        "def": 200,
-        "hp": 153
+        "atk": 323,
+        "def": 182,
+        "hp": 139
       }
     },
     {

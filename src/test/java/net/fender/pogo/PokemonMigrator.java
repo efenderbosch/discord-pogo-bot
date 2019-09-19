@@ -34,7 +34,7 @@ public class PokemonMigrator {
     }
 
     private net.fender.pvpoke.Pokemon migrate(PokeApiClient client, int dex) {
-        Pokemon pokemon = null;
+        Pokemon pokemon;
         try {
             pokemon = client.getPokemon(dex);
         } catch (Throwable t) {
@@ -47,6 +47,15 @@ public class PokemonMigrator {
             return null;
         }
 
+        net.fender.pvpoke.Pokemon converted = new net.fender.pvpoke.Pokemon();
+        converted.setDex(pokemon.getId());
+        converted.setSpeciesId(pokemon.getName());
+        BaseStats baseStats = calculate(pokemon);
+        converted.setBaseStats(baseStats);
+        return converted;
+    }
+
+    private BaseStats calculate(Pokemon pokemon) {
         List<PokemonStat> stats = pokemon.getStats();
         int physicalAttack = 100;
         int physicalDefense = 100;
@@ -77,6 +86,22 @@ public class PokemonMigrator {
             }
         }
 
+        return calculate(physicalAttack, specialAttack, physicalDefense, specialDefense, speed, msgHp);
+    }
+
+    private BaseStats calculate(int physicalAttack, int specialAttack, int physicalDefense, int specialDefense,
+                                int speed, int msgHp) {
+        BaseStats baseStats = calculate(physicalAttack, specialAttack, physicalDefense, specialDefense, speed, msgHp,
+                1.0);
+        StatProduct statProduct = new StatProduct(baseStats, IndividualValues.PERFECT, 40.0);
+        if (statProduct.getCp() >= 4000) {
+            return calculate(physicalAttack, specialAttack, physicalDefense, specialDefense, speed, msgHp, 0.91);
+        }
+        return baseStats;
+    }
+
+    private BaseStats calculate(int physicalAttack, int specialAttack, int physicalDefense, int specialDefense,
+                                int speed, int msgHp, double nerf) {
         double speedModifier = 1 + (speed - 75) / 500.0;
 
         int minAttack = Math.min(physicalAttack, specialAttack);
@@ -84,21 +109,21 @@ public class PokemonMigrator {
         double scaledMaxAttack = 7.0 / 8.0 * maxAttack;
         double scaledMinAttack = 1.0 / 8.0 * minAttack;
         int scaledAttack = (int) Math.round(2.0 * (scaledMaxAttack + scaledMinAttack));
-        int attack = (int) Math.round(scaledAttack * speedModifier);
+        int attack = (int) Math.round(scaledAttack * speedModifier * nerf);
 
         int minDefense = Math.min(physicalDefense, specialDefense);
         int maxDefense = Math.max(physicalDefense, specialDefense);
         double scaledMaxDefense = 5.0 / 8.0 * maxDefense;
         double scaledMinDefense = 3.0 / 8.0 * minDefense;
         int scaledDefense = (int) Math.round(2.0 * (scaledMaxDefense + scaledMinDefense));
-        int defense = (int) Math.round(scaledDefense * speedModifier);
+        int defense = (int) Math.round(scaledDefense * speedModifier * nerf);
 
-        int stamina = (int) Math.floor(msgHp * 1.75 + 50);
-        net.fender.pvpoke.Pokemon converted = new net.fender.pvpoke.Pokemon();
-        converted.setDex(pokemon.getId());
-        converted.setSpeciesId(pokemon.getName());
-        BaseStats baseStats = new BaseStats(attack, defense, stamina);
-        converted.setBaseStats(baseStats);
-        return converted;
+        int stamina;
+        if (nerf == 1.0) {
+            stamina = (int) Math.floor(msgHp * 1.75 + 50);
+        } else {
+            stamina = (int) Math.round((msgHp * 1.75 + 50) * nerf);
+        }
+        return new BaseStats(attack, defense, stamina);
     }
 }
