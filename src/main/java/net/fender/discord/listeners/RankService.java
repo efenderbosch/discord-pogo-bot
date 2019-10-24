@@ -4,17 +4,20 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
+import net.fender.BigDecimalSummaryStatistics;
 import net.fender.pogo.IndividualValues;
 import net.fender.pogo.League;
 import net.fender.pogo.StatProduct;
+import net.fender.pogo.TradeLevel;
 import net.fender.pvpoke.Pokemon;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.math.BigDecimal;
+import java.util.*;
 
+import static java.math.MathContext.DECIMAL64;
+import static java.math.RoundingMode.HALF_EVEN;
 import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.toList;
 import static net.fender.pogo.TradeLevel.*;
 
 public class RankService {
@@ -55,8 +58,7 @@ public class RankService {
 
         EmbedBuilder embedBuilder = new EmbedBuilder();
         embedBuilder.setTitle(pokemon.getSpeciesId());
-//        User author = event.getAuthor();
-//        embedBuilder.setFooter(author.getName(), author.getAvatarUrl());
+
         double percentBest = Math.round(1000.0 * statProduct.getStatProduct() / wildStats.getStatProduct()) / 10.0;
         String desc = "#" + rank + "/" + stats.size() + " | L" + statProduct.getLevel() + " | CP " +
                 statProduct.getCp() + " | " + percentBest + "%";
@@ -99,39 +101,55 @@ public class RankService {
             embedBuilder.setDescription("(not tradable)");
         }
 
-        // put this in a summary command
-//        int size = stats.size() / 8;
-//        List<StatProduct> top = stats.values().stream().sorted().limit(size).collect(toList());
-//        long amazes = top.stream().filter(StatProduct::isAmazes).count();
-//        embedBuilder.addField("Top Appraisal", percent(100.0 * amazes / size), true);
-//        long strong = top.stream().filter(StatProduct::isStrong).count();
-//        embedBuilder.addField("High Appraisal", percent(100.0 * strong / size), false);
-//        long decent = top.stream().filter(StatProduct::isDecent).count();
-//        embedBuilder.addField("Average Appraisal", percent(100.0 * decent / size), true);
-//        long notGreatInBattle = top.stream().filter(StatProduct::isNotGreatInBattle).count();
-//        embedBuilder.addField("Poor Appraisal", percent(100.0 * notGreatInBattle / size), false);
-//        long attackTop = top.stream().filter(StatProduct::isAttackBest).count();
-//        embedBuilder.addField("Attack Best Stat", percent(100.0 * attackTop / size), true);
-//
-//        Map<Integer, Long> counts = top.stream().collect(groupingBy(StatProduct::getCp, counting()));
-//        long breakpoint = size / 16;
-//        long sum = 0;
-//        long cpBreakpoint = 1500;
-//        for (Map.Entry<Integer, Long> entry : counts.entrySet()) {
-//            int cp = entry.getKey();
-//            long count = entry.getValue();
-//            sum += count;
-//            if (sum >= breakpoint) {
-//                cpBreakpoint = cp;
-//                break;
-//            }
-//        }
-//        embedBuilder.addField("CP Eval Breakpoint", cpBreakpoint + "", false);
-
         MessageBuilder builder = new MessageBuilder();
         builder.setEmbed(embedBuilder.build());
         Message message = builder.build();
         rankBot.sendMessage(message).submit();
+    }
+
+    public static void summary(Pokemon pokemon, League league, TextChannel rankBot) {
+        int levelFloor = pokemon.getLevelFloor();
+        String pokemonName = pokemon.getSpeciesId();
+        Map<IndividualValues, StatProduct> statProducts = StatProduct.generateStatProducts(pokemon, league);
+        if (statProducts.isEmpty()) {
+            IndividualValues ivs = pokemon.isTradable() ?
+                    IndividualValues.ZERO :
+                    IndividualValues.floorNonTradable(IndividualValues.PERFECT);
+            StatProduct statProduct = new StatProduct(pokemon, ivs, levelFloor);
+            rankBot.sendMessage(pokemonName + " is ineligible for " + league + " league. Min CP @ lvl " +
+                    levelFloor + " is " + statProduct.getCp()).submit();
+            return;
+        }
+
+        List<StatProduct> values = statProducts.values().stream().sorted().collect(toList());
+        StatProduct best = values.get(0);
+        // divide by 100 for ease of making percentages
+        BigDecimal max = BigDecimal.valueOf(best.getStatProduct() / 100.0);
+
+        for (TradeLevel tradeLevel : TradeLevel.REVERSED) {
+            values.stream().
+                    filter(s -> s.isTradeLevel(tradeLevel)).
+                    sorted().
+                    findAny().
+                    ifPresent(v -> System.out.println(tradeLevel + ": " + v));
+
+            BigDecimalSummaryStatistics stats = statProducts.values().stream().
+                    filter(s -> s.isTradeLevel(tradeLevel)).
+                    map(StatProduct::getStatProduct).
+                    collect(BigDecimalSummaryStatistics.DECIMAL64,
+                            BigDecimalSummaryStatistics::accept,
+                            BigDecimalSummaryStatistics::combine);
+
+            BigDecimal minStatProductPercent = stats.getMin().divide(max, DECIMAL64).setScale(1, HALF_EVEN);
+            BigDecimal maxStatProductPercent = stats.getMax().divide(max, DECIMAL64).setScale(1, HALF_EVEN);
+            BigDecimal averageStatProductPercent = stats.getAverage().divide(max, DECIMAL64).setScale(1, HALF_EVEN);
+            BigDecimal stdDev = stats.getStandardDeviation().divide(max, DECIMAL64).setScale(2, HALF_EVEN);
+            System.out.println("\t min: " + minStatProductPercent + "%; " +
+                    "max: " +  maxStatProductPercent + "%; " +
+                    "avg: " + averageStatProductPercent + "%; " +
+                    "std dev: " + stdDev + "%");
+        }
+
     }
 
     private static String percent(double d) {

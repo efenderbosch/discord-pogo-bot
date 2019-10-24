@@ -19,12 +19,15 @@ public class StatProduct implements Comparable<StatProduct> {
     private final IndividualValues ivs;
 
     public StatProduct(Pokemon pokemon, IndividualValues ivs, double level) {
+        this(pokemon.getBaseStats(), ivs, level);
+    }
+
+    public StatProduct(BaseStats baseStats, IndividualValues ivs, double level) {
         this.level = level;
         this.ivs = ivs;
 
         double cpModifier = CpModifier.getCpModifier(level);
 
-        BaseStats baseStats = pokemon.getBaseStats();
         int attack = baseStats.getAttack() + ivs.getAttack();
         int defense = baseStats.getDefense() + ivs.getDefense();
         int stamina = baseStats.getStamina() + ivs.getStamina();
@@ -72,33 +75,12 @@ public class StatProduct implements Comparable<StatProduct> {
         return TradeLevel.getTradeLevel(ivs).getFloor() >= tradeLevel.getFloor();
     }
 
-    public boolean isAttackBest() {
-        return ivs.getAttack() >= ivs.getDefense() && ivs.getAttack() >= ivs.getStamina();
-    }
-
-    public boolean isNotGreatInBattle() {
-        return ivs.getAttack() + ivs.getDefense() + ivs.getStamina() <= 22;
-    }
-
-    public boolean isDecent() {
-        int total = ivs.getAttack() + ivs.getDefense() + ivs.getStamina();
-        return total > 22 && total <= 29;
-    }
-
-    public boolean isStrong() {
-        int total = ivs.getAttack() + ivs.getDefense() + ivs.getStamina();
-        return total > 29 && total <= 36;
-    }
-
-    public boolean isAmazes() {
-        return ivs.getAttack() + ivs.getDefense() + ivs.getStamina() > 36;
-    }
-
     public static Map<IndividualValues, StatProduct> generateStatProducts(Pokemon pokemon, League league) {
         double startLevel = pokemon.getLevelFloor();
 
         int minIv = pokemon.isTradable() ? 0 : 10;
-        Map<IndividualValues, StatProduct> stats = new HashMap<>(4096);
+        int size = (16 - minIv) * (16 - minIv) * (16 - minIv);
+        Map<IndividualValues, StatProduct> stats = new HashMap<>(size, 1.0f);
         for (int atk = minIv; atk <= 15; atk++) {
             for (int def = minIv; def <= 15; def++) {
                 for (int sta = minIv; sta <= 15; sta++) {
@@ -130,7 +112,7 @@ public class StatProduct implements Comparable<StatProduct> {
     }
 
     public static String round(double d) {
-        return "" + (Math.round(d * 1_000.0) / 1_000.0);
+        return "" + (Math.round(d * 1000.0) / 10.0);
     }
 
     @Override

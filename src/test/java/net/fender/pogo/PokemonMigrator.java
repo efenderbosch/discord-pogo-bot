@@ -92,37 +92,40 @@ public class PokemonMigrator {
     private BaseStats calculate(int physicalAttack, int specialAttack, int physicalDefense, int specialDefense,
                                 int speed, int msgHp) {
         BaseStats baseStats = calculate(physicalAttack, specialAttack, physicalDefense, specialDefense, speed, msgHp,
-                1.0);
+                false);
         StatProduct statProduct = new StatProduct(baseStats, IndividualValues.PERFECT, 40.0);
         if (statProduct.getCp() >= 4000) {
-            return calculate(physicalAttack, specialAttack, physicalDefense, specialDefense, speed, msgHp, 0.91);
+            return calculate(physicalAttack, specialAttack, physicalDefense, specialDefense, speed, msgHp, true);
         }
         return baseStats;
     }
 
     private BaseStats calculate(int physicalAttack, int specialAttack, int physicalDefense, int specialDefense,
-                                int speed, int msgHp, double nerf) {
+                                int speed, int msgHp, boolean nerf) {
         double speedModifier = 1 + (speed - 75) / 500.0;
+
+        double factor = nerf ? 0.91 : 1.0;
 
         int minAttack = Math.min(physicalAttack, specialAttack);
         int maxAttack = Math.max(physicalAttack, specialAttack);
         double scaledMaxAttack = 7.0 / 8.0 * maxAttack;
         double scaledMinAttack = 1.0 / 8.0 * minAttack;
         int scaledAttack = (int) Math.round(2.0 * (scaledMaxAttack + scaledMinAttack));
-        int attack = (int) Math.round(scaledAttack * speedModifier * nerf);
+        int attack = (int) Math.round(scaledAttack * speedModifier * factor);
 
         int minDefense = Math.min(physicalDefense, specialDefense);
         int maxDefense = Math.max(physicalDefense, specialDefense);
         double scaledMaxDefense = 5.0 / 8.0 * maxDefense;
         double scaledMinDefense = 3.0 / 8.0 * minDefense;
         int scaledDefense = (int) Math.round(2.0 * (scaledMaxDefense + scaledMinDefense));
-        int defense = (int) Math.round(scaledDefense * speedModifier * nerf);
+        int defense = (int) Math.round(scaledDefense * speedModifier * factor);
 
         int stamina;
-        if (nerf == 1.0) {
+        // this just doesn't feel right, but seems to give the most correct conversions
+        if (!nerf) {
             stamina = (int) Math.floor(msgHp * 1.75 + 50);
         } else {
-            stamina = (int) Math.round((msgHp * 1.75 + 50) * nerf);
+            stamina = (int) Math.round((msgHp * 1.75 + 50) * factor);
         }
         return new BaseStats(attack, defense, stamina);
     }

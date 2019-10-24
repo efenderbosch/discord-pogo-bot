@@ -1,11 +1,14 @@
 package net.fender.pogo;
 
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class IndividualValues {
 
     public static final IndividualValues ZERO = new IndividualValues(0, 0, 0);
     public static final IndividualValues PERFECT = new IndividualValues(15, 15, 15);
+    private static final Pattern PATTERN = Pattern.compile("(\\d{1,2})[\\/\\s+](\\d{1,2})[\\/\\s+](\\d{1,2})");
 
     private final int attack;
     private final int defense;
@@ -18,8 +21,11 @@ public class IndividualValues {
     }
 
     public static IndividualValues parse(String ivs) {
-        String[] parts = ivs.split("/");
-        return new IndividualValues(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
+        Matcher matcher = PATTERN.matcher(ivs);
+        if (!matcher.matches()) return ZERO;
+        return new IndividualValues(Integer.parseInt(matcher.group(1)),
+                Integer.parseInt(matcher.group(2)),
+                Integer.parseInt(matcher.group(3)));
     }
 
     public static IndividualValues floorNonTradable(IndividualValues other) {

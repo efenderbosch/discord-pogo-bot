@@ -23,7 +23,8 @@ public class TeamRocketGuildMemberJoinEventListener extends BaseEventListener<Gu
 
     @Override
     protected void processEvent(GuildMemberJoinEvent event) {
-        TextChannel generalChannel = event.getJDA().getTextChannelsByName("general", true).get(0);
+        TextChannel generalChannel =
+                event.getJDA().getTextChannelsByName("if-you-can-read-this-set-your-team", true).get(0);
         String greeting = GREETINGS[RANDOM.nextInt(GREETINGS.length)];
         greeting = greeting.replace("TRAINER", event.getMember().getAsMention());
         generalChannel.sendMessage(greeting).submit();

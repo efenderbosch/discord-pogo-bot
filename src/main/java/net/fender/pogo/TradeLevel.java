@@ -1,7 +1,11 @@
 package net.fender.pogo;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.function.Predicate;
+
+import static java.util.Arrays.stream;
+import static java.util.Comparator.reverseOrder;
+import static java.util.stream.Collectors.toList;
 
 public enum TradeLevel implements Predicate<IndividualValues> {
 
@@ -14,6 +18,8 @@ public enum TradeLevel implements Predicate<IndividualValues> {
     GOOD_FRIEND("good friend", 1),
     WILD("wild catch", 0);
 
+    public static final List<TradeLevel> REVERSED = (stream(values()).sorted(reverseOrder()).collect(toList()));
+
     public final String description;
     private final int floor;
 
@@ -23,7 +29,7 @@ public enum TradeLevel implements Predicate<IndividualValues> {
     }
 
     public static TradeLevel getTradeLevel(IndividualValues ivs) {
-        return Arrays.stream(values()).filter(tradeLevel -> tradeLevel.test(ivs)).findFirst().orElseGet(null);
+        return stream(values()).filter(tradeLevel -> tradeLevel.test(ivs)).findFirst().orElseGet(null);
     }
 
     private static boolean testIVs(IndividualValues ivs, int floor) {

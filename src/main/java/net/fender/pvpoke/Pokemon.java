@@ -1,23 +1,21 @@
 package net.fender.pvpoke;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Pokemon {
 
     private int dex;
     private String speciesId;
-    private BaseStats baseStats = new BaseStats(0, 0, 0);
+    private BaseStats baseStats;
     private Set<String> types = new HashSet<>();
     private List<String> fastMoves = new ArrayList<>();
     private List<String> chargeMoves = new ArrayList<>();
     private Set<String> legacyMoves = new HashSet<>();
     private Set<String> tags = new HashSet<>();
+    private Boolean tradable;
+    private Integer levelFloor;
     // defaultIVs
 
     public int getDex() {
@@ -84,17 +82,35 @@ public class Pokemon {
         this.tags = tags;
     }
 
-    @JsonIgnore
     public boolean isTradable() {
-        return !tags.contains("mythical") || dex == 808 || dex == 809;
+        return tradable != null ? tradable : !tags.contains("mythical");
     }
 
-    @JsonIgnore
+    public void setTradable(boolean tradable) {
+        this.tradable = tradable;
+    }
+
     public int getLevelFloor() {
-        if ((tags.contains("legendary") || tags.contains("mythical")) && dex != 808 & dex != 809) {
-            return 15;
-        }
+        if (levelFloor != null) return levelFloor;
+        if (tags.contains("legendary") || tags.contains("mythical")) return 15;
         return 1;
+    }
+
+    public void setLevelFloor(int levelFloor) {
+        this.levelFloor = levelFloor;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(dex);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Pokemon pokemon = (Pokemon) o;
+        return dex == pokemon.dex;
     }
 
     @Override

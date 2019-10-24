@@ -6,7 +6,7 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
@@ -24,7 +24,7 @@ public class BlessedListener extends CommandEventListener {
     private Emote penta;
 
     @Override
-    protected void processCommand(MessageReceivedEvent event, List<String> parts) {
+    protected void processCommand(MessageReceivedEvent event, Matcher matcher) {
         Message message = event.getMessage();
         if (penta == null) {
             JDA jda = message.getJDA();

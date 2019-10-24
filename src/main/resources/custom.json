@@ -1,6 +1,29 @@
 {
   "pokemon": [
     {
+      // rayquaza has not yet been in research
+      "dex": 384,
+      "levelFloor": 20
+    },
+    {
+      // cresselia has not yet been in research
+      "dex": 488,
+      "levelFLoor": 20
+    },
+    {
+      // meltan is tradeable and spawns "wild"
+      "dex": 808,
+      "tradable": true,
+      "levelFloor": 1
+    },
+    {
+      // melmetal is tradeable and spawns "wild"
+      "dex": 809,
+      "tradable": true,
+      "levelFloor": 1
+    },
+    // gen 6+
+    {
       "dex": 650,
       "speciesId": "chespin",
       "baseStats": {

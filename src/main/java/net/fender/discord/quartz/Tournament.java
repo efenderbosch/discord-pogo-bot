@@ -1,7 +1,6 @@
 package net.fender.discord.quartz;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import java.time.Instant;
@@ -30,11 +29,6 @@ public class Tournament {
 
     public boolean isRanked() {
         return ranked;
-    }
-
-    @JsonSetter
-    public void setRanked(int ranked) {
-        this.ranked = ranked == 1;
     }
 
     public void setRanked(boolean ranked) {

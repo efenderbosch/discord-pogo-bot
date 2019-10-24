@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static net.fender.discord.listeners.RankEmoteListener.REACTIONS;
@@ -27,6 +28,7 @@ public class RankListener extends CommandEventWithHelpListener {
     static final ChannelNameFilter CHANNEL_NAME_FILTER = new ChannelNameFilter("rank-bot");
 
     private static final Pattern BASIC = Pattern.compile("\\$rank.*");
+    // \\$rank\\s+(?'pokemon'[-\\w]+)\\s+(?'ivs'(\\d{1,2})\\s+(\\d{1,2})\\s+(\\d{1,2})){0,1}\\s*(?'league'\\w*)
     private static final Pattern FULL = Pattern.compile("\\$rank\\s+([-\\w]+)\\s+(\\d{1,2})\\s+(\\d{1,2})" +
             "\\s+(\\d{1,2})\\s*(\\w*)");
 
@@ -40,7 +42,7 @@ public class RankListener extends CommandEventWithHelpListener {
     }
 
     @Override
-    protected void doCommand(MessageReceivedEvent event, List<String> parts) {
+    protected void doCommand(MessageReceivedEvent event, Matcher matcher) {
         JDA jda = event.getJDA();
         if (rankBot == null) {
             rankBot = jda.getTextChannelsByName("rank-bot", true).get(0);
@@ -48,30 +50,39 @@ public class RankListener extends CommandEventWithHelpListener {
         rankBot.sendTyping().submit();
 
         League league = League.great;
-        String leagueName = parts.get(5);
-        if (!leagueName.trim().isEmpty()) {
+        String leagueName = matcher.group("league");
+        if (leagueName != null && !leagueName.trim().isEmpty()) {
             Optional<League> maybeLeague = League.find(leagueName);
             if (!maybeLeague.isPresent()) {
                 rankBot.sendMessage("Unknown league '" + leagueName + "'!").submit();
-                sendHelp(event, parts);
+                sendHelp(event, matcher);
                 return;
             }
             league = maybeLeague.get();
         }
 
-        String pokemonName = parts.get(1).toLowerCase();
+        String pokemonName = matcher.group("pokemon").toLowerCase();
+        String ivGroup = matcher.group("ivs");
+        if (ivGroup == null) {
+            // send summary
+            rankBot.sendMessage("summary goes here").submit();
+            return;
+        }
+
+        IndividualValues ivs = IndividualValues.parse(ivGroup);
+
         // reg ex won't pass if these aren't numbers, so should not need try/catch around conversion from String
-        int atk = Math.max(0, Math.min(15, Integer.parseInt(parts.get(2))));
-        int def = Math.max(0, Math.min(15, Integer.parseInt(parts.get(3))));
-        int sta = Math.max(0, Math.min(15, Integer.parseInt(parts.get(4))));
-        IndividualValues ivs = new IndividualValues(atk, def, sta);
+//        int atk = Math.max(0, Math.min(15, Integer.parseInt(attributes[0])));
+//        int def = Math.max(0, Math.min(15, Integer.parseInt(attributes[1])));
+//        int sta = Math.max(0, Math.min(15, Integer.parseInt(attributes[2])));
+//        IndividualValues ivs = new IndividualValues(atk, def, sta);
 
         Pokemon pokemon = pokemonRegistry.getPokeman(pokemonName);
         if (pokemon == null) {
             List<String> found = pokemonRegistry.find(pokemonName);
             if (found.isEmpty()) {
                 rankBot.sendMessage(pokemonName + " not found!").submit();
-                sendHelp(event, parts);
+                sendHelp(event, matcher);
             } else {
                 EmbedBuilder embedBuilder = new EmbedBuilder();
                 embedBuilder.setDescription(pokemonName + " not found! Did you mean one of these?");
@@ -213,7 +224,7 @@ public class RankListener extends CommandEventWithHelpListener {
 //    }
 
     @Override
-    protected void sendHelp(MessageReceivedEvent event, List<String> parts) {
+    protected void sendHelp(MessageReceivedEvent event, Matcher matcher) {
         if (rankBot == null) {
             rankBot = event.getJDA().getTextChannelsByName("rank-bot", true).get(0);
         }

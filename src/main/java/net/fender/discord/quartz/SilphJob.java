@@ -1,6 +1,7 @@
 package net.fender.discord.quartz;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.MessageBuilder;
@@ -24,6 +25,7 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.GeoModule;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -34,6 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
+
 //@Component
 public class SilphJob implements Job {
 
@@ -42,14 +46,15 @@ public class SilphJob implements Job {
     @Autowired
     private JDA jda;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper().
+            disable(FAIL_ON_UNKNOWN_PROPERTIES).
+            registerModule(new GeoModule()).
+            registerModule(new JavaTimeModule());
 
     public SilphJob() { }
 
-    SilphJob(JDA jda, ObjectMapper objectMapper) {
+    SilphJob(JDA jda) {
         this.jda = jda;
-        this.objectMapper = objectMapper;
     }
 
     @Override

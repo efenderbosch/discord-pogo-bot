@@ -2,14 +2,13 @@ package net.fender.discord.listeners;
 
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.fender.discord.filters.RegexChannelNameFilter;
-import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
-@Component
+//@Component
 public class WjatListener extends CommandEventListener {
 
     private static final Pattern WHAT = Pattern.compile(".*(wjat\\w*).*", CASE_INSENSITIVE);
@@ -20,7 +19,7 @@ public class WjatListener extends CommandEventListener {
     }
 
     @Override
-    protected void processCommand(MessageReceivedEvent event, List<String> parts) {
+    protected void processCommand(MessageReceivedEvent event, Matcher matcher) {
         //String wjat = parts.get(1).replaceFirst("h", "j").replaceFirst("H", "J");
         //event.getTextChannel().sendMessage(wjat + " ¯\\_(ツ)_/¯").submit();
         event.getTextChannel().sendMessage("(° ͜ʖ͡°)╭∩╮").submit();

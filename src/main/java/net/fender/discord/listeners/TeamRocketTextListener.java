@@ -6,8 +6,8 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.fender.discord.filters.MemberIsUserFilter;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Random;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
@@ -29,11 +29,10 @@ public class TeamRocketTextListener extends CommandEventListener {
     }
 
     @Override
-    protected void processCommand(MessageReceivedEvent event, List<String> parts) {
+    protected void processCommand(MessageReceivedEvent event, Matcher matcher) {
         Message message = event.getMessage();
         String emoteName = EMOTES[RANDOM.nextInt(EMOTES.length)];
         Emote teamRocket = message.getJDA().getEmotesByName(emoteName, true).get(0);
         message.addReaction(teamRocket).submit();
-        // https://open.spotify.com/track/6rPO02ozF3bM7NnOV4h6s2?si=Bqp-3oMVSd6gLiRBCmW4vw
     }
 }

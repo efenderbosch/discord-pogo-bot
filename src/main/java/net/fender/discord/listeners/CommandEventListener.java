@@ -4,8 +4,8 @@ import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.fender.discord.filters.CommandParser;
 
-import java.util.List;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class CommandEventListener extends BaseEventListener<MessageReceivedEvent> {
@@ -19,10 +19,10 @@ public abstract class CommandEventListener extends BaseEventListener<MessageRece
 
     @Override
     protected void processEvent(MessageReceivedEvent event) {
-        List<String> parts = commandParser.apply(event);
-        if (parts.isEmpty()) return;
-        processCommand(event, parts);
+        Matcher matcher = commandParser.apply(event);
+        if (!matcher.matches()) return;
+        processCommand(event, matcher);
     }
 
-    protected abstract void processCommand(MessageReceivedEvent event, List<String> parts);
+    protected abstract void processCommand(MessageReceivedEvent event, Matcher matcher);
 }

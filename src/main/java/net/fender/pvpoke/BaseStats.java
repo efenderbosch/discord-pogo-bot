@@ -4,35 +4,36 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
+import javax.annotation.Nonnull;
 import java.util.Objects;
 
 public class BaseStats {
 
-    private final int attack;
-    private final int defense;
-    private final int stamina;
+    private final Integer attack;
+    private final Integer defense;
+    private final Integer stamina;
 
     @JsonCreator
-    public BaseStats(@JsonProperty("atk") int attack,
-                     @JsonProperty("def") int defense,
-                     @JsonProperty("hp") int stamina) {
+    public BaseStats(@Nonnull @JsonProperty(value = "atk", required = true) Integer attack,
+                     @Nonnull @JsonProperty(value = "def", required = true) Integer defense,
+                     @Nonnull @JsonProperty("hp") Integer stamina) {
         this.attack = attack;
         this.defense = defense;
         this.stamina = stamina;
     }
 
     @JsonProperty("atk")
-    public int getAttack() {
+    public Integer getAttack() {
         return attack;
     }
 
     @JsonProperty("def")
-    public int getDefense() {
+    public Integer getDefense() {
         return defense;
     }
 
     @JsonProperty("hp")
-    public int getStamina() {
+    public Integer getStamina() {
         return stamina;
     }
 
@@ -46,9 +47,9 @@ public class BaseStats {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BaseStats baseStats = (BaseStats) o;
-        return attack == baseStats.attack &&
-                defense == baseStats.defense &&
-                stamina == baseStats.stamina;
+        return Objects.equals(attack, baseStats.attack) &&
+                Objects.equals(defense, baseStats.defense) &&
+                Objects.equals(stamina, baseStats.stamina);
     }
 
     @Override

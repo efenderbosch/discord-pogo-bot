@@ -10,7 +10,6 @@ import net.fender.discord.filters.TimeFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.services.rekognition.RekognitionClient;
 import software.amazon.awssdk.services.rekognition.model.*;
@@ -24,7 +23,7 @@ import static java.math.RoundingMode.HALF_EVEN;
 import static java.util.stream.Collectors.toList;
 import static net.fender.discord.filters.HasImageAttachmentFilter.HAS_IMAGE_ATTACHMENT_FILTER;
 
-@Component
+//@Component
 public class FacebookImageListener extends BaseEventListener<MessageReceivedEvent> {
 
     private static final Logger LOG = LoggerFactory.getLogger(FacebookImageListener.class);

@@ -9,11 +9,10 @@ import net.fender.discord.filters.ChannelNameFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.services.rekognition.RekognitionClient;
-import software.amazon.awssdk.services.rekognition.model.*;
 import software.amazon.awssdk.services.rekognition.model.Image;
+import software.amazon.awssdk.services.rekognition.model.*;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -26,7 +25,7 @@ import static java.util.stream.Collectors.toList;
 import static net.fender.discord.filters.HasImageAttachmentFilter.HAS_IMAGE_ATTACHMENT_FILTER;
 import static net.fender.discord.filters.MemberIsUserFilter.MEMBER_IS_USER_FILTER;
 
-@Component
+//@Component
 public class TestImageListener extends BaseEventListener<MessageReceivedEvent> {
 
     private static final Logger LOG = LoggerFactory.getLogger(TestImageListener.class);
