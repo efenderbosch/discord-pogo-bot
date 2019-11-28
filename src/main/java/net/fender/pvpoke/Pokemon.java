@@ -10,8 +10,8 @@ public class Pokemon {
     private String speciesId;
     private BaseStats baseStats;
     private Set<String> types = new HashSet<>();
-    private List<String> fastMoves = new ArrayList<>();
-    private List<String> chargeMoves = new ArrayList<>();
+    private Set<String> fastMoves = new HashSet<>();
+    private Set<String> chargedMoves = new HashSet<>();
     private Set<String> legacyMoves = new HashSet<>();
     private Set<String> tags = new HashSet<>();
     private Boolean tradable;
@@ -50,20 +50,20 @@ public class Pokemon {
         this.types = types;
     }
 
-    public List<String> getFastMoves() {
+    public Set<String> getFastMoves() {
         return fastMoves;
     }
 
-    public void setFastMoves(List<String> fastMoves) {
+    public void setFastMoves(Set<String> fastMoves) {
         this.fastMoves = fastMoves;
     }
 
-    public List<String> getChargeMoves() {
-        return chargeMoves;
+    public Set<String> getChargedMoves() {
+        return chargedMoves;
     }
 
-    public void setChargeMoves(List<String> chargeMoves) {
-        this.chargeMoves = chargeMoves;
+    public void setChargedMoves(Set<String> chargedMoves) {
+        this.chargedMoves = chargedMoves;
     }
 
     public Set<String> getLegacyMoves() {

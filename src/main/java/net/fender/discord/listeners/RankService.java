@@ -54,14 +54,17 @@ public class RankService {
                 collect(toCollection(TreeSet::new));
         int rank = betterStats.size() + 1;
         StatProduct wildStats = betterStats.isEmpty() ? statProduct : betterStats.first();
-        int bestStatProduct = wildStats.getStatProduct();
+        double bestStatProduct = wildStats.getStatProduct();
 
         EmbedBuilder embedBuilder = new EmbedBuilder();
         embedBuilder.setTitle(pokemon.getSpeciesId());
 
         double percentBest = Math.round(1000.0 * statProduct.getStatProduct() / wildStats.getStatProduct()) / 10.0;
         String desc = "#" + rank + "/" + stats.size() + " | L" + statProduct.getLevel() + " | CP " +
-                statProduct.getCp() + " | " + percentBest + "%";
+                statProduct.getCp() + " | " + percentBest + "%\n" +
+                "atk: " + StatProduct.round(statProduct.getLevelAttack()) +
+                " def: " + StatProduct.round(statProduct.getLevelDefense()) +
+                " hp: " + statProduct.getHp();
         embedBuilder.addField(ivs.toString(), desc, false);
 
         embedBuilder.addField("#1 Rank", getDesc(wildStats, bestStatProduct), false);
@@ -156,7 +159,7 @@ public class RankService {
         return (Math.round(d * 10.0) / 10.0) + "%";
     }
 
-    private static String getDesc(StatProduct statProduct, int bestStatProduct) {
+    private static String getDesc(StatProduct statProduct, double bestStatProduct) {
         double percentBest = Math.round(1000.0 * statProduct.getStatProduct() / bestStatProduct) / 10.0;
         return "L" + statProduct.getLevel() + " | CP " + statProduct.getCp() + " | " +
                 statProduct.getIvs().getAttack() + "/" + statProduct.getIvs().getDefense() + "/" +

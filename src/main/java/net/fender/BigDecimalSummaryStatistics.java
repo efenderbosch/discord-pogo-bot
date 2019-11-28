@@ -2,12 +2,9 @@ package net.fender;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.util.function.Consumer;
-import java.util.function.IntConsumer;
-import java.util.function.LongConsumer;
-import java.util.function.Supplier;
+import java.util.function.*;
 
-public class BigDecimalSummaryStatistics implements LongConsumer, IntConsumer, Consumer<BigDecimal> {
+public class BigDecimalSummaryStatistics implements LongConsumer, IntConsumer, DoubleConsumer, Consumer<BigDecimal> {
 
     public static final Supplier<BigDecimalSummaryStatistics> DECIMAL32 =
             () -> new BigDecimalSummaryStatistics(MathContext.DECIMAL32);
@@ -36,6 +33,11 @@ public class BigDecimalSummaryStatistics implements LongConsumer, IntConsumer, C
 
     @Override
     public void accept(long value) {
+        accept(BigDecimal.valueOf(value));
+    }
+
+    @Override
+    public void accept(double value) {
         accept(BigDecimal.valueOf(value));
     }
 

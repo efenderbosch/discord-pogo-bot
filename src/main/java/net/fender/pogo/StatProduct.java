@@ -6,7 +6,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+
+import static java.util.Map.Entry.comparingByValue;
+import static java.util.stream.Collectors.toMap;
 
 public class StatProduct implements Comparable<StatProduct> {
 
@@ -14,7 +18,7 @@ public class StatProduct implements Comparable<StatProduct> {
     private final double levelAttack;
     private final double levelDefense;
     private final int hp;
-    private int statProduct;
+    private double statProduct;
     private final int cp;
     private final IndividualValues ivs;
 
@@ -36,7 +40,7 @@ public class StatProduct implements Comparable<StatProduct> {
         levelDefense = cpModifier * defense;
         hp = (int) Math.floor(cpModifier * stamina);
 
-        statProduct = (int) Math.round(levelAttack * levelDefense * hp);
+        statProduct = levelAttack * levelDefense * hp;
 
         double d = Math.sqrt(defense);
         double s = Math.sqrt(stamina);
@@ -47,7 +51,7 @@ public class StatProduct implements Comparable<StatProduct> {
         return level;
     }
 
-    public int getStatProduct() {
+    public double getStatProduct() {
         return statProduct;
     }
 
@@ -75,7 +79,7 @@ public class StatProduct implements Comparable<StatProduct> {
         return TradeLevel.getTradeLevel(ivs).getFloor() >= tradeLevel.getFloor();
     }
 
-    public static Map<IndividualValues, StatProduct> generateStatProducts(Pokemon pokemon, League league) {
+    public static LinkedHashMap<IndividualValues, StatProduct> generateStatProducts(Pokemon pokemon, League league) {
         double startLevel = pokemon.getLevelFloor();
 
         int minIv = pokemon.isTradable() ? 0 : 10;
@@ -95,7 +99,11 @@ public class StatProduct implements Comparable<StatProduct> {
                 }
             }
         }
-        return stats;
+        // sort by StatProduct
+        return stats.entrySet().stream().
+                sorted(comparingByValue()).
+                collect(toMap(Map.Entry::getKey, Map.Entry::getValue,
+                (oldValue, newValue) -> oldValue, LinkedHashMap::new));
     }
 
     @Override
@@ -112,7 +120,7 @@ public class StatProduct implements Comparable<StatProduct> {
     }
 
     public static String round(double d) {
-        return "" + (Math.round(d * 1000.0) / 10.0);
+        return "" + (Math.round(d * 10.0) / 10.0);
     }
 
     @Override
@@ -131,7 +139,7 @@ public class StatProduct implements Comparable<StatProduct> {
     @Override
     public int compareTo(@Nonnull StatProduct o) {
         if (statProduct != o.statProduct) {
-            return o.statProduct - statProduct;
+            return Double.compare(o.statProduct, statProduct);
         }
         return o.cp - cp;
     }

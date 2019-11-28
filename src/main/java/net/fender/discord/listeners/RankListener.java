@@ -29,8 +29,8 @@ public class RankListener extends CommandEventWithHelpListener {
 
     private static final Pattern BASIC = Pattern.compile("\\$rank.*");
     // \\$rank\\s+(?'pokemon'[-\\w]+)\\s+(?'ivs'(\\d{1,2})\\s+(\\d{1,2})\\s+(\\d{1,2})){0,1}\\s*(?'league'\\w*)
-    private static final Pattern FULL = Pattern.compile("\\$rank\\s+([-\\w]+)\\s+(\\d{1,2})\\s+(\\d{1,2})" +
-            "\\s+(\\d{1,2})\\s*(\\w*)");
+    private static final Pattern FULL = Pattern.compile("\\$rank\\s+(?<pokemon>[-\\w]+)\\s+(?<ivs>(\\d{1,2})\\s+" +
+            "(\\d{1,2})\\s+(\\d{1,2}))\\s*(?<league>\\w*)");
 
     private final PokemonRegistry pokemonRegistry;
     private TextChannel rankBot;

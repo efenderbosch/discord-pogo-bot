@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.*;
 
@@ -45,10 +46,13 @@ public class PokemonRegistry {
                 if (allStats.size() == 1) {
                     // collapse all forms to one form
                     Pokemon mainForm = forms.get(0);
-                    LOG.info("filtering dupes for {}", mainForm.getSpeciesId());
+                    //LOG.info("filtering dupes for {}", mainForm.getSpeciesId());
                     String speciesIdWithForm = mainForm.getSpeciesId();
                     String speciesIdWithoutForm = StringUtils.substringBefore(speciesIdWithForm, "_");
                     mainForm.setSpeciesId(speciesIdWithoutForm);
+                    forms.stream().map(Pokemon::getSpeciesId).
+                            filter(Predicate.not(Predicate.isEqual(speciesIdWithoutForm))).
+                            forEach(speciesId -> LOG.info("replacing {} with {}", speciesId, speciesIdWithoutForm));
                     pokemonByName.put(speciesIdWithoutForm, mainForm);
                 } else {
                     forms.forEach(form -> pokemonByName.put(form.getSpeciesId(), form));
@@ -89,6 +93,10 @@ public class PokemonRegistry {
 
     public Collection<Pokemon> getAll() {
         return pokemonByName.values();
+    }
+
+    public Map<String, Pokemon> getAllByPokemonName() {
+        return pokemonByName;
     }
 
     public List<String> find(String search) {

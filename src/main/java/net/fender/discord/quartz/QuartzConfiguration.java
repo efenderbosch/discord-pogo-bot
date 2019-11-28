@@ -71,10 +71,32 @@ public class QuartzConfiguration {
     }
 
     @Bean
-    public Trigger purgeTeamRocketEncountersChannelJobTrigger(@Qualifier("purgeTeamRocketEncountersChannelJobDetail") JobDetail
-                                                                          purgeTeamRocketEncountersChannelJob) {
+    public Trigger purgeTeamRocketEncountersChannelJobTrigger(@Qualifier("purgeTeamRocketEncountersChannelJobDetail")
+                                                                      JobDetail purgeTeamRocketEncountersChannelJob) {
         return TriggerBuilder.newTrigger().forJob(purgeTeamRocketEncountersChannelJob).
                 withSchedule(CronScheduleBuilder.cronSchedule("0 0/5 * * * ?")).
+                build();
+    }
+
+    @Bean
+    public JobDetail purgeTeamRocketLeadersChannelJobDetail() {
+        JobDataMap jobDataMap = new JobDataMap();
+        // TODO parameterize
+        jobDataMap.put("channel", "team-rocket-leaders");
+        jobDataMap.put("truncateTo", ChronoUnit.DAYS);
+        jobDataMap.put("window", Duration.ofHours(0L));
+        return JobBuilder.newJob().
+                usingJobData(jobDataMap).
+                ofType(PurgeChannelJob.class).
+                storeDurably().
+                build();
+    }
+
+    @Bean
+    public Trigger purgeTeamRocketLeadersChannelJobTrigger(@Qualifier("purgeSightingsChannelJobDetail") JobDetail
+                                                                   purgeSightingsChannelJob) {
+        return TriggerBuilder.newTrigger().forJob(purgeSightingsChannelJob).
+                withSchedule(dailyAtHourAndMinute(0, 1)).
                 build();
     }
 
