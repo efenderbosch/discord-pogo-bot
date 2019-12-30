@@ -3,227 +3,163 @@ package net.fender;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import net.fender.pogo.*;
+import com.google.common.io.LineReader;
+import net.fender.pogo.Appraisal;
+import net.fender.pogo.IndividualValues;
+import net.fender.pogo.PokemonRegistry;
+import net.fender.pogo.StatProduct;
 import net.fender.pvpoke.Pokemon;
-import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS;
 import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
-import static java.util.Collections.reverseOrder;
 import static java.util.Map.Entry.comparingByValue;
+import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toMap;
 import static net.fender.pogo.League.great;
+import static net.fender.pogo.League.ultra;
+import static net.fender.pogo.TradeLevel.GREAT_FRIEND;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestStuff {
+
+    private static final Logger LOG = LoggerFactory.getLogger(TestStuff.class);
 
     private static final ObjectMapper MAPPER = new ObjectMapper().
             disable(FAIL_ON_UNKNOWN_PROPERTIES).
             enable(ALLOW_COMMENTS);
 
     @Test
-    public void test_asdf() throws IOException {
+    public void test_purified() throws IOException {
         ResourceLoader resourceLoader = new DefaultResourceLoader();
         PokemonRegistry pokemonRegistry = new PokemonRegistry(MAPPER, resourceLoader);
         Pokemon banette = pokemonRegistry.getPokeman("banette");
-        LinkedHashMap<IndividualValues, StatProduct> statProducts = StatProduct.generateStatProducts(banette, great);
-        statProducts.values().stream().
-                filter(sp -> sp.getLevel() >= 25.0 &&
-                        sp.getIvs().getAttack() >= 2 &&
-                        sp.getIvs().getDefense() >= 2 &&
-                        sp.getIvs().getStamina() >= 2).
-                sorted(Comparator.reverseOrder()).
-                limit(25).
-                forEach(sp -> System.out.println(sp.getIvs().getAttack() + "/" + sp.getIvs().getDefense() + "/" + sp.getIvs().getStamina()));
+        IndividualValues ivs = new IndividualValues(2, 15, 2);
+        LinkedHashMap<IndividualValues, StatProduct> statProducts = StatProduct.generateStatProducts(banette, great,
+                40);
+        StatProduct statProduct = statProducts.get(ivs);
+        assertTrue(statProduct.isTradeLevel(GREAT_FRIEND) && statProduct.getLevel() >= 25.0);
+
+        SortedSet<StatProduct> purified = statProducts.values().stream().
+                filter(sp -> sp.getLevel() >= 25.0 && sp.isTradeLevel(GREAT_FRIEND)).
+                collect(toCollection(TreeSet::new));
+        SortedSet<StatProduct> betterPurified = purified.stream().
+                filter(s -> s.getStatProduct() > statProduct.getStatProduct()).
+                collect(toCollection(TreeSet::new));
+        int purifiedRank = betterPurified.size() + 1;
+        assertThat(purifiedRank, is(44));
     }
 
-    @Test
+    @Disabled
     public void test() throws IOException {
         ResourceLoader resourceLoader = new DefaultResourceLoader();
         PokemonRegistry pokemonRegistry = new PokemonRegistry(MAPPER, resourceLoader);
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode gameMaster = mapper.readTree(resourceLoader.getResource("GAME_MASTER2.json").getInputStream());
-        ArrayNode itemTemplates = (ArrayNode) gameMaster.get("itemTemplates");
-        Set<String> excludes = new HashSet<>();
-        Set<String> purified = new HashSet<>();
-        for (JsonNode node : itemTemplates) {
-            JsonNode pokemonSettings = node.get("pokemonSettings");
-            if (pokemonSettings == null || pokemonSettings.isNull()) continue;
-
-            if (pokemonSettings.hasNonNull("shadow")) continue;
-
-            JsonNode thirdMove = pokemonSettings.get("thirdMove");
-            if (thirdMove == null || thirdMove.isNull()) continue;
-
-            JsonNode stardustToUnlock = thirdMove.get("stardustToUnlock");
-            if (stardustToUnlock == null || stardustToUnlock.isNull()) continue;
-
-            if (stardustToUnlock.intValue() >= 60_000) {
-                JsonNode form = pokemonSettings.get("form");
-                String formName;
-                if (form != null && !form.isNull()) {
-                    formName = form.textValue().toLowerCase();
-                } else {
-                    formName = pokemonSettings.get("pokemonId").textValue().toLowerCase();
-                }
-                if (formName.endsWith("_purified")) {
-                    purified.add(StringUtils.substringBefore(formName, "_purified"));
-                } else {
-                    excludes.add(formName);
-                }
-            }
-
-        }
-        excludes.removeAll(purified);
-        Scanner scanner = new Scanner(resourceLoader.getResource("thrifty_exclude.txt").getInputStream());
-        while (scanner.hasNext()) {
-            excludes.add(scanner.nextLine());
-        }
-
-        StringJoiner joiner = new StringJoiner(",");
         for (Pokemon pokemon : pokemonRegistry.getAll()) {
-            if (pokemon.getDex() > 637) continue;
-
-            if (excludes.contains(pokemon.getSpeciesId())) continue;
-
-            Set<String> chargeMoves = pokemon.getChargedMoves();
-            chargeMoves.remove("FRUSTRATION");
-            chargeMoves.remove("RETURN");
-            chargeMoves.removeAll(pokemon.getLegacyMoves());
-            if (chargeMoves.size() > 4) continue;
-
-            LinkedHashMap<IndividualValues, StatProduct> statProducts = StatProduct.generateStatProducts(pokemon, great);
-            Collection<StatProduct> values = statProducts.values();
-            if (values.isEmpty()) continue;
-            double level =
-                    values.stream().limit(1).mapToDouble(statProduct -> statProduct.getLevel()).max().getAsDouble();
-            if (level <= 30.5) {
-                joiner.add(pokemon.getSpeciesId());
-            }
+            LinkedHashMap<IndividualValues, StatProduct> statProducts = StatProduct.generateStatProducts(pokemon,
+                    ultra, 40);
+            statProducts.values().stream().
+                    findFirst().
+                    ifPresent(sp -> System.out.println(pokemon.getSpeciesId() + "," + sp.getCp() + "," + sp.getLevel() +
+                            "," + sp.getIvs() + "," + sp.getStatProduct()));
+//                    filter(sp -> sp.getLevelDefense() > 140 && sp.getHp() > 128).
+//                    sorted().limit(100).
+//                    forEach(System.out::println);
         }
-        System.out.println(joiner);
-//        LinkedHashMap<IndividualValues, StatProduct> statProducts = StatProduct.generateStatProducts(pokemon, great);
-//        Map<IndividualValues, StatProduct> vaporeon = statProducts.entrySet().stream().
-//                limit(256).
-//                collect(toMap(Map.Entry::getKey, Map.Entry::getValue,
-//                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
-//
-//        pokemon = pokemonRegistry.getPokeman("flareon");
-//        statProducts = StatProduct.generateStatProducts(pokemon, great);
-//        Map<IndividualValues, StatProduct> flareon = statProducts.entrySet().stream().
-//                sorted(Map.Entry.comparingByValue()).
-//                limit(256).
-//                collect(toMap(Map.Entry::getKey, Map.Entry::getValue,
-//                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
-//
-//        pokemon = pokemonRegistry.getPokeman("jolteon");
-//        statProducts = StatProduct.generateStatProducts(pokemon, great);
-//        Map<IndividualValues, StatProduct> jolteon = statProducts.entrySet().stream().
-//                sorted(Map.Entry.comparingByValue()).
-//                limit(256).
-//                collect(toMap(Map.Entry::getKey, Map.Entry::getValue,
-//                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
-//
-//        Set<IndividualValues> ivs = vaporeon.keySet();
-//        ivs.retainAll(flareon.keySet());
-//        ivs.retainAll(jolteon.keySet());
-//        for (IndividualValues iv : ivs) {
-//            StatProduct vape = vaporeon.get(iv);
-//            StatProduct flare = flareon.get(iv);
-//            StatProduct jolt = jolteon.get(iv);
-//            System.out.println(iv + " v: " + vape.get);
-//        }
-
-//        double top = values.get(0).getStatProduct() * 1.0;
-//        long count = values.stream().
-////                filter(sp -> TradeLevel.GREAT_FRIEND.test(sp.getIvs())).
-//        filter(sp -> sp.getLevel() >= 20.0).count();
-//        System.out.println(count);
-//
-////        forEach(sp -> System.out.println(" * " + sp.getIvs() + "; cp: " + sp.getCp() + "; lvl: " + sp.getLevel() +
-////                        "; atk: " + StatProduct.round(sp.getLevelAttack()) + "; def: " + StatProduct.round(sp.getLevelDefense())
-////                        + "; hp: " + sp.getHp() + "; " + Math.round(1000.0 * sp .getStatProduct() / top) / 10.0 + "%"));
-//        long better = values.stream().filter(sp -> sp.getStatProduct() > statProduct.getStatProduct()).count();
-//        System.out.println(better);
-//        // divide by 100 for ease of making percentages
-//        BigDecimal max = BigDecimal.valueOf(values.get(0).getStatProduct() / 100.0);
-//
-//        for (TradeLevel tradeLevel : TradeLevel.values()) {
-//            values.stream().
-//                    filter(s -> s.isTradeLevel(tradeLevel)).
-//                    sorted().
-//                    findAny().
-//                    ifPresent(v -> System.out.println(tradeLevel + ": " + v));
-//
-//            BigDecimalSummaryStatistics stats = statProducts.values().stream().
-//                    filter(s -> s.isTradeLevel(tradeLevel)).
-//                    map(StatProduct::getStatProduct).
-//                    collect(BigDecimalSummaryStatistics.DECIMAL64,
-//                            BigDecimalSummaryStatistics::accept,
-//                            BigDecimalSummaryStatistics::combine);
-//
-//            BigDecimal minStatProductPercent = stats.getMin().divide(max, DECIMAL64).setScale(1, HALF_EVEN);
-//            BigDecimal maxStatProductPercent = stats.getMax().divide(max, DECIMAL64).setScale(1, HALF_EVEN);
-//            BigDecimal averageStatProductPercent = stats.getAverage().divide(max, DECIMAL64).setScale(1, HALF_EVEN);
-//            BigDecimal stdDev = stats.getStandardDeviation().divide(max, DECIMAL64).setScale(2, HALF_EVEN);
-//            System.out.println("\t min: " + minStatProductPercent + "%; " +
-//                    "max: " + maxStatProductPercent + "%; " +
-//                    "avg: " + averageStatProductPercent + "%; " +
-//                    "std dev: " + stdDev + "%");
-//        }
     }
 
     @Test
     public void test_all() throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
         ResourceLoader resourceLoader = new DefaultResourceLoader();
-        PokemonRegistry pokemonRegistry = new PokemonRegistry(MAPPER, resourceLoader);
-        SortedSet<PokemonStatProduct> best = new TreeSet<>();
-        SortedSet<Pokemon> sorted = new TreeSet<>(Comparator.comparing(Pokemon::getDex));
-        sorted.addAll(pokemonRegistry.getAll());
-        Map<Pokemon, StatProduct> filtered = new HashMap<>();
-        for (Pokemon pokemon : sorted) {
-            //if (!pokemon.isTradable()) continue;
-            if (!pokemon.getTypes().contains("ghost")) continue;
-            Map<IndividualValues, StatProduct> stats = StatProduct.generateStatProducts(pokemon, great);
-            Optional<StatProduct> maybeStatProduct = stats.values().stream().
-                    sorted().
-                    filter(sp -> sp.getCp() > 1260).
-                    //limit(50).
-                    //filter(sp -> sp.isTradeLevel(LUCKY_TRADE)).
-                            findAny();
-            if (maybeStatProduct.isPresent()) {
-                StatProduct statProduct = maybeStatProduct.get();
-                filtered.put(pokemon, statProduct);
-//                System.out.println(pokemon.getSpeciesId() + ": " + statProduct.getCp() + "@" + statProduct.getLevel() +
-//                        " " + statProduct.getIvs() + " " + statProduct.getStatProduct());
-                //PokemonStatProduct pokemonStatProduct = new PokemonStatProduct(pokemon, statProduct);
-                //best.add(pokemonStatProduct);
+        Resource gamemaster = resourceLoader.getResource("GAME_MASTER2.json");
+        LineReader lineReader =
+                new LineReader(new InputStreamReader(resourceLoader.getResource("thrifty_exclude.txt").getInputStream()));
+        Set<String> ineligible = new HashSet<>();
+        String banned = lineReader.readLine();
+        while (banned != null) {
+            ineligible.add(banned);
+            banned = lineReader.readLine();
+        }
+
+        JsonNode root = objectMapper.readTree(gamemaster.getInputStream());
+        ArrayNode itemTemplates = (ArrayNode) root.get("itemTemplates");
+
+        for (JsonNode itemTemplate : itemTemplates) {
+            if (!itemTemplate.hasNonNull("pokemonSettings")) continue;
+            JsonNode pokemonSettings = itemTemplate.get("pokemonSettings");
+            //String pokemonId = pokemonSettings.get("pokemonId").asText().toLowerCase();
+
+            if (!pokemonSettings.hasNonNull("form")) continue;
+
+            JsonNode form = pokemonSettings.get("form");
+            String pokemonId = form.asText().toLowerCase();
+            if (pokemonId.endsWith("_shadow")) continue;
+
+            if (!pokemonSettings.hasNonNull("thirdMove")) continue;
+            JsonNode thirdMove = pokemonSettings.get("thirdMove");
+
+            if (!thirdMove.hasNonNull("stardustToUnlock")) continue;
+            int stardustToUnlock = thirdMove.get("stardustToUnlock").intValue();
+            if (stardustToUnlock > 50001) {
+                ineligible.add(pokemonId);
             }
         }
+        // allow the discount babies
+        ineligible.remove("lucario");
+        ineligible.remove("mantine");
+        ineligible.remove("sudowoodo");
+        ineligible.remove("magmar");
+        ineligible.remove("magmortar");
+        ineligible.remove("electivire");
 
-        Map<Pokemon, StatProduct> sorted2 = filtered.entrySet().stream().
-                sorted(reverseOrder(comparingByValue())).
-                collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
-        for (Map.Entry<Pokemon, StatProduct> entry : sorted2.entrySet()) {
-            Pokemon pokemon = entry.getKey();
-            StatProduct statProduct = entry.getValue();
-            System.out.println(pokemon.getSpeciesId() + ": \t\t" + statProduct.getCp() + "@" + statProduct.getLevel() +
-                    "; atk: " + StatProduct.round(statProduct.getLevelAttack()) +
-                    ", def: " + StatProduct.round(statProduct.getLevelDefense()) +
-                    ", hp: " + statProduct.getHp() + "; " + statProduct.getStatProduct());
+        StringJoiner stringJoiner = new StringJoiner(",");
+        PokemonRegistry pokemonRegistry = new PokemonRegistry(MAPPER, resourceLoader);
+        for (Pokemon pokemon : pokemonRegistry.getAll()) {
+            if (pokemon.getDex() > 649) continue;
+            if (pokemon.getTags().contains("mythical") || pokemon.getTags().contains("legendary")) continue;
+            if (ineligible.contains(pokemon.getSpeciesId())) {
+                //LOG.info("{} cost is high", pokemon.getSpeciesId());
+                continue;
+            }
+
+            Set<String> chargedMoves = pokemon.getChargedMoves();
+            chargedMoves.remove("frustration");
+            chargedMoves.remove("return");
+            chargedMoves.removeAll(pokemon.getLegacyMoves());
+            if (chargedMoves.size() > 4) {
+                LOG.info("{} has {} charge moves, skipping", pokemon.getSpeciesId(), chargedMoves.size());
+                continue;
+            }
+
+            Optional<StatProduct> maybeStatProduct =
+                    StatProduct.generateStatProducts(pokemon, great, 40).values().stream().findFirst();
+            if (!maybeStatProduct.isPresent()) {
+                LOG.info("{} is not great league eligible, skipping", pokemon.getSpeciesId());
+                continue;
+            }
+
+            StatProduct statProduct = maybeStatProduct.get();
+            if (statProduct.getLevel() > 31.5) {
+                //LOG.info("{} optimum stat product is above 31, skipping", pokemon.getSpeciesId());
+                continue;
+            }
+            stringJoiner.add(pokemon.getSpeciesId());
+            //LOG.info("{}", pokemon.getSpeciesId());
         }
-
-
-//        best.stream().forEach(pokemonStatProduct -> {
-//            StatProduct statProduct = pokemonStatProduct.getStatProduct();
-//            System.out.println(" *  " + pokemonStatProduct.getPokemon() + " " + statProduct.getCp());
-//        });
+        System.out.println(stringJoiner);
     }
 
     @Test
@@ -233,7 +169,7 @@ public class TestStuff {
         Pokemon evolvedForm = pokemonRegistry.getPokeman("infernape");
         Pokemon baseForm = pokemonRegistry.getPokeman("chimchar");
         Map<IndividualValues, StatProduct> evolvedStats =
-                StatProduct.generateStatProducts(evolvedForm, great).entrySet().stream().
+                StatProduct.generateStatProducts(evolvedForm, great, 40).entrySet().stream().
                         sorted(comparingByValue()).
                         limit(300).
                         collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
@@ -313,15 +249,17 @@ public class TestStuff {
     public void test_pvp() throws IOException {
         ResourceLoader resourceLoader = new DefaultResourceLoader();
         PokemonRegistry pokemonRegistry = new PokemonRegistry(MAPPER, resourceLoader);
-        Pokemon pokemon = pokemonRegistry.getPokeman("dragonair");
-        Map<IndividualValues, StatProduct> statProducts = StatProduct.generateStatProducts(pokemon, great);
+        Pokemon pokemon = pokemonRegistry.getPokeman("altaria");
+        Map<IndividualValues, StatProduct> statProducts = StatProduct.generateStatProducts(pokemon, great, 40);
         double max = statProducts.values().stream().mapToDouble(StatProduct::getStatProduct).max().getAsDouble();
         statProducts.values().stream().
-                filter(sp -> sp.getLevelAttack() >= 116.16).
-                filter(sp -> sp.getLevelDefense() >= 112.78).
-                //filter(sp -> sp.getHp() >= 158).
-                        sorted().
-                forEach(sp -> System.out.println(sp.getIvs() + " " + StatProduct.round(sp.getStatProduct() * 100.0 / max) +
-                        "%"));
+//                filter(sp -> sp.getStatProduct() > 1765496).
+//                filter(sp -> sp.getCp() <= 1476)
+                 filter(sp -> sp.getLevelAttack() >= 106.98).
+                 //filter(sp -> sp.getLevelDefense() >= 141).
+                 filter(sp -> sp.getHp() >= 140).
+                        //sorted().
+                forEach(sp -> System.out.println(sp.getCp() + " " + sp.getIvs() + " " +
+                        StatProduct.round(sp.getStatProduct() * 100.0 / max) + "%"));
     }
 }

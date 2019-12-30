@@ -8,7 +8,7 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
 import net.fender.discord.DiscordConfiguration;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class PurgeChannelJobTest {
     @Autowired
     ResourceLoader resourceLoader;
 
-    @Test
+    @Disabled
     public void purge_quests() throws Exception {
         Resource resource = resourceLoader.getResource("application-aws-credentials.yml");
 

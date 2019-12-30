@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static java.util.Map.Entry.comparingByValue;
 import static java.util.stream.Collectors.toMap;
@@ -79,7 +80,9 @@ public class StatProduct implements Comparable<StatProduct> {
         return TradeLevel.getTradeLevel(ivs).getFloor() >= tradeLevel.getFloor();
     }
 
-    public static LinkedHashMap<IndividualValues, StatProduct> generateStatProducts(Pokemon pokemon, League league) {
+    public static LinkedHashMap<IndividualValues, StatProduct> generateStatProducts(Pokemon pokemon,
+                                                                                    League league,
+                                                                                    int maxLevel) {
         double startLevel = pokemon.getLevelFloor();
 
         int minIv = pokemon.isTradable() ? 0 : 10;
@@ -89,7 +92,7 @@ public class StatProduct implements Comparable<StatProduct> {
             for (int def = minIv; def <= 15; def++) {
                 for (int sta = minIv; sta <= 15; sta++) {
                     IndividualValues ivs = new IndividualValues(atk, def, sta);
-                    for (double level = startLevel; level <= 40.0; level += 0.5) {
+                    for (double level = startLevel; level <= maxLevel; level += 0.5) {
                         StatProduct statProduct = new StatProduct(pokemon, ivs, level);
                         int cp = statProduct.getCp();
                         if (cp <= league.maxCp) {
@@ -103,7 +106,7 @@ public class StatProduct implements Comparable<StatProduct> {
         return stats.entrySet().stream().
                 sorted(comparingByValue()).
                 collect(toMap(Map.Entry::getKey, Map.Entry::getValue,
-                (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
     }
 
     @Override
@@ -125,15 +128,15 @@ public class StatProduct implements Comparable<StatProduct> {
 
     @Override
     public int hashCode() {
-        return ivs.hashCode();
+        return Objects.hash(cp, ivs);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        StatProduct that = (StatProduct) o;
-        return ivs.equals(that.ivs);
+        StatProduct other = (StatProduct) o;
+        return cp == other.cp && Objects.equals(ivs, other.ivs);
     }
 
     @Override

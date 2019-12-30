@@ -14,6 +14,13 @@ default-locale: en_US
 
 server.port: 9090
 
+quartz:
+  purgeChannels:
+    - channel: suggestions
+      truncateTo: DAYS
+      window: PT24H
+      cron: '0 0/5 * * * ?'
+
 ---
 
 spring:
