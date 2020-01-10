@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.google.common.io.LineReader;
-import net.fender.pogo.Appraisal;
-import net.fender.pogo.IndividualValues;
-import net.fender.pogo.PokemonRegistry;
-import net.fender.pogo.StatProduct;
+import net.fender.pogo.*;
 import net.fender.pvpoke.Pokemon;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -80,7 +77,7 @@ public class TestStuff {
         }
     }
 
-    @Test
+    @Disabled
     public void test_all() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         ResourceLoader resourceLoader = new DefaultResourceLoader();
@@ -166,12 +163,13 @@ public class TestStuff {
     public void test_pvp_search_string() throws IOException {
         ResourceLoader resourceLoader = new DefaultResourceLoader();
         PokemonRegistry pokemonRegistry = new PokemonRegistry(MAPPER, resourceLoader);
-        Pokemon evolvedForm = pokemonRegistry.getPokeman("infernape");
-        Pokemon baseForm = pokemonRegistry.getPokeman("chimchar");
+        Pokemon evolvedForm = pokemonRegistry.getPokeman("empoleon");
+        Pokemon baseForm = pokemonRegistry.getPokeman("piplup");
+        League league = ultra;
         Map<IndividualValues, StatProduct> evolvedStats =
-                StatProduct.generateStatProducts(evolvedForm, great, 40).entrySet().stream().
+                StatProduct.generateStatProducts(evolvedForm, league, 40).entrySet().stream().
                         sorted(comparingByValue()).
-                        limit(300).
+                        limit(141).
                         collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
         EnumSet<Appraisal> allAppraisals = EnumSet.noneOf(Appraisal.class);
         SortedSet<Integer> allCP = new TreeSet<>();
@@ -181,7 +179,7 @@ public class TestStuff {
             for (IndividualValues ivs : evolvedStats.keySet()) {
                 StatProduct statProduct = new StatProduct(baseForm, ivs, level);
                 StatProduct evolved = new StatProduct(evolvedForm, ivs, level);
-                if (evolved.getCp() <= 1500) {
+                if (evolved.getCp() <= league.maxCp) {
                     int cp = statProduct.getCp();
                     allCP.add(cp);
                     int hp = statProduct.getHp();
@@ -249,17 +247,19 @@ public class TestStuff {
     public void test_pvp() throws IOException {
         ResourceLoader resourceLoader = new DefaultResourceLoader();
         PokemonRegistry pokemonRegistry = new PokemonRegistry(MAPPER, resourceLoader);
-        Pokemon pokemon = pokemonRegistry.getPokeman("altaria");
+        Pokemon pokemon = pokemonRegistry.getPokeman("empoleon");
         Map<IndividualValues, StatProduct> statProducts = StatProduct.generateStatProducts(pokemon, great, 40);
         double max = statProducts.values().stream().mapToDouble(StatProduct::getStatProduct).max().getAsDouble();
-        statProducts.values().stream().
+        long count = statProducts.values().stream().
 //                filter(sp -> sp.getStatProduct() > 1765496).
 //                filter(sp -> sp.getCp() <= 1476)
-                 filter(sp -> sp.getLevelAttack() >= 106.98).
-                 //filter(sp -> sp.getLevelDefense() >= 141).
-                 filter(sp -> sp.getHp() >= 140).
-                        //sorted().
-                forEach(sp -> System.out.println(sp.getCp() + " " + sp.getIvs() + " " +
-                        StatProduct.round(sp.getStatProduct() * 100.0 / max) + "%"));
+                 filter(sp -> sp.getLevelAttack() >= 130.75).
+                 filter(sp -> sp.getLevelDefense() >= 108.19).
+                count();
+//                 filter(sp -> sp.getHp() >= 140).
+//                        sorted().
+//                forEach(sp -> System.out.println(sp.getCp() + " " + sp.getIvs() + " " +
+//                        StatProduct.round(sp.getStatProduct() * 100.0 / max) + "%"));
+            System.out.println(count);
     }
 }

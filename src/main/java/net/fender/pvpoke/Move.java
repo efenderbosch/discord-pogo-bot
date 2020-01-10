@@ -1,5 +1,9 @@
 package net.fender.pvpoke;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
+import java.util.Objects;
+
 public class Move {
 
     private String moveId;
@@ -9,6 +13,9 @@ public class Move {
     private int energy;
     private int energyGain;
     private int cooldown;
+    private int[] buffs = new int[0];
+    private BuffTarget buffTarget;
+    private double buffApplyChance;
 
     public String getMoveId() {
         return moveId;
@@ -65,4 +72,51 @@ public class Move {
     public void setCooldown(int cooldown) {
         this.cooldown = cooldown;
     }
+
+    public int[] getBuffs() {
+        return buffs;
+    }
+
+    public void setBuffs(int[] buffs) {
+        this.buffs = buffs;
+    }
+
+    public BuffTarget getBuffTarget() {
+        return buffTarget;
+    }
+
+    public void setBuffTarget(BuffTarget buffTarget) {
+        this.buffTarget = buffTarget;
+    }
+
+    public double getBuffApplyChance() {
+        return buffApplyChance;
+    }
+
+    public void setBuffApplyChance(double buffApplyChance) {
+        this.buffApplyChance = buffApplyChance;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Move move = (Move) o;
+        return Objects.equals(moveId, move.moveId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(moveId);
+    }
+
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this);
+    }
+
+    public enum BuffTarget {
+        self, opponent
+    }
+
 }

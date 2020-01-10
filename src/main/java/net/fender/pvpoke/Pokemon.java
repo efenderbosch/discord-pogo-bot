@@ -16,6 +16,8 @@ public class Pokemon {
     private Set<String> tags = new HashSet<>();
     private Boolean tradable;
     private Integer levelFloor;
+    private boolean shadow;
+    private int level25CP;
     // defaultIVs
 
     public int getDex() {
@@ -98,6 +100,22 @@ public class Pokemon {
 
     public void setLevelFloor(int levelFloor) {
         this.levelFloor = levelFloor;
+    }
+
+    public boolean isShadow() {
+        return shadow;
+    }
+
+    public void setShadow(boolean shadow) {
+        this.shadow = shadow;
+    }
+
+    public int getLevel25CP() {
+        return level25CP;
+    }
+
+    public void setLevel25CP(int level25CP) {
+        this.level25CP = level25CP;
     }
 
     @Override

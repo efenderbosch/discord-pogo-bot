@@ -30,7 +30,7 @@ public class RankService {
                     levelFloor + " is " + statProduct.getCp()).submit();
             return;
         }
-        Map<IndividualValues, StatProduct> level45Stats = StatProduct.generateStatProducts(pokemon, league, 45);
+        Map<IndividualValues, StatProduct> level45Stats = StatProduct.generateStatProducts(pokemon, league, 41);
 
         if (!pokemon.isTradable()) {
             ivs = IndividualValues.floorNonTradable(ivs);
