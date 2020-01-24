@@ -136,7 +136,7 @@ public class StatProduct implements Comparable<StatProduct> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         StatProduct other = (StatProduct) o;
-        return cp == other.cp && Objects.equals(ivs, other.ivs);
+        return cp == other.cp && Objects.equals(ivs, other.ivs) && level == other.level;
     }
 
     @Override

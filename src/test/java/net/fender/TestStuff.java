@@ -60,14 +60,40 @@ public class TestStuff {
         assertThat(purifiedRank, is(44));
     }
 
+    @Test
+    public void test_level41() throws IOException {
+        ResourceLoader resourceLoader = new DefaultResourceLoader();
+        PokemonRegistry pokemonRegistry = new PokemonRegistry(MAPPER, resourceLoader);
+        Pokemon pokemon = pokemonRegistry.getPokeman("linoone");
+        IndividualValues ivs = new IndividualValues(0, 8, 15);
+        LinkedHashMap<IndividualValues, StatProduct> statProducts40 = StatProduct.generateStatProducts(pokemon, great,
+                40);
+        LinkedHashMap<IndividualValues, StatProduct> statProducts41 = StatProduct.generateStatProducts(pokemon, great,
+                41);
+        StatProduct statProduct40 = statProducts40.get(ivs);
+        System.out.println(statProduct40.getCp() + " " + statProduct40.getLevel() + " " + statProduct40.getStatProduct());
+        StatProduct statProduct41 = statProducts41.get(ivs);
+        System.out.println(statProduct41.getCp() + " " + statProduct41.getLevel() + " " + statProduct41.getStatProduct());
+
+        StatProduct top40 = statProducts40.values().iterator().next();
+        System.out.println(top40.getCp() + " " + top40.getLevel() + " " + top40.getStatProduct());
+        StatProduct top41 = statProducts41.values().iterator().next();
+        System.out.println(top41.getCp() + " " + top41.getLevel() + " " + top41.getStatProduct());
+        long rank =
+                statProducts40.values().stream().filter(statProduct -> statProduct.getStatProduct() >= statProduct41.getStatProduct()).count();
+        System.out.println(rank);
+    }
+
     @Disabled
     public void test() throws IOException {
         ResourceLoader resourceLoader = new DefaultResourceLoader();
         PokemonRegistry pokemonRegistry = new PokemonRegistry(MAPPER, resourceLoader);
         for (Pokemon pokemon : pokemonRegistry.getAll()) {
             LinkedHashMap<IndividualValues, StatProduct> statProducts = StatProduct.generateStatProducts(pokemon,
-                    ultra, 40);
+                    great, 40);
             statProducts.values().stream().
+                    limit(50).
+                    filter(sp -> sp.isTradeLevel(TradeLevel.LUCKY_TRADE) && sp.getCp() > 1400).
                     findFirst().
                     ifPresent(sp -> System.out.println(pokemon.getSpeciesId() + "," + sp.getCp() + "," + sp.getLevel() +
                             "," + sp.getIvs() + "," + sp.getStatProduct()));
@@ -110,7 +136,7 @@ public class TestStuff {
 
             if (!thirdMove.hasNonNull("stardustToUnlock")) continue;
             int stardustToUnlock = thirdMove.get("stardustToUnlock").intValue();
-            if (stardustToUnlock > 50001) {
+            if (stardustToUnlock > 75001) {
                 ineligible.add(pokemonId);
             }
         }
@@ -136,20 +162,20 @@ public class TestStuff {
             chargedMoves.remove("frustration");
             chargedMoves.remove("return");
             chargedMoves.removeAll(pokemon.getLegacyMoves());
-            if (chargedMoves.size() > 4) {
+            if (chargedMoves.size() > 7) {
                 LOG.info("{} has {} charge moves, skipping", pokemon.getSpeciesId(), chargedMoves.size());
                 continue;
             }
 
             Optional<StatProduct> maybeStatProduct =
-                    StatProduct.generateStatProducts(pokemon, great, 40).values().stream().findFirst();
+                    StatProduct.generateStatProducts(pokemon, ultra, 40).values().stream().findFirst();
             if (!maybeStatProduct.isPresent()) {
                 LOG.info("{} is not great league eligible, skipping", pokemon.getSpeciesId());
                 continue;
             }
 
             StatProduct statProduct = maybeStatProduct.get();
-            if (statProduct.getLevel() > 31.5) {
+            if (statProduct.getLevel() > 34.5) {
                 //LOG.info("{} optimum stat product is above 31, skipping", pokemon.getSpeciesId());
                 continue;
             }
@@ -247,19 +273,23 @@ public class TestStuff {
     public void test_pvp() throws IOException {
         ResourceLoader resourceLoader = new DefaultResourceLoader();
         PokemonRegistry pokemonRegistry = new PokemonRegistry(MAPPER, resourceLoader);
-        Pokemon pokemon = pokemonRegistry.getPokeman("empoleon");
+        Pokemon pokemon = pokemonRegistry.getPokeman("altaria");
         Map<IndividualValues, StatProduct> statProducts = StatProduct.generateStatProducts(pokemon, great, 40);
-        double max = statProducts.values().stream().mapToDouble(StatProduct::getStatProduct).max().getAsDouble();
-        long count = statProducts.values().stream().
+        StatProduct max = statProducts.values().iterator().next();
+        //double max = statProducts.values().stream().mapToDouble(StatProduct::getStatProduct).max().getAsDouble();
+        double bestAtk =
+                statProducts.values().stream().limit(25).mapToDouble(StatProduct::getLevelAttack).max().getAsDouble();
+        System.out.println(bestAtk);
+        statProducts.values().stream().
 //                filter(sp -> sp.getStatProduct() > 1765496).
 //                filter(sp -> sp.getCp() <= 1476)
-                 filter(sp -> sp.getLevelAttack() >= 130.75).
-                 filter(sp -> sp.getLevelDefense() >= 108.19).
-                count();
+        filter(sp -> sp.getLevelAttack() > bestAtk).
+                //filter(sp -> sp.getLevelDefense() >= 108.19).
+                //count();
 //                 filter(sp -> sp.getHp() >= 140).
 //                        sorted().
-//                forEach(sp -> System.out.println(sp.getCp() + " " + sp.getIvs() + " " +
-//                        StatProduct.round(sp.getStatProduct() * 100.0 / max) + "%"));
-            System.out.println(count);
+        forEach(sp -> System.out.println(sp.getCp() + " " + sp.getIvs() + " " +
+        StatProduct.round(sp.getStatProduct() * 100.0 / max.getStatProduct()) + "%"));
+//            System.out.println(count);
     }
 }

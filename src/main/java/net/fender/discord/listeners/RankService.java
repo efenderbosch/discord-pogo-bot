@@ -30,14 +30,14 @@ public class RankService {
                     levelFloor + " is " + statProduct.getCp()).submit();
             return;
         }
-        Map<IndividualValues, StatProduct> level45Stats = StatProduct.generateStatProducts(pokemon, league, 41);
+        Map<IndividualValues, StatProduct> buddyLevelStats = StatProduct.generateStatProducts(pokemon, league, 41);
 
         if (!pokemon.isTradable()) {
             ivs = IndividualValues.floorNonTradable(ivs);
         }
 
         StatProduct level40StatProduct = level40Stats.get(ivs);
-        StatProduct level45StatProduct = level45Stats.get(ivs);
+        StatProduct buddyLevelStatProduct = buddyLevelStats.get(ivs);
         if (level40StatProduct == null) {
             StatProduct over = new StatProduct(pokemon, ivs, levelFloor);
             rankBot.sendMessage("CP at lvl " + levelFloor + " for " + ivs + " is " + over.getCp() +
@@ -48,18 +48,10 @@ public class RankService {
         EmbedBuilder embedBuilder = new EmbedBuilder();
         embedBuilder.setTitle(pokemon.getSpeciesId());
         buildEmbed(pokemon, level40StatProduct, level40Stats.values(), league, embedBuilder);
-        StatProduct topLevel40 = level40Stats.entrySet().stream().
-                findFirst().
-                map(Map.Entry::getValue).
-                orElseGet(null);
-        StatProduct topLevel45 = level45Stats.entrySet().stream().
-                findFirst().
-                map(Map.Entry::getValue).
-                orElseGet(null);
 
-        if (!Objects.equals(topLevel40, topLevel45)) {
+        if (!Objects.equals(level40StatProduct, buddyLevelStatProduct)) {
             embedBuilder.addField("", "------------", false);
-            buildEmbed(pokemon, level45StatProduct, level45Stats.values(), league, embedBuilder);
+            buildEmbed(pokemon, buddyLevelStatProduct, buddyLevelStats.values(), league, embedBuilder);
         }
 
         MessageBuilder builder = new MessageBuilder();
@@ -105,30 +97,10 @@ public class RankService {
         embedBuilder.addField("#1 Rank", getDesc(wildStats, bestStatProduct), false);
 
         if (pokemon.isTradable() && league != League.master) {
-//            statProducts.stream().
-//                    filter(sp -> sp.isTradeLevel(GREAT_FRIEND)).
-//                    sorted().findFirst().ifPresent(great ->
-//                    embedBuilder.addField("Top Great Friend Trade:", getDesc(great, bestStatProduct), false));
-
-//            statProducts.stream().
-//                    filter(sp -> sp.isTradeLevel(ULTRA_FRIEND)).
-//                    sorted().findFirst().ifPresent(ultra ->
-//                    embedBuilder.addField("Top Ultra Friend Trade:", getDesc(ultra, bestStatProduct), false));
-
             statProducts.stream().
                     filter(sp -> sp.isTradeLevel(BEST_FRIEND)).
                     sorted().findFirst().ifPresent(best ->
                     embedBuilder.addField("Top Best Friend Trade:", getDesc(best, bestStatProduct), false));
-
-//            statProducts.stream().
-//                    filter(sp -> sp.isTradeLevel(RAID_HATCH_RESEARCH)).
-//                    sorted().findFirst().ifPresent(raid ->
-//                    embedBuilder.addField("Top Raid/Hatch/Research:", getDesc(raid, bestStatProduct), false));
-
-//            statProducts.stream().
-//                    filter(sp -> sp.isTradeLevel(LUCKY_TRADE)).
-//                    sorted().findFirst().ifPresent(lucky ->
-//                    embedBuilder.addField("Top Lucky Friend Trade:", getDesc(lucky, bestStatProduct), false));
         }
 
         if (pokemon.isTradable()) {
