@@ -128,7 +128,7 @@ public class StatProduct implements Comparable<StatProduct> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(cp, ivs);
+        return Objects.hash(cp, ivs, level);
     }
 
     @Override

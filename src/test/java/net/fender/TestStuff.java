@@ -27,6 +27,7 @@ import static java.util.stream.Collectors.toMap;
 import static net.fender.pogo.League.great;
 import static net.fender.pogo.League.ultra;
 import static net.fender.pogo.TradeLevel.GREAT_FRIEND;
+import static net.fender.pogo.TradeLevel.RAID_HATCH_RESEARCH;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -38,6 +39,27 @@ public class TestStuff {
     private static final ObjectMapper MAPPER = new ObjectMapper().
             disable(FAIL_ON_UNKNOWN_PROPERTIES).
             enable(ALLOW_COMMENTS);
+
+    public static void printRanges(SortedSet<Integer> integers, String prefix) {
+        int length = integers.size();
+        Integer[] cpArray = integers.toArray(new Integer[length]);
+        int idx = 0;
+        int idx2 = 0;
+        while (idx < length) {
+            while (++idx2 < length && cpArray[idx2] - cpArray[idx2 - 1] == 1) ;
+            if (cpArray[idx] != cpArray[idx2 - 1]) {
+                System.out.printf("%s%s-%s,", prefix, cpArray[idx], cpArray[idx2 - 1]);
+            } else {
+                System.out.printf("%s%s,", prefix, cpArray[idx], cpArray[idx2 - 1]);
+            }
+            idx = idx2;
+        }
+    }
+
+    @Test
+    public void test1() {
+
+    }
 
     @Test
     public void test_purified() throws IOException {
@@ -64,23 +86,43 @@ public class TestStuff {
     public void test_level41() throws IOException {
         ResourceLoader resourceLoader = new DefaultResourceLoader();
         PokemonRegistry pokemonRegistry = new PokemonRegistry(MAPPER, resourceLoader);
-        Pokemon pokemon = pokemonRegistry.getPokeman("linoone");
-        IndividualValues ivs = new IndividualValues(0, 8, 15);
+        Pokemon pokemon = pokemonRegistry.getPokeman("scrafty");
+        IndividualValues ivs40 = new IndividualValues(15, 15, 15);
+        IndividualValues ivs41 = new IndividualValues(15, 15, 15);
+
         LinkedHashMap<IndividualValues, StatProduct> statProducts40 = StatProduct.generateStatProducts(pokemon, great,
                 40);
         LinkedHashMap<IndividualValues, StatProduct> statProducts41 = StatProduct.generateStatProducts(pokemon, great,
                 41);
-        StatProduct statProduct40 = statProducts40.get(ivs);
+
+        statProducts40.values().stream().
+                filter(statProduct -> statProduct.isTradeLevel(RAID_HATCH_RESEARCH)).
+                sorted(Comparator.reverseOrder()).
+                limit(1).findAny().ifPresentOrElse(System.out::println, null);
+
+        StatProduct statProduct40 = statProducts40.get(ivs40);
         System.out.println(statProduct40.getCp() + " " + statProduct40.getLevel() + " " + statProduct40.getStatProduct());
-        StatProduct statProduct41 = statProducts41.get(ivs);
+        StatProduct statProduct41 = statProducts41.get(ivs41);
         System.out.println(statProduct41.getCp() + " " + statProduct41.getLevel() + " " + statProduct41.getStatProduct());
 
         StatProduct top40 = statProducts40.values().iterator().next();
-        System.out.println(top40.getCp() + " " + top40.getLevel() + " " + top40.getStatProduct());
+        System.out.println(top40.getCp() + " " + top40.getIvs() + " " + top40.getLevel() + " " + top40.getStatProduct());
         StatProduct top41 = statProducts41.values().iterator().next();
-        System.out.println(top41.getCp() + " " + top41.getLevel() + " " + top41.getStatProduct());
+        System.out.println(top41.getCp() + " " + top41.getIvs() + " " + top41.getLevel() + " " + top41.getStatProduct());
+
+        SortedSet<StatProduct> all = new TreeSet<>();
+        all.addAll(statProducts40.values());
+        all.addAll(statProducts41.values());
+        long rank40 =
+                all.stream().filter(statProduct -> statProduct.getStatProduct() >= top40.getStatProduct()).count();
+        System.out.println(rank40);
+        long rank41 =
+                all.stream().filter(statProduct -> statProduct.getStatProduct() >= top41.getStatProduct()).count();
+        System.out.println(rank41);
+
         long rank =
-                statProducts40.values().stream().filter(statProduct -> statProduct.getStatProduct() >= statProduct41.getStatProduct()).count();
+                statProducts40.values().stream().
+                        filter(statProduct -> statProduct.getStatProduct() >= statProduct41.getStatProduct()).count();
         System.out.println(rank);
     }
 
@@ -253,38 +295,26 @@ public class TestStuff {
         System.out.println(allAppraisals.stream().map(Appraisal::getSearchString).collect(Collectors.joining(",")));
     }
 
-    public static void printRanges(SortedSet<Integer> integers, String prefix) {
-        int length = integers.size();
-        Integer[] cpArray = integers.toArray(new Integer[length]);
-        int idx = 0;
-        int idx2 = 0;
-        while (idx < length) {
-            while (++idx2 < length && cpArray[idx2] - cpArray[idx2 - 1] == 1) ;
-            if (cpArray[idx] != cpArray[idx2 - 1]) {
-                System.out.printf("%s%s-%s,", prefix, cpArray[idx], cpArray[idx2 - 1]);
-            } else {
-                System.out.printf("%s%s,", prefix, cpArray[idx], cpArray[idx2 - 1]);
-            }
-            idx = idx2;
-        }
-    }
-
     @Test
     public void test_pvp() throws IOException {
         ResourceLoader resourceLoader = new DefaultResourceLoader();
         PokemonRegistry pokemonRegistry = new PokemonRegistry(MAPPER, resourceLoader);
-        Pokemon pokemon = pokemonRegistry.getPokeman("altaria");
+        Pokemon pokemon = pokemonRegistry.getPokeman("wigglytuff");
         Map<IndividualValues, StatProduct> statProducts = StatProduct.generateStatProducts(pokemon, great, 40);
         StatProduct max = statProducts.values().iterator().next();
         //double max = statProducts.values().stream().mapToDouble(StatProduct::getStatProduct).max().getAsDouble();
         double bestAtk =
-                statProducts.values().stream().limit(25).mapToDouble(StatProduct::getLevelAttack).max().getAsDouble();
+                statProducts.values().stream().limit(500).mapToDouble(StatProduct::getLevelAttack).max().getAsDouble();
         System.out.println(bestAtk);
+
+        double bestDef = statProducts.values().stream().limit(500).mapToDouble(StatProduct::getLevelDefense).max().getAsDouble();
+        System.out.println(bestDef);
+
         statProducts.values().stream().
 //                filter(sp -> sp.getStatProduct() > 1765496).
 //                filter(sp -> sp.getCp() <= 1476)
-        filter(sp -> sp.getLevelAttack() > bestAtk).
-                //filter(sp -> sp.getLevelDefense() >= 108.19).
+                filter(sp -> sp.getLevelAttack() > 114.91).
+                filter(sp -> sp.getLevelDefense() >= 75.47).
                 //count();
 //                 filter(sp -> sp.getHp() >= 140).
 //                        sorted().

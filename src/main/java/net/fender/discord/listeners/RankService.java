@@ -37,7 +37,6 @@ public class RankService {
         }
 
         StatProduct level40StatProduct = level40Stats.get(ivs);
-        StatProduct buddyLevelStatProduct = buddyLevelStats.get(ivs);
         if (level40StatProduct == null) {
             StatProduct over = new StatProduct(pokemon, ivs, levelFloor);
             rankBot.sendMessage("CP at lvl " + levelFloor + " for " + ivs + " is " + over.getCp() +
@@ -49,7 +48,17 @@ public class RankService {
         embedBuilder.setTitle(pokemon.getSpeciesId());
         buildEmbed(pokemon, level40StatProduct, level40Stats.values(), league, embedBuilder);
 
-        if (!Objects.equals(level40StatProduct, buddyLevelStatProduct)) {
+        StatProduct topLevel40 = level40Stats.entrySet().stream().
+                findFirst().
+                map(Map.Entry::getValue).
+                orElseGet(null);
+        StatProduct topLevel41 = buddyLevelStats.entrySet().stream().
+                findFirst().
+                map(Map.Entry::getValue).
+                orElseGet(null);
+
+        StatProduct buddyLevelStatProduct = buddyLevelStats.get(ivs);
+        if (!Objects.equals(level40StatProduct, buddyLevelStatProduct) || !Objects.equals(topLevel40, topLevel41)) {
             embedBuilder.addField("", "------------", false);
             buildEmbed(pokemon, buddyLevelStatProduct, buddyLevelStats.values(), league, embedBuilder);
         }
