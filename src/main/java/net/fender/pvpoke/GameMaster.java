@@ -1,47 +1,43 @@
 package net.fender.pvpoke;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GameMaster {
 
-    private Settings settings;
-    private List<Cup> cups = new ArrayList<>();
-    private List<Pokemon> pokemon = new ArrayList<>();
-    private List<Move> moves = new ArrayList<>();
+    private final Settings settings;
+    private final List<Cup> cups;
+    private final List<Pokemon> pokemon;
+    private final List<Move> moves;
+
+    @JsonCreator
+    public GameMaster(@JsonProperty("settings") Settings settings,
+                      @JsonProperty("cups") List<Cup> cups,
+                      @JsonProperty("pokemon") List<Pokemon> pokemon,
+                      @JsonProperty("moves") List<Move> moves) {
+        this.settings = settings;
+        this.cups = cups;
+        this.pokemon = pokemon;
+        this.moves = moves;
+    }
 
     public Settings getSettings() {
         return settings;
-    }
-
-    public void setSettings(Settings settings) {
-        this.settings = settings;
     }
 
     public List<Cup> getCups() {
         return cups;
     }
 
-    public void setCups(List<Cup> cups) {
-        this.cups = cups;
-    }
-
     public List<Pokemon> getPokemon() {
         return pokemon;
     }
 
-    public void setPokemon(List<Pokemon> pokemon) {
-        this.pokemon = pokemon;
-    }
-
     public List<Move> getMoves() {
         return moves;
-    }
-
-    public void setMoves(List<Move> moves) {
-        this.moves = moves;
     }
 
     @Override
