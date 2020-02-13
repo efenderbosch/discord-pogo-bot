@@ -16,10 +16,22 @@ server.port: 9090
 
 quartz:
   purgeChannels:
-    - channel: suggestions
+    - channel: team-rocket-encounters
       truncateTo: DAYS
       window: PT24H
+      cron: '0 0 0 * * ?'
+    - channel: sightings
+      truncateTo: HOURS
+      window: PT1H
       cron: '0 0/5 * * * ?'
+    - channel: ex-pass-coordination
+      truncateTo: DAYS
+      window: PT360H
+      cron: '0 0 0 * * ?'
+    - channel: legendary-raid-hour
+      truncateTo: DAYS
+      window: PT192H
+      cron: '0 0 0 * * ?'
 
 ---
 
