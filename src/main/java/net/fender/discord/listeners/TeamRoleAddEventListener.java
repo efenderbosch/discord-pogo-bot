@@ -1,16 +1,15 @@
 package net.fender.discord.listeners;
 
 import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
+import net.dv8tion.jda.core.events.guild.member.GuildMemberRoleAddEvent;
+import org.springframework.stereotype.Component;
 
 import java.util.Random;
 
-//@Component
-public class TeamRocketGuildMemberJoinEventListener extends BaseEventListener<GuildMemberJoinEvent> {
+import static net.fender.discord.filters.TeamRoleAddedFilter.TEAM_ROLE_ADDED_FILTER;
 
-    public TeamRocketGuildMemberJoinEventListener() {
-        super(GuildMemberJoinEvent.class);
-    }
+@Component
+public class TeamRoleAddEventListener extends BaseEventListener<GuildMemberRoleAddEvent> {
 
     private static final String[] GREETINGS = {
             "So! I must say, I am impressed you got here, TRAINER. Team Rocket captures Pokémon from around the " +
@@ -20,12 +19,19 @@ public class TeamRocketGuildMemberJoinEventListener extends BaseEventListener<Gu
                     " other."};
     private static final Random RANDOM = new Random();
 
+    private TextChannel general;
+
+    public TeamRoleAddEventListener() {
+        super(GuildMemberRoleAddEvent.class, TEAM_ROLE_ADDED_FILTER);
+    }
+
     @Override
-    protected void processEvent(GuildMemberJoinEvent event) {
-        TextChannel generalChannel =
-                event.getJDA().getTextChannelsByName("if-you-can-read-this-set-your-team", true).get(0);
+    protected void processEvent(GuildMemberRoleAddEvent event) {
+        if (general == null) {
+            general = event.getJDA().getTextChannelsByName("general", true).get(0);
+        }
         String greeting = GREETINGS[RANDOM.nextInt(GREETINGS.length)];
         greeting = greeting.replace("TRAINER", event.getMember().getAsMention());
-        generalChannel.sendMessage(greeting).submit();
+        general.sendMessage(greeting).submit();
     }
 }
