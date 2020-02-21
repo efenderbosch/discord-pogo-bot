@@ -8,7 +8,11 @@ public class IndividualValues {
 
     public static final IndividualValues ZERO = new IndividualValues(0, 0, 0);
     public static final IndividualValues PERFECT = new IndividualValues(15, 15, 15);
-    private static final Pattern PATTERN = Pattern.compile("(?<atk>\\d{1,2})[\\/|\\s]+(?<def>\\d{1,2})[\\/|\\s]+(?<sta>\\d{1,2})");
+    public static final String IVS_REG_EX =
+            "(?<atk>0?\\d|1[0-5])[\\/|\\s]+" +
+            "(?<def>0?\\d|1[0-5])[\\/|\\s]+" +
+            "(?<sta>0?\\d|1[0-5])";
+    private static final Pattern PATTERN = Pattern.compile(IVS_REG_EX);
 
     private final int attack;
     private final int defense;

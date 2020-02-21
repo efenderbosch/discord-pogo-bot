@@ -28,9 +28,12 @@ public class RankListener extends CommandEventWithHelpListener {
     static final ChannelNameFilter CHANNEL_NAME_FILTER = new ChannelNameFilter("rank-bot");
 
     private static final Pattern BASIC = Pattern.compile("\\$rank.*");
-    // \\$rank\\s+(?'pokemon'[-\\w]+)\\s+(?'ivs'(\\d{1,2})\\s+(\\d{1,2})\\s+(\\d{1,2})){0,1}\\s*(?'league'\\w*)
-    private static final Pattern FULL = Pattern.compile("\\$rank\\s+(?<pokemon>[-\\w]+)\\s+(?<ivs>(\\d{1,2})\\s+" +
-            "(\\d{1,2})\\s+(\\d{1,2}))\\s*(?<league>\\w*)");
+    private static final String REG_EX =
+            "\\$rank\\s+" +
+            "(?<pokemon>[-\\w]+)\\s+" +
+            "(?<ivs>" + IndividualValues.IVS_REG_EX + ")\\s*" +
+            "(?<league>great|ultra|master)?";
+    private static final Pattern FULL = Pattern.compile(REG_EX);
 
     private final PokemonRegistry pokemonRegistry;
     private TextChannel rankBot;
